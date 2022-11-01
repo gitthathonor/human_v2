@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
 import site.metacoding.humancloud.dto.dummy.request.user.LoginDto;
@@ -49,8 +50,8 @@ public class UserController {
         return new ResponseDto<>(1, "ok", null);
     }
 
-    @GetMapping("/s/mypage")
-    public ResponseDto<?> viewUserMypage(@RequestParam Integer id) {
+    @GetMapping("/s/mypage/{id}")
+    public ResponseDto<?> viewUserMypage(@PathVariable Integer id) {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
     }
 

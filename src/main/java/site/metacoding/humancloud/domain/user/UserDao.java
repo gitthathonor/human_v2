@@ -5,11 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public interface UserDao {
 	public int save(User user);
 
-	public User findById(Integer id);
+	public UserFindById findById(Integer id);
 
 	public List<User> findAll();
 
@@ -19,7 +21,7 @@ public interface UserDao {
 
 	public User findByUsername(String username);
 
-	public User findAllUsername(String username);
+	public UserFindByAllUsername findAllUsername(String username);
 
 	public List<CompanyRankingDto> findByRank();
 

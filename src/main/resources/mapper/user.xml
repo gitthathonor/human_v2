@@ -12,7 +12,7 @@
         where user_id=#{user.userId}
 	</update>
 
-	<select id="findAllUsername" resultType="site.metacoding.humancloud.domain.user.User">
+	<select id="findAllUsername" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindByAllUsername">
 		select *
 		from (
 				 select company_username username from company
@@ -28,7 +28,7 @@
 
 	
 
-	<select id="findById" resultType="site.metacoding.humancloud.domain.user.User">
+	<select id="findById" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindById">
         select * from user where user_id=#{userId}
 	</select>
 
@@ -42,12 +42,12 @@
 
 
 
-	<!-- <select id="findByRank" resultType="site.metacoding.humancloud.dto.response.user.CompanyRankingDto">
+	<select id="findByRank" resultType="site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto">
 		SELECT RANK() over (ORDER BY COUNT(subscribe_company_id) desc) as ranking, COUNT(subscribe_company_id) likes,  c.company_name name, c.company_logo logo
 		FROM subscribe  s RIGHT OUTER JOIN company c
 		ON s.subscribe_company_id = c.company_id
 		GROUP BY subscribe_company_id
 		HAVING COUNT(subscribe_company_id) > 0
 		ORDER BY ranking
-	</select> -->
+	</select>
 </mapper>

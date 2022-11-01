@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @NoArgsConstructor
 @Builder
@@ -23,15 +24,6 @@ public class User {
 	private String email;
 	private String phoneNumber;
 	private Timestamp createdAt;
-
-	public User update(UserUpdateReqDto userUpdateReqDto) {
-		return User.builder()
-				.password(userUpdateReqDto.getPassword())
-				.name(userUpdateReqDto.getName())
-				.email(userUpdateReqDto.getEmail())
-				.phoneNumber(userUpdateReqDto.getPhoneNumber())
-				.build();
-	}
 
 	// 전화번호 포매팅
 	public void formatPhoneNumber() {

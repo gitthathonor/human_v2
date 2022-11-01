@@ -4,16 +4,47 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.StandardException;
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
 
 public class UserRespDto {
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UserFindById {
+        private Integer userId;
+        private String username;
+        private String password;
+        private String name;
+        private String email;
+        private String phoneNumber;
+        private Timestamp createdAt;
+
+        public User toEntity() {
+            return User.builder()
+                    .password(this.password)
+                    .name(this.name)
+                    .email(this.email)
+                    .phoneNumber(this.phoneNumber)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UserFindByAllUsername {
+        private String username;
+    }
+
     @Getter
     @Setter
     public static class JoinRespDto {
@@ -34,25 +65,25 @@ public class UserRespDto {
             this.phoneNumber = user.getPhoneNumber();
             this.createdAt = user.getCreatedAt();
         }
+    }
 
-        @Getter
-        @Setter
-        public static class UserUpdateRespDto {
-            private Integer userId;
-            private String username;
-            private String password;
-            private String name;
-            private String email;
-            private String phoneNumber;
+    @Getter
+    @Setter
+    public static class UserUpdateRespDto {
+        private Integer userId;
+        private String username;
+        private String password;
+        private String name;
+        private String email;
+        private String phoneNumber;
 
-            public UserUpdateRespDto(User user) {
-                this.userId = user.getUserId();
-                this.username = user.getUsername();
-                this.password = user.getPassword();
-                this.name = user.getName();
-                this.email = user.getEmail();
-                this.phoneNumber = user.getPhoneNumber();
-            }
+        public UserUpdateRespDto(UserFindById user) {
+            this.userId = user.getUserId();
+            this.username = user.getUsername();
+            this.password = user.getPassword();
+            this.name = user.getName();
+            this.email = user.getEmail();
+            this.phoneNumber = user.getPhoneNumber();
         }
     }
 
@@ -67,7 +98,7 @@ public class UserRespDto {
         private List<UserResumeDto> resumeList;
         private List<CompanyRankingDto> companyRankingDtoList;
 
-        public UserMypageRespDto(User user) {
+        public UserMypageRespDto(UserFindById user) {
             this.email = user.getEmail();
             this.phoneNumber = user.getPhoneNumber();
         }
@@ -87,6 +118,7 @@ public class UserRespDto {
 
         @Getter
         @Setter
+        @NoArgsConstructor
         public static class SubscribeCompanyDto {
             private String companyName;
             private String companyLogo;

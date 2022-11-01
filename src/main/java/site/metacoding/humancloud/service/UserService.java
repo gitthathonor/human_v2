@@ -14,8 +14,10 @@ import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.JoinRespDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.JoinRespDto.UserUpdateRespDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserUpdateRespDto;
 
 @RequiredArgsConstructor
 @Service
@@ -35,7 +37,7 @@ public class UserService {
     }
 
     public UserUpdateRespDto 회원업데이트(Integer id, UserUpdateReqDto userUpdateReqDto) {
-        User userPS = userDao.findById(id);
+        UserFindById userPS = userDao.findById(id);
         userUpdateReqDto.setUserId(id);
 
         if (userPS == null) {
@@ -43,15 +45,14 @@ public class UserService {
         }
 
         // 영속화
-        userPS.update(userUpdateReqDto);
-        userDao.update(userPS);
+        userDao.update(userPS.toEntity());
 
         return new UserUpdateRespDto(userPS);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void 회원탈퇴(Integer id) {
-        User userPS = userDao.findById(id);
+        UserFindById userPS = userDao.findById(id);
         if (userPS == null) {
             throw new RuntimeException("잘못된 요청입니다");
         }
@@ -84,12 +85,12 @@ public class UserService {
     }
 
     // 서비스 내에서 사용하는 메서드
-    public User 유저정보보기(Integer userId) {
+    public UserFindById 유저정보보기(Integer userId) {
         return userDao.findById(userId);
     }
 
     public boolean 유저네임중복체크(String username) {
-        User userPS = userDao.findAllUsername(username);
+        UserFindByAllUsername userPS = userDao.findAllUsername(username);
         if (userPS == null) {
             return true;
         }
