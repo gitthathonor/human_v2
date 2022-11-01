@@ -21,14 +21,14 @@ public class SubscribeController {
 
     private final SubscribeService subscribeService;
 
-    @DeleteMapping("/subscribe/{userId}/{companyId}")
+    @DeleteMapping("/s/subscribe/{userId}/{companyId}")
     public @ResponseBody ResponseDto<?> deleteSubscribe(@PathVariable("userId") Integer userId,
             @PathVariable("companyId") Integer companyId) {
         subscribeService.구독취소(userId, companyId);
         return new ResponseDto<>(1, "OK", null);
     }
 
-    @PostMapping("/subscribe")
+    @PostMapping("/s/subscribe")
     public @ResponseBody ResponseDto<?> subscribeCompany(@RequestBody SubscribeSaveReqDto subscribeSaveReqDto) {
         return new ResponseDto<>(1, "ok", subscribeService.구독하기(subscribeSaveReqDto));
     }

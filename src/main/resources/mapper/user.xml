@@ -22,7 +22,7 @@
 		where username=#{username}
 	</select>
 
-	<select id="findByUsername" resultType="site.metacoding.humancloud.domain.user.User">
+	<select id="findByUsername" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindByUsername">
         select * from user where username=#{username}
 	</select>
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
+import site.metacoding.humancloud.dto.user.UserReqDto.LoginReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
 import site.metacoding.humancloud.service.UserService;
 
@@ -42,6 +43,14 @@ public class UserController {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
     }
 
+    // @PostMapping("/user/login")
+    // public ResponseDto<?> login(@RequestBody LoginReqDto loginDto) {
+    // User result = userService.로그인(loginDto);
+    // if (result != null) {
+    // }
+    // return new ResponseDto<>(1, "1", result);
+    // }
+
     // @GetMapping("/user/{id}")
     // public ResponseDto<?> updateMypage(@PathVariable Integer id) {
     // return new ResponseDto<>(1, "ok", userService.유저정보보기(id));
@@ -56,17 +65,6 @@ public class UserController {
     // @GetMapping("/login")
     // public String loginForm() {
     // return "page/user/login";
-    // }
-
-    // @PostMapping("/user/login")
-    // public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto,
-    // HttpServletRequest request) {
-    // User result = userService.로그인(loginDto);
-    // if (result != null) {
-    // HttpSession session = request.getSession();
-    // session.setAttribute("principal", result);
-    // }
-    // return new ResponseDto<>(1, "1", result);
     // }
 
     // @GetMapping("/user/usernameSameCheck")

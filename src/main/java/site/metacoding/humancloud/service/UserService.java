@@ -1,6 +1,7 @@
 package site.metacoding.humancloud.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,25 +38,21 @@ public class UserService {
     }
 
     public UserUpdateRespDto 회원업데이트(Integer id, UserUpdateReqDto userUpdateReqDto) {
-        UserFindById userPS = userDao.findById(id);
+        Optional<UserFindById> userPS = userDao.findById(id);
+        userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
+
         userUpdateReqDto.setUserId(id);
 
-        if (userPS == null) {
-            throw new RuntimeException("잘못된 요청입니다");
-        }
-
         // 영속화
-        userDao.update(userPS.toEntity());
+        userDao.update(userPS.get().toEntity());
 
-        return new UserUpdateRespDto(userPS);
+        return new UserUpdateRespDto(userPS.get());
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void 회원탈퇴(Integer id) {
-        UserFindById userPS = userDao.findById(id);
-        if (userPS == null) {
-            throw new RuntimeException("잘못된 요청입니다");
-        }
+        Optional<UserFindById> userPS = userDao.findById(id);
+        userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
 
         // 해당 유저의 이력서 삭제
         List<Resume> resumes = resumeDao.findByUserId(id);
@@ -86,7 +83,9 @@ public class UserService {
 
     // 서비스 내에서 사용하는 메서드
     public UserFindById 유저정보보기(Integer userId) {
-        return userDao.findById(userId);
+        Optional<UserFindById> userPS = userDao.findById(userId);
+        userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
+        return userPS.get();
     }
 
     public boolean 유저네임중복체크(String username) {
