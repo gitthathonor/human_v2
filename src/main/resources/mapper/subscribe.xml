@@ -21,7 +21,7 @@
 	</insert>
 	
 	<select id="findCompanyByUserId" resultType="site.metacoding.humancloud.dto.user.SubscribeCompanyDto">
-		select c.company_name, c.companyLogo from company c
+		select c.company_name, c.company_logo from company c
 		inner join subscribe
 		on c.company_id=subscribe_company_id
 		where subscribe.subscribe_user_id=#{userId}

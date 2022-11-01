@@ -1,6 +1,7 @@
 package site.metacoding.humancloud.dto.user;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -71,6 +72,19 @@ public class UserRespDto {
             this.phoneNumber = user.getPhoneNumber();
         }
 
+        public void setUserResume(List<Resume> resumeList) {
+            // 형 변환 후 리스트화
+            List<UserResumeDto> userResumeDtoList = new ArrayList();
+            for (Resume resume : resumeList) {
+                userResumeDtoList.add(new UserResumeDto(resume));
+            }
+            this.resumeList = userResumeDtoList;
+
+            // 이력서 열람횟수
+            if (resumeList.size() >= 1)
+                this.resumeReadCount = resumeList.size();
+        }
+
         @Getter
         @Setter
         public static class SubscribeCompanyDto {
@@ -90,15 +104,6 @@ public class UserRespDto {
                 this.resumeReadCount = resume.getResumeReadCount();
                 this.resumeCreatedAt = resume.getResumeCreatedAt();
             }
-        }
-
-        @Getter
-        @Setter
-        public static class UserCompanyRankingDto {
-            private Integer ranking;
-            private Integer likes;
-            private String name;
-            private String logo;
         }
     }
 }

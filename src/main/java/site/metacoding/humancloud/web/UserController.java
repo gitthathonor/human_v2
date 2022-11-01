@@ -22,6 +22,7 @@ import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
 import site.metacoding.humancloud.dto.dummy.request.user.LoginDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto;
 import site.metacoding.humancloud.service.UserService;
 
 @RequiredArgsConstructor
@@ -45,12 +46,12 @@ public class UserController {
     @DeleteMapping("/s/user/{id}")
     public ResponseDto<?> delete(@PathVariable Integer id) {
         userService.회원탈퇴(id);
-        return new ResponseDto<>(1, "회원탈퇴성공", null);
+        return new ResponseDto<>(1, "ok", null);
     }
 
     @GetMapping("/s/mypage")
     public ResponseDto<?> viewUserMypage(@RequestParam Integer id) {
-
+        return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
     }
 
     // @GetMapping("/user/{id}")
@@ -58,39 +59,41 @@ public class UserController {
     // return new ResponseDto<>(1, "ok", userService.유저정보보기(id));
     // }
 
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "redirect:/";
-    }
+    // @GetMapping("/logout")
+    // public String logout() {
+    // session.invalidate();
+    // return "redirect:/";
+    // }
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "page/user/login";
-    }
+    // @GetMapping("/login")
+    // public String loginForm() {
+    // return "page/user/login";
+    // }
 
-    @PostMapping("/user/login")
-    public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
-        User result = userService.로그인(loginDto);
-        if (result != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("principal", result);
-        }
-        return new ResponseDto<>(1, "1", result);
-    }
+    // @PostMapping("/user/login")
+    // public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto,
+    // HttpServletRequest request) {
+    // User result = userService.로그인(loginDto);
+    // if (result != null) {
+    // HttpSession session = request.getSession();
+    // session.setAttribute("principal", result);
+    // }
+    // return new ResponseDto<>(1, "1", result);
+    // }
 
-    @GetMapping("/user/usernameSameCheck")
-    public @ResponseBody ResponseDto<?> usernameSameCheck(@RequestParam("username") String username) {
-        Boolean result = userService.유저네임중복체크(username);
-        if (result == true) {
-            return new ResponseDto<>(1, "ok", true);
-        }
-        return new ResponseDto<>(1, "same id", false);
-    }
+    // @GetMapping("/user/usernameSameCheck")
+    // public @ResponseBody ResponseDto<?>
+    // usernameSameCheck(@RequestParam("username") String username) {
+    // Boolean result = userService.유저네임중복체크(username);
+    // if (result == true) {
+    // return new ResponseDto<>(1, "ok", true);
+    // }
+    // return new ResponseDto<>(1, "same id", false);
+    // }
 
-    @GetMapping("/join")
-    public String userSaveForm() {
-        return "page/user/userSaveForm";
-    }
+    // @GetMapping("/join")
+    // public String userSaveForm() {
+    // return "page/user/userSaveForm";
+    // }
 
 }

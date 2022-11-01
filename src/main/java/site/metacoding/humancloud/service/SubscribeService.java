@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.subscribe.Subscribe;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto.SubscribeCompanyDto;
 
 @RequiredArgsConstructor
 @Service
@@ -41,7 +42,7 @@ public class SubscribeService {
         return false;
     }
 
-    public List<Company> 구독기업보기(Integer userId) {
+    public List<SubscribeCompanyDto> 구독기업보기(Integer userId) {
         return subscribeDao.findCompanyByUserId(userId);
     }
 }

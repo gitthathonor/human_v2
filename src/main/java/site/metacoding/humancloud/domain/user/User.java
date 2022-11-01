@@ -1,6 +1,7 @@
 package site.metacoding.humancloud.domain.user;
 
 import java.sql.Timestamp;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,4 +33,11 @@ public class User {
 				.build();
 	}
 
+	// 전화번호 포매팅
+	public void formatPhoneNumber() {
+		String fomat = "(\\d{3})(\\d{3,4})(\\d{4})";
+		if (Pattern.matches(fomat, this.phoneNumber)) {
+			this.phoneNumber = this.phoneNumber.replaceAll(fomat, "$1-$2-$3");
+		}
+	}
 }
