@@ -20,10 +20,10 @@
 		values (#{subscribeUserId}, #{subscribeCompanyId}, now())
 	</insert>
 	
-	<select id="findCompanyByUserId" resultType="site.metacoding.humancloud.domain.company.Company">
-		select company.* from company
+	<select id="findCompanyByUserId" resultType="site.metacoding.humancloud.dto.user.SubscribeCompanyDto">
+		select c.company_name, c.companyLogo from company c
 		inner join subscribe
-		on company.company_id=subscribe_company_id
+		on c.company_id=subscribe_company_id
 		where subscribe.subscribe_user_id=#{userId}
 	</select>
 

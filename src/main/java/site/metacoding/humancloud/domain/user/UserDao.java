@@ -4,17 +4,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
 import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
 
 public interface UserDao {
-	public int save(JoinDto joinDto);
+	public int save(User user);
 
 	public User findById(Integer id);
 
 	public List<User> findAll();
 
-	public int update(@Param("id") Integer id, @Param("user") User user);
+	public int update(@Param("user") User user);
 
 	public int deleteById(Integer userId);
 

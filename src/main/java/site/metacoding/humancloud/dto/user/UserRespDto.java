@@ -1,5 +1,104 @@
 package site.metacoding.humancloud.dto.user;
 
-public class UserRespDto {
+import java.sql.Timestamp;
+import java.util.List;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.StandardException;
+import site.metacoding.humancloud.domain.company.Company;
+import site.metacoding.humancloud.domain.resume.Resume;
+import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
+
+public class UserRespDto {
+    @Getter
+    @Setter
+    public static class JoinRespDto {
+        private Integer userId;
+        private String username;
+        private String password;
+        private String name;
+        private String email;
+        private String phoneNumber;
+        private Timestamp createdAt;
+
+        public JoinRespDto(User user) {
+            this.userId = user.getUserId();
+            this.username = user.getUsername();
+            this.password = user.getPassword();
+            this.name = user.getName();
+            this.email = user.getEmail();
+            this.phoneNumber = user.getPhoneNumber();
+            this.createdAt = user.getCreatedAt();
+        }
+
+        @Getter
+        @Setter
+        public static class UserUpdateRespDto {
+            private Integer userId;
+            private String username;
+            private String password;
+            private String name;
+            private String email;
+            private String phoneNumber;
+
+            public UserUpdateRespDto(User user) {
+                this.userId = user.getUserId();
+                this.username = user.getUsername();
+                this.password = user.getPassword();
+                this.name = user.getName();
+                this.email = user.getEmail();
+                this.phoneNumber = user.getPhoneNumber();
+            }
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class UserMypageRespDto {
+        private String email;
+        private String phoneNumber;
+        private int resumeReadCount; // 이력서 열람 횟수
+        private List<SubscribeCompanyDto> companyList;
+        private List<UserResumeDto> resumeList;
+        private List<CompanyRankingDto> companyRankingDtoList;
+
+        public UserMypageRespDto(User user) {
+            this.email = user.getEmail();
+            this.phoneNumber = user.getPhoneNumber();
+        }
+
+        @Getter
+        @Setter
+        public static class SubscribeCompanyDto {
+            private String companyName;
+            private String companyLogo;
+        }
+
+        @Getter
+        @Setter
+        public static class UserResumeDto {
+            private String resumeTitle;
+            private int resumeReadCount;
+            private Timestamp resumeCreatedAt;
+
+            public UserResumeDto(Resume resume) {
+                this.resumeTitle = resume.getResumeTitle();
+                this.resumeReadCount = resume.getResumeReadCount();
+                this.resumeCreatedAt = resume.getResumeCreatedAt();
+            }
+        }
+
+        @Getter
+        @Setter
+        public static class UserCompanyRankingDto {
+            private Integer ranking;
+            private Integer likes;
+            private String name;
+            private String logo;
+        }
+    }
 }

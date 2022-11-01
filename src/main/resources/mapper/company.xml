@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.metacoding.humancloud.domain.company.CompanyDao">
 
-<select id="paging"
+<!-- <select id="paging"
 		resultType="site.metacoding.humancloud.dto.response.page.PagingDto">
 		SELECT totalCount,
 		totalPage,
@@ -15,7 +15,7 @@
 		isFirst, 0 isLast
 		FROM company
 		) b
-	</select>
+	</select> -->
 
 	<insert id="save" useGeneratedKeys="true" keyProperty="companyId">
 		INSERT INTO company(company_username, company_password,
