@@ -31,7 +31,7 @@ public class RecruitReqDto {
             return Recruit.builder().recruitTitle(recruitTitle).recruitCareer(recruitCareer)
                     .recruitSalary(recruitSalary).recruitLocation(recruitLocation).recruitReadCount(recruitReadCount)
                     .recruitContent(recruitContent).recruitCompanyId(recruitCompanyId).recruitDeadline(recruitDeadline)
-                    /* .recruitCategoryList(recruitCategoryList) */.build();
+                    .build();
         }
     }
 
@@ -51,10 +51,10 @@ public class RecruitReqDto {
         private List<String> recruitCategoryList;
 
         public Recruit toEntity() {
-            return Recruit.builder().recruitTitle(recruitTitle).recruitCareer(recruitCareer)
+            return Recruit.builder().recruitId(recruitId).recruitTitle(recruitTitle).recruitCareer(recruitCareer)
                     .recruitSalary(recruitSalary).recruitLocation(recruitLocation).recruitReadCount(recruitReadCount)
                     .recruitContent(recruitContent).recruitCompanyId(recruitCompanyId).recruitDeadline(recruitDeadline)
-                    /* .recruitCategoryList(recruitCategoryList) */.build();
+                    .build();
         }
     }
 
