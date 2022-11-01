@@ -20,10 +20,12 @@ import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -63,12 +65,17 @@ public class ResumeService {
         }
     }
 
-    public Map<String, Object> 이력서상세보기(Integer resumeId, Integer userId) {
-        Map<String, Object> resumeDetail = new HashMap<>();
-        resumeDetail.put("resume", resumeDao.findById(resumeId));
-        resumeDetail.put("category", categoryDao.findByResumeId(resumeId));
-        resumeDetail.put("user", userDao.findById(userId));
-        return resumeDetail;
+    public ResumeDetailRespDto 이력서상세보기(@Param("resumeId") Integer resumeId, @Param("userId") Integer userId) {
+        ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
+        User user = userDao.findById(userId);
+        Resume resume = resumeDao.findById(resumeId);
+        List<Category> categories = categoryDao.findByResumeId(resumeId);
+        log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
+        log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
+        resumeDetailRespDto.toEntity(user);
+        resumeDetailRespDto.toEntity(resume);
+        resumeDetailRespDto.setCategoryList(categories);
+        return resumeDetailRespDto;
     }
 
     // 이력서 목록

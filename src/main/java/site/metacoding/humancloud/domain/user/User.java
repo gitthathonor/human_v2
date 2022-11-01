@@ -2,6 +2,7 @@ package site.metacoding.humancloud.domain.user;
 
 import java.sql.Timestamp;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,13 @@ public class User {
 	public User(String username, String password, String name, String email, String phoneNumber) {
 		this.username = username;
 		this.password = password;
+		this.name = name;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
+
+	@Builder
+	public User(String name, String email, String phoneNumber) {
 		this.name = name;
 		this.email = email;
 		this.phoneNumber = phoneNumber;

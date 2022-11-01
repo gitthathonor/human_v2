@@ -26,7 +26,9 @@ import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
 
@@ -95,23 +97,23 @@ public class ResumeController {
   @GetMapping("resume/updateForm/{resumeId}/{userId}")
   public String updatePage(@PathVariable("resumeId") Integer resumeId, @PathVariable("userId") Integer userId,
       Model model) {
-    model.addAttribute("resume", resumeService.이력서상세보기(resumeId, userId).get("resume"));
-    model.addAttribute("category", resumeService.이력서상세보기(resumeId, userId).get("category"));
-    model.addAttribute("user", resumeService.이력서상세보기(resumeId, userId).get("user"));
+    // model.addAttribute("resume", resumeService.이력서상세보기(resumeId,
+    // userId).get("resume"));
+    // model.addAttribute("category", resumeService.이력서상세보기(resumeId,
+    // userId).get("category"));
+    // model.addAttribute("user", resumeService.이력서상세보기(resumeId,
+    // userId).get("user"));
     return "page/resume/updateForm";
   }
 
   @GetMapping("resume/detail/{resumeId}/{userId}")
-  public String detailResume(@PathVariable("resumeId") Integer resumeId, @PathVariable("userId") Integer userId,
-      Model model) {
+  public @ResponseBody ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,
+      @PathVariable("userId") Integer userId) {
 
     resumeService.열람횟수증가(resumeId);
+    ResumeDetailRespDto resumeDetailRespDto = resumeService.이력서상세보기(resumeId, userId);
 
-    model.addAttribute("resume", resumeService.이력서상세보기(resumeId, userId).get("resume"));
-    model.addAttribute("category", resumeService.이력서상세보기(resumeId, userId).get("category"));
-    model.addAttribute("user", resumeService.이력서상세보기(resumeId, userId).get("user"));
-
-    return "page/resume/detail";
+    return new ResponseDto<>(1, "이력서 상세보기 성공", resumeDetailRespDto);
   }
 
   @GetMapping("/resume/saveForm/{userId}")
