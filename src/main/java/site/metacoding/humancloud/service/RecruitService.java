@@ -19,6 +19,7 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 
 @RequiredArgsConstructor
 @Service
@@ -61,11 +62,11 @@ public class RecruitService {
     }
 
     @Transactional
-    public void 구인공고작성(SaveDto saveDto) {
-        recruitDao.save(saveDto);
-        Category category = new Category(saveDto.getRecruitId(), null, null);
+    public void 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
+        recruitDao.save(recruitSaveReqDto);
+        Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
 
-        for (String i : saveDto.getRecruitCategoryList()) {
+        for (String i : recruitSaveReqDto.getRecruitCategoryList()) {
             category.setCategoryName(i);
             categoryDao.save(category);
         }

@@ -6,9 +6,10 @@ import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 
 public interface RecruitDao {
-	public void save(SaveDto saveDto);
+	public void save(RecruitSaveReqDto recruitSaveReqDto);
 
 	public Recruit findById(Integer id);
 
