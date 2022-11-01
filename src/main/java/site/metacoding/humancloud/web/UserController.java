@@ -1,29 +1,17 @@
 package site.metacoding.humancloud.web;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
-import site.metacoding.humancloud.dto.dummy.request.user.LoginDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto;
 import site.metacoding.humancloud.service.UserService;
 
 @RequiredArgsConstructor
@@ -31,7 +19,6 @@ import site.metacoding.humancloud.service.UserService;
 public class UserController {
 
     private final UserService userService;
-    private final HttpSession session;
 
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {

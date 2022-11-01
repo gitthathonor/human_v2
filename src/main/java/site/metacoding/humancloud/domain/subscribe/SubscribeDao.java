@@ -12,15 +12,16 @@ public interface SubscribeDao {
 
 	public Subscribe findById(@Param("userId") Integer userId, @Param("companyId") Integer companyId);
 
-	public List<Subscribe> findAll();
+	public void deleteByUserCompany(@Param("userId") Integer userId, @Param("companyId") Integer companyId);
 
-	public void update(Subscribe subscribe);
+	// public List<Subscribe> findAll();
 
-	public void deleteById(Integer id);
+	// public void update(Subscribe subscribe);
+
+	// public void deleteById(Integer id);
 
 	public List<SubscribeCompanyDto> findCompanyByUserId(Integer userId);
 
 	public List<Subscribe> findByCompanyId(Integer companyId);
 
-	public void deleteByUserCompany(@Param("userId") Integer userId, @Param("companyId") Integer companyId);
 }
