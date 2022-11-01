@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +17,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
 
+@Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ResumeController {
 
   private final ResumeService resumeService;
@@ -121,7 +123,8 @@ public class ResumeController {
   @PostMapping(value = "/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public @ResponseBody ResponseDto<?> create(@RequestPart("file") MultipartFile file,
-      @RequestPart("saveDto") SaveDto saveDto) throws Exception {
+      @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
+
     int pos = file.getOriginalFilename().lastIndexOf(".");
     String extension = file.getOriginalFilename().substring(pos + 1);
     String filePath = "C:\\temp\\img\\";
@@ -141,10 +144,16 @@ public class ResumeController {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    saveDto.setResumePhoto(imgName);
+    resumeSaveReqDto.setResumePhoto(imgName);
+    log.debug("디버그 : 서비스로 넘어가기 직전");
+    log.debug("디버그 : " + resumeSaveReqDto.getResumeTitle());
+    log.debug("디버그 : " + resumeSaveReqDto.getResumeCareer());
+    log.debug("디버그 : " + resumeSaveReqDto.getResumeEducation());
+    log.debug("디버그 : " + resumeSaveReqDto.getResumePhoto());
 
-    resumeService.이력서저장(saveDto);
-    return new ResponseDto<>(1, "업로드 성공", imgName);
+    resumeService.이력서저장(resumeSaveReqDto);
+
+    return new ResponseDto<>(1, "업로드 성공", null);
   }
 
 }

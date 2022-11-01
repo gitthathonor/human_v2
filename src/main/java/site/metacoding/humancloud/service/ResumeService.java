@@ -10,15 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ResumeService {
@@ -44,10 +46,10 @@ public class ResumeService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void 이력서저장(SaveDto saveDto) {
-        resumeDao.save(saveDto);
-        for (String category : saveDto.getCategoryList()) {
-            Category categoryElement = new Category(saveDto.getResumeId(), category);
+    public void 이력서저장(ResumeSaveReqDto resumeSaveReqDto) {
+        resumeDao.save(resumeSaveReqDto);
+        for (String category : resumeSaveReqDto.getCategoryList()) {
+            Category categoryElement = new Category(resumeSaveReqDto.getResumeId(), category);
             categoryDao.save(categoryElement);
         }
     }
