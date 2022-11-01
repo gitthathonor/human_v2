@@ -46,13 +46,14 @@ public class RecruitService {
         // 영속화 : id 로 공고페이지 찾음
         Recruit recruitPS = recruitDao.findById(id);
         if (recruitPS != null) {
-            recruitPS.recruitUpdate(recruitUpdateReqDto);
+            // recruitPS.recruitUpdate(recruitUpdateReqDto);
+            recruitUpdateReqDto.toEntity();
         }
 
-        Category category = new Category(recruitUpdateReqDto.getRecruitId(), null, null);
+        Category category = new Category(id, null, null);
 
         // 기존의 카테고리 없애고
-        categoryDao.deleteByRecruitId(recruitUpdateReqDto.getRecruitId());
+        categoryDao.deleteByRecruitId(id);
         // 새로 수정된 사항대로 체크리스트 INSERT
         for (String i : recruitUpdateReqDto.getRecruitCategoryList()) {
             category.setCategoryName(i);

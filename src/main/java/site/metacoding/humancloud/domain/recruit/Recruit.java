@@ -32,8 +32,8 @@ public class Recruit {
 	@Builder
 	public Recruit(Integer recruitId, String recruitTitle, String recruitCareer, Integer recruitSalary,
 			String recruitLocation, String recruitContent, Integer recruitReadCount, Integer recruitCompanyId,
-			String recruitDeadline, Timestamp recruitCreatedAt, String recruitStartDay,
-			List<String> recruitCategoryList, Company company, List<Category> category,
+			String recruitDeadline, Timestamp recruitCreatedAt, String recruitStartDay, Company company,
+			List<Category> category,
 			List<Recruit> recruitListByCompanyId) {
 		this.recruitId = recruitId;
 		this.recruitTitle = recruitTitle;
@@ -46,13 +46,10 @@ public class Recruit {
 		this.recruitDeadline = recruitDeadline;
 		this.recruitCreatedAt = recruitCreatedAt;
 		this.recruitStartDay = recruitStartDay;
-		this.recruitCategoryList = recruitCategoryList;
 		this.company = company;
 		this.category = category;
 		this.recruitListByCompanyId = recruitListByCompanyId;
 	}
-
-	private List<String> recruitCategoryList;
 
 	private Company company;
 	private List<Category> category;
@@ -61,13 +58,4 @@ public class Recruit {
 	public Recruit(String recruitTitle) {
 		this.recruitTitle = recruitTitle;
 	}
-
-	public void recruitUpdate(RecruitUpdateReqDto recruitUpdateReqDto) {
-		this.recruitTitle = recruitUpdateReqDto.getRecruitTitle();
-		this.recruitCareer = recruitUpdateReqDto.getRecruitCareer();
-		this.recruitSalary = recruitUpdateReqDto.getRecruitSalary();
-		this.recruitLocation = recruitUpdateReqDto.getRecruitLocation();
-		this.recruitContent = recruitUpdateReqDto.getRecruitContent();
-	}
-
 }
