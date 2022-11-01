@@ -40,7 +40,7 @@ public class CompanyService {
 	}
 
 	// 기업 회원 등록
-	public void saveCompany(Company company) {
+	public void 기업회원등록(Company company) {
 		companyDao.save(company);
 	}
 

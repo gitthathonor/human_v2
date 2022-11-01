@@ -2,6 +2,7 @@ package site.metacoding.humancloud.domain.company;
 
 import java.sql.Timestamp;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,6 @@ import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Company {
 
 	private Integer companyId;
@@ -23,8 +23,34 @@ public class Company {
 	private String companyLogo;
 	private Timestamp companyCreatedAt;
 
-	public Company(String companyUsername, String companyPassword, String companyName, String companyEmail,
-			String companyPhoneNumber, String companyAddress, String companyLogo) {
+	// public Company(String companyUsername, String companyPassword, String
+	// companyName, String companyEmail,
+	// String companyPhoneNumber, String companyAddress, String companyLogo) {
+	// this.companyUsername = companyUsername;
+	// this.companyPassword = companyPassword;
+	// this.companyName = companyName;
+	// this.companyEmail = companyEmail;
+	// this.companyPhoneNumber = companyPhoneNumber;
+	// this.companyAddress = companyAddress;
+	// this.companyLogo = companyLogo;
+	// }
+
+	// public Company(String companyPassword, String companyName, String
+	// companyEmail,
+	// String companyPhoneNumber, String companyAddress, String companyLogo) {
+	// this.companyPassword = companyPassword;
+	// this.companyName = companyName;
+	// this.companyEmail = companyEmail;
+	// this.companyPhoneNumber = companyPhoneNumber;
+	// this.companyAddress = companyAddress;
+	// this.companyLogo = companyLogo;
+	// }
+
+	@Builder
+	public Company(Integer companyId, String companyUsername, String companyPassword, String companyName,
+			String companyEmail, String companyPhoneNumber, String companyAddress, String companyLogo,
+			Timestamp companyCreatedAt) {
+		this.companyId = companyId;
 		this.companyUsername = companyUsername;
 		this.companyPassword = companyPassword;
 		this.companyName = companyName;
@@ -32,16 +58,7 @@ public class Company {
 		this.companyPhoneNumber = companyPhoneNumber;
 		this.companyAddress = companyAddress;
 		this.companyLogo = companyLogo;
-	}
-
-	public Company(String companyPassword, String companyName, String companyEmail,
-			String companyPhoneNumber, String companyAddress, String companyLogo) {
-		this.companyPassword = companyPassword;
-		this.companyName = companyName;
-		this.companyEmail = companyEmail;
-		this.companyPhoneNumber = companyPhoneNumber;
-		this.companyAddress = companyAddress;
-		this.companyLogo = companyLogo;
+		this.companyCreatedAt = companyCreatedAt;
 	}
 
 	public void update(UpdateDto updateDto) {
