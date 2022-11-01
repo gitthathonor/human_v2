@@ -125,33 +125,7 @@ public class ResumeController {
   public @ResponseBody ResponseDto<?> create(@RequestPart("file") MultipartFile file,
       @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
-    int pos = file.getOriginalFilename().lastIndexOf(".");
-    String extension = file.getOriginalFilename().substring(pos + 1);
-    String filePath = "C:\\temp\\img\\";
-    String imgSaveName = UUID.randomUUID().toString();
-    String imgName = imgSaveName + "." + extension;
-
-    File makeFileFolder = new File(filePath);
-    if (!makeFileFolder.exists()) {
-      if (!makeFileFolder.mkdir()) {
-        throw new Exception("File.mkdir():Fail.");
-      }
-    }
-
-    File dest = new File(filePath, imgName);
-    try {
-      Files.copy(file.getInputStream(), dest.toPath());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    resumeSaveReqDto.setResumePhoto(imgName);
-    log.debug("디버그 : 서비스로 넘어가기 직전");
-    log.debug("디버그 : " + resumeSaveReqDto.getResumeTitle());
-    log.debug("디버그 : " + resumeSaveReqDto.getResumeCareer());
-    log.debug("디버그 : " + resumeSaveReqDto.getResumeEducation());
-    log.debug("디버그 : " + resumeSaveReqDto.getResumePhoto());
-
-    resumeService.이력서저장(resumeSaveReqDto);
+    resumeService.이력서저장(file, resumeSaveReqDto);
 
     return new ResponseDto<>(1, "업로드 성공", null);
   }
