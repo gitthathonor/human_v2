@@ -32,9 +32,31 @@ public class RecruitReqDto {
                     .recruitSalary(recruitSalary).recruitLocation(recruitLocation).recruitReadCount(recruitReadCount)
                     .recruitContent(recruitContent).recruitCompanyId(recruitCompanyId).recruitDeadline(recruitDeadline)
                     .recruitCategoryList(recruitCategoryList).build();
-
         }
+    }
 
+    @Getter
+    @Setter
+    public static class RecruitUpdateReqDto {
+        private Integer recruitId;
+        private String recruitTitle;
+        private String recruitCareer;
+        private Integer recruitSalary;
+        private String recruitLocation;
+        private Integer recruitReadCount;
+        private String recruitContent;
+        private Integer recruitCompanyId;
+        private String recruitDeadline;
+
+        private List<String> recruitCategoryList;
+
+        public Recruit toEntity() {
+
+            return Recruit.builder().recruitTitle(recruitTitle).recruitCareer(recruitCareer)
+                    .recruitSalary(recruitSalary).recruitLocation(recruitLocation).recruitReadCount(recruitReadCount)
+                    .recruitContent(recruitContent).recruitCompanyId(recruitCompanyId).recruitDeadline(recruitDeadline)
+                    .recruitCategoryList(recruitCategoryList).build();
+        }
     }
 
 }

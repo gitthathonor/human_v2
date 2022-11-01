@@ -20,6 +20,7 @@ import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.RecruitService;
@@ -39,17 +40,19 @@ public class RecruitController {
     return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
   }
 
-  @GetMapping("recruit/update/{id}")
-  public ResponseDto<?> updateFrom(@PathVariable(required = false) Integer id, Model model) {
-    Recruit recruitPS = recruitService.공고상세페이지(id);
-    model.addAttribute("Recruit", recruitPS);
-    return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id));
-  }
+  // @GetMapping("recruit/update/{id}")
+  // public ResponseDto<?> updateFrom(@PathVariable(required = false) Integer id,
+  // Model model) {
+  // Recruit recruitPS = recruitService.공고상세페이지(id);
+  // model.addAttribute("Recruit", recruitPS);
+  // return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id));
+  // }
 
-  @PutMapping("recruit/update")
-  public @ResponseBody ResponseDto<?> update(@RequestBody SaveDto saveDto) {
+  @PutMapping("recruit/update/{id}")
+  public @ResponseBody ResponseDto<?> update(@PathVariable Integer id,
+      @RequestBody RecruitUpdateReqDto recruitUpdateReqDto) {
 
-    recruitService.구인공고업데이트(saveDto);
+    recruitService.구인공고업데이트(id, recruitUpdateReqDto);
 
     return new ResponseDto<>(1, "성공", null);
   }

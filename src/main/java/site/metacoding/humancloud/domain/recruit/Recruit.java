@@ -11,6 +11,7 @@ import lombok.Setter;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 
 @NoArgsConstructor
 @Getter
@@ -61,12 +62,12 @@ public class Recruit {
 		this.recruitTitle = recruitTitle;
 	}
 
-	public void recruitUpdate(SaveDto saveDto) {
-		this.recruitTitle = saveDto.getRecruitTitle();
-		this.recruitCareer = saveDto.getRecruitCareer();
-		this.recruitSalary = saveDto.getRecruitSalary();
-		this.recruitLocation = saveDto.getRecruitLocation();
-		this.recruitContent = saveDto.getRecruitContent();
+	public void recruitUpdate(RecruitUpdateReqDto recruitUpdateReqDto) {
+		this.recruitTitle = recruitUpdateReqDto.getRecruitTitle();
+		this.recruitCareer = recruitUpdateReqDto.getRecruitCareer();
+		this.recruitSalary = recruitUpdateReqDto.getRecruitSalary();
+		this.recruitLocation = recruitUpdateReqDto.getRecruitLocation();
+		this.recruitContent = recruitUpdateReqDto.getRecruitContent();
 	}
 
 }
