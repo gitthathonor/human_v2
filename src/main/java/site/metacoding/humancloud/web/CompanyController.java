@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
@@ -24,13 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
-import site.metacoding.humancloud.dto.dummy.request.company.LoginDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
-import site.metacoding.humancloud.dto.dummy.response.user.ResCompanyDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
 
@@ -54,30 +51,8 @@ public class CompanyController {
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseDto<?> save(@RequestPart("file") MultipartFile file,
 			@RequestPart("companyJoinReqDto") CompanyJoinReqDto companyJoinReqDto) throws Exception {
-
-		int pos = file.getOriginalFilename().lastIndexOf(".");
-		String extension = file.getOriginalFilename().substring(pos + 1);
-		String filePath = "C:\\temp\\img\\";
-		String logoSaveName = UUID.randomUUID().toString();
-		String logo = logoSaveName + "." + extension;
-
-		File makeFileFolder = new File(filePath);
-		if (!makeFileFolder.exists()) {
-			if (!makeFileFolder.mkdir()) {
-				throw new Exception("File.mkdir():Fail.");
-			}
-		}
-
-		File dest = new File(filePath, logo);
-		try {
-			Files.copy(file.getInputStream(), dest.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Company company = companyJoinReqDto.toEntity(logo);
-		companyService.기업회원등록(company);
-		return new ResponseDto<>(1, "기업 등록 성공", logo);
+		companyService.기업회원등록(file, companyJoinReqDto);
+		return new ResponseDto<>(1, "기업 등록 성공", null);
 	}
 
 	// 기업 정보 상세보기
@@ -139,15 +114,8 @@ public class CompanyController {
 	}
 
 	@PostMapping("/company/login")
-	public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
-		ResCompanyDto result = companyService.로그인(loginDto);
-
-		if (result != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("companyPrincipal", result.getCompany());
-			session.setAttribute("subscribeList", result.getSubscribe());
-		}
-		return new ResponseDto<>(1, "1", result.getCompany());
+	public ResponseDto<?> login(@RequestBody CompanyLoginReqDto companyLoginReqDto) {
+		return new ResponseDto<>(1, "로그인 성공", companyService.로그인(companyLoginReqDto));
 	}
 
 	@GetMapping("/company/mypage")

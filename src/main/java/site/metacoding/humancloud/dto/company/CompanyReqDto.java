@@ -1,7 +1,6 @@
 package site.metacoding.humancloud.dto.company;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
 
@@ -30,11 +29,17 @@ public class CompanyReqDto {
         }
     }
 
-    @NoArgsConstructor
     @Setter
     @Getter
     public static class CompanyLoginReqDto {
         private String companyUsername;
         private String companyPassword;
+
+        public Company toEntity() {
+            return Company.builder()
+                    .companyUsername(companyUsername)
+                    .companyPassword(companyPassword)
+                    .build();
+        }
     }
 }

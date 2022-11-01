@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.metacoding.humancloud.dto.AuthUser;
 import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class Company {
+public class Company extends AuthUser {
 
 	private Integer companyId;
 	private String companyUsername;
@@ -45,6 +46,16 @@ public class Company {
 	// this.companyAddress = companyAddress;
 	// this.companyLogo = companyLogo;
 	// }
+
+	@Override
+	public Integer getId() {
+		return companyId;
+	}
+
+	@Override
+	public String getUsername() {
+		return companyUsername;
+	}
 
 	@Builder
 	public Company(Integer companyId, String companyUsername, String companyPassword, String companyName,
