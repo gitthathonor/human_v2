@@ -22,11 +22,13 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
+import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
 import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
@@ -39,20 +41,24 @@ public class CompanyService {
 	private final RecruitDao recruitDao;
 	private final ResumeDao resumeDao;
 	private final SHA256 sha256;
+	private final UserDao userDao;
 
 	// 회원 username 중복체크
-	public boolean checkSameUsername(String companyUsername) {
-		Company companyPS = companyDao.findAllUsername(companyUsername);
-		if (companyPS == null) {
-			return false;
-		} else {
+	public boolean 유저네임중복체크(String companyUsername) {
+		UserFindByAllUsername username = userDao.findAllUsername(companyUsername);
+		if (username == null) {
 			return true;
 		}
+		return false;
 	}
 
 	// 기업 회원 등록
 	@Transactional
 	public void 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {
+		boolean checkUsername = 유저네임중복체크(companyJoinReqDto.getCompanyUsername());
+		if (checkUsername == false) {
+			throw new RuntimeException("아이디 중복 오류");
+		}
 		int pos = file.getOriginalFilename().lastIndexOf(".");
 		String extension = file.getOriginalFilename().substring(pos + 1);
 		String filePath = "C:\\temp\\img\\";
@@ -155,8 +161,17 @@ public class CompanyService {
 	}
 
 	// 기업정보 삭제
-	@Transactional
-	public void deleteCompany(Integer id) {
+	@Transactional(rollbackFor = RuntimeException.class)
+	public void 기업정보삭제(Integer id) {
+		Optional<CompanyFindById> companyOP = companyDao.findById(id);
+		companyOP.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+		// 해당 Company의 채용공고 삭제
+		List<Recruit> recruits = recruitDao.findByCompanyId(id);
+		if (recruits != null) {
+			recruitDao.deleteById(id);
+		}
+
 		companyDao.deleteById(id);
 	}
 

@@ -1,12 +1,9 @@
 package site.metacoding.humancloud.dto.recruit;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.category.Category;
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 
 public class RecruitReqDto {
