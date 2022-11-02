@@ -23,7 +23,6 @@
 		FROM recruit
 		) b
 	</select>
-	-->
 	<select id="joinCompanyRecruit" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto">
 		select * from recruit
 		inner join company
@@ -77,7 +76,6 @@ order by count DESC
 	<select id="findByTitle" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail">
 		SELECT * FROM recruit WHERE recruit_title LIKE '%'||#{recruitTitle}||'%'
 	</select>
-	-->
 	<select id="findById" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
 	select * from recruit 
 	WHERE recruit_id = #{id}

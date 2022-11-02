@@ -14,7 +14,7 @@ public class RecruitReqDto {
     @Getter
     @Setter
     public static class RecruitSaveReqDto {
-        private Integer recruitId;
+        private Integer recruitId; // 카테고리 INSERT 때문에 필요함, Mybatis 에서 INSERT 시 ID 값을 리턴해줌
         private String recruitTitle;
         private String recruitCareer;
         private Integer recruitSalary;

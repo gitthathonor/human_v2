@@ -75,8 +75,7 @@ public class RecruitController {
 
   @PostMapping("/recruit/save")
   public @ResponseBody ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
-    recruitService.구인공고작성(recruitSaveReqDto);
-    return new ResponseDto<>(1, "성공", null);
+    return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }
 
   @GetMapping("/recruit/list")
