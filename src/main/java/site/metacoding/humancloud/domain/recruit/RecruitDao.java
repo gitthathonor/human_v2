@@ -33,4 +33,6 @@ public interface RecruitDao {
 	public List<RecruitDetail> findByTitle(String recruitTitle);
 
 	public PagingDto paging(Integer page);
+
+	public List<Recruit> findByCategoryName(Integer startNum);
 }

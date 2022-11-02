@@ -82,9 +82,8 @@ public class RecruitController {
   }
 
   @PostMapping("/recruit/category")
-  public @ResponseBody ResponseDto<?> viewCategory(@RequestBody Category category) {
-    System.out.println(recruitService.분류별채용공고목록보기(category.getCategoryName()));
-    return new ResponseDto<>(1, "OK", recruitService.분류별채용공고목록보기(category.getCategoryName()));
+  public @ResponseBody ResponseDto<?> viewCategory(@RequestBody Category category, @Param("page") Integer page) {
+    return new ResponseDto<>(1, "OK", recruitService.분류별채용공고목록보기(category.getCategoryName(), page));
   }
 
   @PostMapping("/recruit/list")
