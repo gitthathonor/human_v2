@@ -1,11 +1,17 @@
 package site.metacoding.humancloud.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.company.Company;
@@ -15,10 +21,12 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
-import site.metacoding.humancloud.dto.dummy.request.company.LoginDto;
+import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
-import site.metacoding.humancloud.dto.dummy.response.user.ResCompanyDto;
+import site.metacoding.humancloud.util.SHA256;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +36,7 @@ public class CompanyService {
 	private final SubscribeDao subscribeDao;
 	private final RecruitDao recruitDao;
 	private final ResumeDao resumeDao;
+	private final SHA256 sha256;
 
 	// 회원 username 중복체크
 	public boolean checkSameUsername(String companyUsername) {
@@ -40,7 +49,30 @@ public class CompanyService {
 	}
 
 	// 기업 회원 등록
-	public void saveCompany(Company company) {
+	@Transactional
+	public void 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {
+		int pos = file.getOriginalFilename().lastIndexOf(".");
+		String extension = file.getOriginalFilename().substring(pos + 1);
+		String filePath = "C:\\temp\\img\\";
+		String logoSaveName = UUID.randomUUID().toString();
+		String logo = logoSaveName + "." + extension;
+
+		File makeFileFolder = new File(filePath);
+		if (!makeFileFolder.exists()) {
+			if (!makeFileFolder.mkdir()) {
+				throw new Exception("File.mkdir():Fail.");
+			}
+		}
+
+		File dest = new File(filePath, logo);
+		try {
+			Files.copy(file.getInputStream(), dest.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String encPassword = sha256.encrypt(companyJoinReqDto.getCompanyPassword());
+		companyJoinReqDto.setCompanyPassword(encPassword);
+		Company company = companyJoinReqDto.toEntity(logo);
 		companyDao.save(company);
 	}
 
@@ -90,14 +122,18 @@ public class CompanyService {
 		companyDao.deleteById(id);
 	}
 
-	public ResCompanyDto 로그인(LoginDto loginDto) {
-		Company companyPS = companyDao.findByUsername(loginDto.getCompanyUsername());
+	public SessionUser 로그인(CompanyLoginReqDto companyLoginReqDto) {
+		Company companyPS = companyDao.findByUsername(companyLoginReqDto.getCompanyUsername());
+		String encPassword = sha256.encrypt(companyLoginReqDto.getCompanyPassword());
 		if (companyPS == null) {
-			return null;
-		} else if (loginDto.getCompanyPassword().equals(companyPS.getCompanyPassword())) {
-			return new ResCompanyDto(companyPS, subscribeDao.findByCompanyId(companyPS.getCompanyId()));
+			throw new RuntimeException("회원가입 되지 않았습니다.");
+		} else {
+			if (!companyPS.getCompanyPassword().equals(encPassword)) {
+				throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
+			}
+			return SessionUser.builder().company(companyPS).build();
 		}
-		return null;
+
 	}
 
 	public List<Recruit> 채용공고리스트불러오기(Integer id) {

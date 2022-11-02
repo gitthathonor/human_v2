@@ -2,14 +2,19 @@ package site.metacoding.humancloud.config.auth;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Optional;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,6 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.user.UserReqDto.LoginReqDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByUsername;
+import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,67 +43,68 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        // HttpServletRequest req = (HttpServletRequest) request;
-        // HttpServletResponse resp = (HttpServletResponse) response;
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
 
-        // // Post요청이 아닌것을 거부
-        // if (!req.getMethod().equals("POST")) {
-        // customResponse("로그인시에는 post요청을 해야 합니다.", resp);
-        // return;
-        // }
+        // Post요청이 아닌것을 거부
+        if (!req.getMethod().equals("POST")) {
+            customResponse("로그인시에는 post요청을 해야 합니다.", resp);
+            return;
+        }
 
-        // // Body 값 받기
-        // ObjectMapper om = new ObjectMapper();
-        // LoginReqDto loginReqDto = om.readValue(req.getInputStream(),
-        // LoginReqDto.class);
-        // log.debug("디버그 : " + loginReqDto.getUsername());
-        // log.debug("디버그 : " + loginReqDto.getPassword());
+        // Body 값 받기
+        ObjectMapper om = new ObjectMapper();
+        LoginReqDto loginReqDto = om.readValue(req.getInputStream(),
+                LoginReqDto.class);
+        log.debug("디버그 : " + loginReqDto.getUsername());
+        log.debug("디버그 : " + loginReqDto.getPassword());
 
-        // // 유저네임 있는지 체크
-        // Optional<User> userOP = userDao.findByUsername(loginReqDto.getUsername());
-        // if (userOP.isEmpty()) {
-        // customResponse("유저네임을 찾을 수 없습니다.", resp);
-        // return;
-        // }
+        // 유저네임 있는지 체크
+        Optional<UserFindByUsername> userOP = userDao.findByUsername(loginReqDto.getUsername());
+        if (userOP.isEmpty()) {
+            customResponse("유저네임을 찾을 수 없습니다.", resp);
+            return;
+        }
 
-        // // 패스워드 체크
-        // User userPS = userOP.get();
+        // 패스워드 체크
+        UserFindByUsername userPS = userOP.get();
         // SHA256 sh = new SHA256();
         // String encPassword = sh.encrypt(loginReqDto.getPassword());
-        // if (!userPS.getPassword().equals(encPassword)) {
-        // customResponse("패스워드가 틀렸습니다.", resp);
-        // return;
-        // }
 
-        // // JWT토큰 생성 1초 = 1/1000
-        // Date expire = new Date(System.currentTimeMillis() + (1000 * 60 * 60));
+        String encPassword = loginReqDto.getPassword();
+        if (!userPS.getPassword().equals(encPassword)) {
+            customResponse("패스워드가 틀렸습니다.", resp);
+            return;
+        }
 
-        // String jwtToken = JWT.create()
-        // .withSubject("메타코딩")
-        // .withExpiresAt(expire)
-        // .withClaim("id", userPS.getId())
-        // .withClaim("username", userPS.getUsername())
-        // .sign(Algorithm.HMAC512("뺑소니"));
-        // log.debug("디버그 : " + jwtToken);
+        // JWT토큰 생성 1초 = 1/1000
+        Date expire = new Date(System.currentTimeMillis() + (1000 * 60 * 60));
 
-        // // JWT토큰 응답
-        // customJwtResponse(jwtToken, userPS, resp);
+        String jwtToken = JWT.create()
+                .withSubject("메타코딩")
+                .withExpiresAt(expire)
+                .withClaim("id", userPS.getUsername())
+                .withClaim("username", userPS.getUsername())
+                .sign(Algorithm.HMAC512("뺑소니"));
+        log.debug("디버그 : " + jwtToken);
 
-        // // chain.doFilter(req, resp);
+        // JWT토큰 응답
+        customJwtResponse(jwtToken, userPS, resp);
+
+        // chain.doFilter(req, resp);
     }
 
-    private void customJwtResponse(String token, User userPS, HttpServletResponse resp)
+    private void customJwtResponse(String token, UserFindByUsername userPS, HttpServletResponse resp)
             throws IOException, JsonProcessingException {
-        // resp.setContentType("application/json; charset=utf-8");
-        // resp.setHeader("Authorization", "Bearer " + token);
-        // PrintWriter out = resp.getWriter();
-        // resp.setStatus(200);
-        // ResponseDto<?> responseDto = new ResponseDto<>(1, "성공", new
-        // SessionUser(userPS));
-        // ObjectMapper om = new ObjectMapper();
-        // String body = om.writeValueAsString(responseDto);
-        // out.println(body);
-        // out.flush();
+        resp.setContentType("application/json; charset=utf-8");
+        resp.setHeader("Authorization", "Bearer " + token);
+        PrintWriter out = resp.getWriter();
+        resp.setStatus(200);
+        ResponseDto<?> responseDto = new ResponseDto<>(1, "성공", null); // data에 세션유저
+        ObjectMapper om = new ObjectMapper();
+        String body = om.writeValueAsString(responseDto);
+        out.println(body);
+        out.flush();
     }
 
     private void customResponse(String msg, HttpServletResponse resp) throws IOException, JsonProcessingException {

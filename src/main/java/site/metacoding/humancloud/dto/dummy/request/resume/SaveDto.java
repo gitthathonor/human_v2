@@ -3,8 +3,10 @@ package site.metacoding.humancloud.dto.dummy.request.resume;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class SaveDto {
@@ -16,10 +18,6 @@ public class SaveDto {
   private String resumePhoto;
   private String resumeLink;
   private List<String> categoryList;
-
-  public SaveDto() {
-
-  }
 
   public SaveDto(Integer resumeUserId, String resumeTitle, String resumeEducation, String resumeCareer,
       String resumePhoto, String resumeLink, List<String> categoryList) {

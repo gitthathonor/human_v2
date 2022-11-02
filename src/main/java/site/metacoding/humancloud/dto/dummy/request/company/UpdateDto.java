@@ -14,8 +14,9 @@ public class UpdateDto {
 	private String companyAddress;
 	private String companyLogo;
 
-	public Company toEntity(String companyLogo) {
-		return new Company(this.companyPassword, this.companyName, this.companyEmail, this.companyPhoneNumber,
-				this.companyAddress, companyLogo);
-	}
+	// public Company toEntity(String companyLogo) {
+	// return new Company(this.companyPassword, this.companyName, this.companyEmail,
+	// this.companyPhoneNumber,
+	// this.companyAddress, companyLogo);
+	// }
 }
