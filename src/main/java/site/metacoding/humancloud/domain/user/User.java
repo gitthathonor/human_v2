@@ -61,4 +61,5 @@ public class User {
 		if (Pattern.matches(fomat, this.phoneNumber)) {
 			this.phoneNumber = this.phoneNumber.replaceAll(fomat, "$1-$2-$3");
 		}
+	}
 }

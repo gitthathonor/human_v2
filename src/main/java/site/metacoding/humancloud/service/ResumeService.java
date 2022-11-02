@@ -66,16 +66,16 @@ public class ResumeService {
     }
 
     public ResumeDetailRespDto 이력서상세보기(@Param("resumeId") Integer resumeId, @Param("userId") Integer userId) {
-        ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
-        User user = userDao.findById(userId);
-        Resume resume = resumeDao.findById(resumeId);
-        List<Category> categories = categoryDao.findByResumeId(resumeId);
-        log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
-        log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
-        resumeDetailRespDto.toEntity(user);
-        resumeDetailRespDto.toEntity(resume);
-        resumeDetailRespDto.setCategoryList(categories);
-        return resumeDetailRespDto;
+        // ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
+        // User user = userDao.findById(userId);
+        // Resume resume = resumeDao.findById(resumeId);
+        // List<Category> categories = categoryDao.findByResumeId(resumeId);
+        // log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
+        // log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
+        // resumeDetailRespDto.toEntity(user);
+        // resumeDetailRespDto.toEntity(resume);
+        // resumeDetailRespDto.setCategoryList(categories);
+        return null;
     }
 
     // 이력서 목록
