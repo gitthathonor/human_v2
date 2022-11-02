@@ -16,11 +16,13 @@ import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
+import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitSaveRespDto;
 
 @RequiredArgsConstructor
@@ -29,17 +31,30 @@ public class RecruitService {
 
     private final RecruitDao recruitDao;
     private final CategoryDao categoryDao;
-    private final CompanyDao companyDao;
+    private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
+    private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
 
-    public Recruit 공고상세페이지(Integer recruitId) {
+    public RecruitDetailRespDto 공고상세페이지(Integer recruitId, Integer userId) {
         Recruit recruitPS = recruitDao.findById(recruitId);
         Company companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
+        RecruitDetailRespDto recruitDetailRespDto = new RecruitDetailRespDto(
+                recruitPS, companyPS,
+                resumeDao.findByUserId(userId));
+
         List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
         List<Recruit> recruitListByCompanyId = recruitDao.findByCompanyId(recruitPS.getRecruitCompanyId());
-        recruitPS.setCategory(categoryList);
-        recruitPS.setCompany(companyPS);
-        recruitPS.setRecruitListByCompanyId(recruitListByCompanyId);
-        return recruitPS;
+        recruitDetailRespDto.setCategory(categoryList);
+        recruitDetailRespDto.setCompany(companyPS);
+        recruitDetailRespDto.setRecruitListByCompanyId(recruitListByCompanyId);
+
+        // 공고 한 건 RecruitResp
+        // 컴페니 한 건 CompanyREsp
+        // 이력서 목록 List<resume>
+
+        // -- > RecruitDetailRespDto [ RecruitResp / CompanyREsp / List<resume> ]
+
+        // recruitid, recruit
+        return recruitDetailRespDto;
     }
 
     @Transactional
