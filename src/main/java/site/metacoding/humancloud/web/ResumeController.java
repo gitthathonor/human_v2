@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +17,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
 
+@Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ResumeController {
 
   private final ResumeService resumeService;
@@ -93,23 +97,23 @@ public class ResumeController {
   @GetMapping("resume/updateForm/{resumeId}/{userId}")
   public String updatePage(@PathVariable("resumeId") Integer resumeId, @PathVariable("userId") Integer userId,
       Model model) {
-    model.addAttribute("resume", resumeService.이력서상세보기(resumeId, userId).get("resume"));
-    model.addAttribute("category", resumeService.이력서상세보기(resumeId, userId).get("category"));
-    model.addAttribute("user", resumeService.이력서상세보기(resumeId, userId).get("user"));
+    // model.addAttribute("resume", resumeService.이력서상세보기(resumeId,
+    // userId).get("resume"));
+    // model.addAttribute("category", resumeService.이력서상세보기(resumeId,
+    // userId).get("category"));
+    // model.addAttribute("user", resumeService.이력서상세보기(resumeId,
+    // userId).get("user"));
     return "page/resume/updateForm";
   }
 
   @GetMapping("resume/detail/{resumeId}/{userId}")
-  public String detailResume(@PathVariable("resumeId") Integer resumeId, @PathVariable("userId") Integer userId,
-      Model model) {
+  public @ResponseBody ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,
+      @PathVariable("userId") Integer userId) {
 
     resumeService.열람횟수증가(resumeId);
+    ResumeDetailRespDto resumeDetailRespDto = resumeService.이력서상세보기(resumeId, userId);
 
-    model.addAttribute("resume", resumeService.이력서상세보기(resumeId, userId).get("resume"));
-    model.addAttribute("category", resumeService.이력서상세보기(resumeId, userId).get("category"));
-    model.addAttribute("user", resumeService.이력서상세보기(resumeId, userId).get("user"));
-
-    return "page/resume/detail";
+    return new ResponseDto<>(1, "이력서 상세보기 성공", resumeDetailRespDto);
   }
 
   @GetMapping("/resume/saveForm/{userId}")
@@ -121,30 +125,11 @@ public class ResumeController {
   @PostMapping(value = "/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public @ResponseBody ResponseDto<?> create(@RequestPart("file") MultipartFile file,
-      @RequestPart("saveDto") SaveDto saveDto) throws Exception {
-    int pos = file.getOriginalFilename().lastIndexOf(".");
-    String extension = file.getOriginalFilename().substring(pos + 1);
-    String filePath = "C:\\temp\\img\\";
-    String imgSaveName = UUID.randomUUID().toString();
-    String imgName = imgSaveName + "." + extension;
+      @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
-    File makeFileFolder = new File(filePath);
-    if (!makeFileFolder.exists()) {
-      if (!makeFileFolder.mkdir()) {
-        throw new Exception("File.mkdir():Fail.");
-      }
-    }
+    resumeService.이력서저장(file, resumeSaveReqDto);
 
-    File dest = new File(filePath, imgName);
-    try {
-      Files.copy(file.getInputStream(), dest.toPath());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    saveDto.setResumePhoto(imgName);
-
-    resumeService.이력서저장(saveDto);
-    return new ResponseDto<>(1, "업로드 성공", imgName);
+    return new ResponseDto<>(1, "업로드 성공", null);
   }
 
 }

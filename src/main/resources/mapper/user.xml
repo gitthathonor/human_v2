@@ -26,7 +26,6 @@
         select * from user where username=#{username}
 	</select>
 
-	
 
 	<select id="findById" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindById">
         select * from user where user_id=#{userId}
@@ -39,7 +38,6 @@
 	<delete id="deleteById">
         delete from user where user_id=#{userId}
 	</delete>
-
 
 
 	<select id="findByRank" resultType="site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto">

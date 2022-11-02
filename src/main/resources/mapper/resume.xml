@@ -15,11 +15,11 @@
       on resume.resume_id=currentComRescruit.apply_resume_id
    </select>
 
-   <update id = "updateReadCount">
+   <update id="updateReadCount">
       update resume set resume_read_count=resume_read_count+1 where resume_id=#{resumeId}
    </update>
 
-   <!-- <select id="paging" resultType="site.metacoding.humancloud.dto.response.page.PagingDto">
+   <select id="paging" resultType="site.metacoding.humancloud.dto.dummy.response.page.PagingDto">
 		SELECT totalCount,
 		totalPage,
 		currentPage,
@@ -31,27 +31,27 @@
 		isFirst, 0 isLast
 		FROM resume
 		) b
-	</select> -->
+	</select>
 
    <select id="orderByRecommend" resultType="site.metacoding.humancloud.domain.resume.Resume">
-      select resume.*, result.count from resume
-      left join
-      (select *, count(*) count
-      from
-      (select c2.* from (select category.*
-      from
-      (select recruit.* from recruit inner join company
-      on company.company_id=recruit.recruit_company_id
-      where company_id=1) r
-      inner join category
-      on r.recruit_id=category.category_recruit_id
-      group by category_name) c1
-      join (SELECT * FROM category
-      WHERE category_resume_id is not null) c2
-      on c1.category_name=c2.category_name) list
-      group by category_resume_id) result
-      on resume.resume_id=result.category_resume_id
-      order by count desc
+select resume.*, result.count from resume
+left join
+(select *, count(*) count
+from
+(select c2.* from (select category.*
+from
+(select recruit.* from recruit inner join company
+on company.company_id=recruit.recruit_company_id
+where company_id=1) r
+inner join category
+on r.recruit_id=category.category_recruit_id
+group by category_name) c1
+join (SELECT * FROM category
+WHERE category_resume_id is not null) c2
+on c1.category_name=c2.category_name) list
+group by category_resume_id) result
+on resume.resume_id=result.category_resume_id
+order by count desc
     </select>
 
    <select id="findByUserId" resultType="site.metacoding.humancloud.domain.resume.Resume">

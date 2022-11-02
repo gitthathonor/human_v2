@@ -19,6 +19,8 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 
 @RequiredArgsConstructor
 @Service
@@ -40,32 +42,31 @@ public class RecruitService {
     }
 
     @Transactional
-    public void 구인공고업데이트(SaveDto saveDto) {
-        // 영속화 : id 로 공고페이지 찾음
-        Recruit recruitPS = recruitDao.findById(saveDto.getRecruitId());
+    public void 구인공고업데이트(Integer id, RecruitUpdateReqDto recruitUpdateReqDto) {
+
+        recruitUpdateReqDto.setRecruitId(id);
+
+        Recruit recruitPS = recruitDao.findById(id);
         if (recruitPS != null) {
-            recruitPS.recruitUpdate(saveDto);
+            Category category = new Category(id, null, null);
+
+            // 기존의 카테고리 없애고
+            categoryDao.deleteByRecruitId(id);
+            // 새로 수정된 사항대로 체크리스트 INSERT
+            for (String i : recruitUpdateReqDto.getRecruitCategoryList()) {
+                category.setCategoryName(i);
+                categoryDao.save(category);
+            }
+            recruitDao.update(recruitUpdateReqDto);
         }
-
-        Category category = new Category(saveDto.getRecruitId(), null, null);
-
-        // 기존의 카테고리 없애고
-        categoryDao.deleteByRecruitId(saveDto.getRecruitId());
-        // 새로 수정된 사항대로 체크리스트 INSERT
-        for (String i : saveDto.getRecruitCategoryList()) {
-            category.setCategoryName(i);
-            categoryDao.save(category);
-        }
-
-        recruitDao.update(recruitPS);
     }
 
     @Transactional
-    public void 구인공고작성(SaveDto saveDto) {
-        recruitDao.save(saveDto);
-        Category category = new Category(saveDto.getRecruitId(), null, null);
+    public void 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
+        recruitDao.save(recruitSaveReqDto);
+        Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
 
-        for (String i : saveDto.getRecruitCategoryList()) {
+        for (String i : recruitSaveReqDto.getRecruitCategoryList()) {
             category.setCategoryName(i);
             categoryDao.save(category);
         }

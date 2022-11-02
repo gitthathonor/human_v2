@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.category.Category;
@@ -18,12 +19,14 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.RecruitService;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class RecruitController {
 
   private final RecruitService recruitService;
@@ -32,53 +35,54 @@ public class RecruitController {
 
   // main
   @GetMapping("/")
-  public String main(Model model) {
+  public ResponseDto<?> main(Model model) {
     model.addAttribute("list", recruitService.메인공고목록보기());
-    return "page/main";
+    return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
   }
 
-  @GetMapping("recruit/update/{id}")
-  public String updateFrom(@PathVariable(required = false) Integer id, Model model) {
-    Recruit recruitPS = recruitService.공고상세페이지(id);
-    model.addAttribute("Recruit", recruitPS);
-    return "page/recruit/updateForm";
-  }
+  // @GetMapping("recruit/update/{id}")
+  // public ResponseDto<?> updateFrom(@PathVariable(required = false) Integer id,
+  // Model model) {
+  // Recruit recruitPS = recruitService.공고상세페이지(id);
+  // model.addAttribute("Recruit", recruitPS);
+  // return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id));
+  // }
 
-  @PutMapping("recruit/update")
-  public @ResponseBody ResponseDto<?> update(@RequestBody SaveDto saveDto) {
+  @PutMapping("recruit/update/{id}")
+  public @ResponseBody ResponseDto<?> update(@PathVariable Integer id,
+      @RequestBody RecruitUpdateReqDto recruitUpdateReqDto) {
 
-    recruitService.구인공고업데이트(saveDto);
+    recruitService.구인공고업데이트(id, recruitUpdateReqDto);
 
     return new ResponseDto<>(1, "성공", null);
   }
 
   @GetMapping("/recruit/detail/{id}/{userId}")
-  public String recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId, Model model) {
+  public ResponseDto<?> recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId,
+      Model model) {
     Recruit recruitPS = recruitService.공고상세페이지(id);
     model.addAttribute("Recruit", recruitPS);
     model.addAttribute("company", companyService.getCompanyDetail(recruitPS.getRecruitCompanyId()));
     model.addAttribute("apply", applyService.이력서목록보기(userId));
-    return "page/recruit/detail";
+    return new ResponseDto<>(1, "성공", model);
   }
 
-  @GetMapping("/recruit/saveForm/{companyId}")
-  public String writeFrom(@PathVariable Integer companyId, Model model) {
-    model.addAttribute("company", companyService.getCompanyDetail(companyId));
-    return "page/recruit/saveForm";
-  }
+  // @GetMapping("/recruit/saveForm/{companyId}")
+  // public String writeFrom(@PathVariable Integer companyId, Model model) {
+  // model.addAttribute("company", companyService.getCompanyDetail(companyId));
+  // return "page/recruit/saveForm";
+  // }
 
   @PostMapping("/recruit/save")
-  public @ResponseBody ResponseDto<?> write(@RequestBody SaveDto saveDto) {
-
-    recruitService.구인공고작성(saveDto);
-
+  public @ResponseBody ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
+    recruitService.구인공고작성(recruitSaveReqDto);
     return new ResponseDto<>(1, "성공", null);
   }
 
   @GetMapping("/recruit/list")
-  public String viewList(Model model, @Param("page") Integer page) {
+  public ResponseDto<?> viewList(Model model, @Param("page") Integer page) {
     model.addAttribute("recruits", recruitService.채용공고목록보기(page));
-    return "page/recruit/recruitList";
+    return new ResponseDto<>(1, "성공", model);
   }
 
   @PostMapping("/recruit/category")

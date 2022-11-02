@@ -22,9 +22,9 @@
 		isFirst, 0 isLast
 		FROM recruit
 		) b
-	</select> -->
+	</select>
 
-	<!-- <select id="joinCompanyRecruit" resultType="site.metacoding.humancloud.dto.response.recruit.CompanyRecruitDto">
+	<select id="joinCompanyRecruit" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto">
 		select * from recruit
 		inner join company
 		on recruit.recruit_company_id=company.company_id
@@ -74,9 +74,10 @@ order by count DESC
 	</insert>
 
 
-	<!-- <select id="findByTitle" resultType="site.metacoding.humancloud.dto.response.recruit.RecruitDetail">
+	<select id="findByTitle" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail">
 		SELECT * FROM recruit WHERE recruit_title LIKE '%'||#{recruitTitle}||'%'
-	</select> -->
+	</select>
+
 	<select id="findById" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
 	select * from recruit 
 	WHERE recruit_id = #{id}
