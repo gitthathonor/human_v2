@@ -30,6 +30,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     // 2. 권한 체크
     int role = auth.role(); // 0 일반 1 기업 2 관리자
+    System.out.println("---------------------------------");
+    System.out.println(auth.role());
+    System.out.println(session.getAttribute("role"));
+
     int sessionUserRole = Integer.parseInt(session.getAttribute("role").toString());
 
     if (role == sessionUserRole) {

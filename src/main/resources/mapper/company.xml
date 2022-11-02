@@ -16,7 +16,11 @@
 		FROM company
 		) b
 	</select>
+<<<<<<< HEAD
 
+=======
+	-->
+>>>>>>> 25cd49f0f9acf7209ee8be800e86ce684b3b7ded
 	<insert id="save" useGeneratedKeys="true" keyProperty="companyId">
 		INSERT INTO company(company_username, company_password,
 		company_name, company_email, company_phone_number, company_address,
