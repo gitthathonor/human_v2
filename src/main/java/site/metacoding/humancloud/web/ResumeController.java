@@ -70,9 +70,9 @@ public class ResumeController {
       @RequestPart("file") MultipartFile file,
       @RequestPart("resumeUpdateReqDto") ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
 
-    resumeService.이력서수정(resumeId, file, resumeUpdateReqDto);
-
     ResumeDetailRespDto resumeDetailRespDto = resumeService.이력서상세보기(resumeId, resumeUpdateReqDto.getResumeUserId());
+
+    resumeService.이력서수정(resumeId, file, resumeUpdateReqDto);
 
     return new ResponseDto<>(1, "이력서 수정 성공", resumeDetailRespDto);
   }
