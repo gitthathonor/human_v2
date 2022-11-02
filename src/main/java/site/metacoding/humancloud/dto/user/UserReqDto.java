@@ -3,6 +3,7 @@ package site.metacoding.humancloud.dto.user;
 import lombok.Getter;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class UserReqDto {
 
@@ -38,13 +39,16 @@ public class UserReqDto {
     @Setter
     public static class UserUpdateReqDto {
         private Integer userId;
+        private String username;
         private String password;
         private String name;
         private String email;
         private String phoneNumber;
 
-        public User toEntity() {
+        public User toEntity(UserFindById userFindById) {
             return User.builder()
+                    .userId(userFindById.getUserId())
+                    .username(userFindById.getUsername())
                     .password(this.password)
                     .name(this.name)
                     .email(this.email)

@@ -5,10 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.messaging.handler.HandlerMethod;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import site.metacoding.humancloud.util.annotation.Auth;
 
+@Component
 public class AuthInterceptor implements HandlerInterceptor {
 
   // 핸들러(컨트룰러 메서드)가 실행되기 전 : 권한을 확인하기 위해

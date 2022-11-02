@@ -31,10 +31,10 @@ public class UserService {
 
     public JoinRespDto 회원가입(JoinReqDto joinReqDto) {
         Optional<UserFindByAllUsernameDto> userPS = userDao.findAllUsername(joinReqDto.getUsername());
-        userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
+        // userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
 
-        String encPassword = sha256.encrypt(joinReqDto.getPassword());
-        joinReqDto.setPassword(encPassword);
+        // String encPassword = sha256.encrypt(joinReqDto.getPassword());
+        // joinReqDto.setPassword(encPassword);
 
         User user = joinReqDto.toEntity();
         userDao.save(user);
@@ -45,11 +45,10 @@ public class UserService {
         Optional<UserFindById> userPS = userDao.findById(id);
         userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
 
-        userUpdateReqDto.setUserId(id);
+        User user = userUpdateReqDto.toEntity(userPS.get());
+        userDao.update(user);
 
-        userDao.update(userUpdateReqDto.toEntity());
-
-        return new UserUpdateRespDto(userPS.get());
+        return new UserUpdateRespDto(user);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)

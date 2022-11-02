@@ -79,7 +79,7 @@ public class UserRespDto {
         private String email;
         private String phoneNumber;
 
-        public UserUpdateRespDto(UserFindById user) {
+        public UserUpdateRespDto(User user) {
             this.userId = user.getUserId();
             this.username = user.getUsername();
             this.password = user.getPassword();

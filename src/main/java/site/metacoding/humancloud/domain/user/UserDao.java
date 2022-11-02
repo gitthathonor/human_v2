@@ -17,7 +17,7 @@ public interface UserDao {
 
 	public List<User> findAll();
 
-	public int update(@Param("user") User user);
+	public int update(User user);
 
 	public int deleteById(Integer userId);
 
