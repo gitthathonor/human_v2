@@ -37,6 +37,7 @@ public class RecruitService {
     public RecruitDetailRespDto 공고상세페이지(Integer recruitId, Integer userId) {
         Recruit recruitPS = recruitDao.findById(recruitId);
         Company companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
+        // Resp 게릿
         RecruitDetailRespDto recruitDetailRespDto = new RecruitDetailRespDto(
                 recruitPS, companyPS,
                 resumeDao.findByUserId(userId));
@@ -47,13 +48,6 @@ public class RecruitService {
         recruitDetailRespDto.setCompany(companyPS);
         recruitDetailRespDto.setRecruitListByCompanyId(recruitListByCompanyId);
 
-        // 공고 한 건 RecruitResp
-        // 컴페니 한 건 CompanyREsp
-        // 이력서 목록 List<resume>
-
-        // -- > RecruitDetailRespDto [ RecruitResp / CompanyREsp / List<resume> ]
-
-        // recruitid, recruit
         return recruitDetailRespDto;
     }
 
