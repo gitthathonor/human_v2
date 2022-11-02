@@ -24,4 +24,17 @@ public class ResumeReqDto {
     private MultipartFile[] file;
   }
 
+  @Getter
+  @Setter
+  public static class ResumeUpdateReqDto {
+    private Integer resumeId;
+    private Integer resumeUserId;
+    private String resumeTitle;
+    private String resumeEducation;
+    private String resumeCareer;
+    private String resumePhoto;
+    private String resumeLink;
+    private List<String> categoryList;
+    private MultipartFile[] file;
+  }
 }

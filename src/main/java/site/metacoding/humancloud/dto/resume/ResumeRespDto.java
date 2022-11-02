@@ -86,4 +86,39 @@ public class ResumeRespDto {
 
   }
 
+  @Setter
+  @Getter
+  public static class ResumeUpdateRespDto {
+    private Integer resumeId;
+    private Integer resumeUserId;
+    private String resumeTitle;
+    private String resumeEducation;
+    private String resumeCareer;
+    private String resumePhoto;
+    private String resumeLink;
+    private String name;
+    private String email;
+    private String phoneNumber;
+    private List<Category> categoryList;
+
+    public UserFindById toUserEntity(UserFindById userFindById) {
+      this.name = userFindById.getName();
+      this.email = userFindById.getEmail();
+      this.phoneNumber = userFindById.getPhoneNumber();
+      return userFindById;
+    }
+
+    public ResumeFindById toResumeEntity(ResumeFindById resumeFindById) {
+      this.resumeId = resumeFindById.getResumeId();
+      this.resumeUserId = resumeFindById.getResumeUserId();
+      this.resumeTitle = resumeFindById.getResumeTitle();
+      this.resumeEducation = resumeFindById.getResumeEducation();
+      this.resumeCareer = resumeFindById.getResumeCareer();
+      this.resumePhoto = resumeFindById.getResumePhoto();
+      this.resumeLink = resumeFindById.getResumeLink();
+      return resumeFindById;
+    }
+
+  }
+
 }

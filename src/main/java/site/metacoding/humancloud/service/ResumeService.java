@@ -26,6 +26,7 @@ import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
@@ -46,11 +47,15 @@ public class ResumeService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void 이력서수정(Integer resumeId, UpdateDto updateDto) {
-        resumeDao.update(updateDto);
-        categoryDao.deleteByResumeId(resumeId);
-        for (String category : updateDto.getCategoryList()) {
-            Category categoryElement = new Category(resumeId, category);
+    public void 이력서수정(Integer resumeId, MultipartFile file, ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
+
+        String imgName = insertImg(file);
+        resumeUpdateReqDto.setResumePhoto(imgName);
+
+        resumeDao.update(resumeUpdateReqDto);
+        categoryDao.deleteByResumeId(resumeUpdateReqDto.getResumeId());
+        for (String category : resumeUpdateReqDto.getCategoryList()) {
+            Category categoryElement = new Category(resumeUpdateReqDto.getResumeId(), category);
             categoryDao.save(categoryElement);
         }
     }
