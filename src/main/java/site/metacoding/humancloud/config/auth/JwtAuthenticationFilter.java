@@ -76,6 +76,7 @@ public class JwtAuthenticationFilter implements Filter {
                 .withExpiresAt(expire)
                 .withClaim("id", usernamePS.get().getId())
                 .withClaim("username", usernamePS.get().getUsername())
+                .withClaim("role", usernamePS.get().getRole())
                 .sign(Algorithm.HMAC512("3조"));
 
         // JWT토큰 응답
@@ -83,7 +84,7 @@ public class JwtAuthenticationFilter implements Filter {
 
     }
 
-    private void customJwtResponse(String token, String jwtToken, UserFindByAllUsernameDto userFindByAllUsernameDto,
+    private void customJwtResponse(String msg, String token, UserFindByAllUsernameDto userFindByAllUsernameDto,
             HttpServletResponse resp)
             throws IOException, JsonProcessingException {
         resp.setContentType("application/json; charset=utf-8");
