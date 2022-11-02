@@ -48,6 +48,15 @@ public class ResumeService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void 이력서수정(Integer resumeId, MultipartFile file, ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
+        Optional<ResumeFindById> resumeOP = resumeDao.findById(resumeId);
+
+        if (!(resumeOP.isPresent())) {
+            throw new RuntimeException("해당 하는 이력서가 없습니다. 이력서 Id : " + resumeId);
+        }
+
+        if (resumeOP.get().getResumeId() != resumeUpdateReqDto.getResumeId()) {
+            throw new RuntimeException("해당 유저는 이력서 Id가 " + resumeId + "인 이력서를 수정할 권한이 없습니다.");
+        }
 
         String imgName = insertImg(file);
         resumeUpdateReqDto.setResumePhoto(imgName);
