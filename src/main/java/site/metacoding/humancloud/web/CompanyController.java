@@ -78,9 +78,8 @@ public class CompanyController {
 	// 기업 정보 수정
 	@PutMapping(value = "/company/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public @ResponseBody ResponseDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
+	public ResponseDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
 			@RequestPart("companyUpdateReqDto") CompanyUpdateReqDto companyUpdateReqDto) throws Exception {
-
 		return new ResponseDto<>(1, "기업정보 수정완료", companyService.기업정보수정(id, file, companyUpdateReqDto));
 	}
 

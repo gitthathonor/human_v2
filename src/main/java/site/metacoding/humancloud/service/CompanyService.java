@@ -25,6 +25,7 @@ import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.util.SHA256;
 
@@ -109,7 +110,7 @@ public class CompanyService {
 
 	// 기업정보 수정
 	@Transactional
-	public CompanyFindById 기업정보수정(Integer id, MultipartFile file, CompanyUpdateReqDto companyUpdateReqDto)
+	public CompanyUpdateRespDto 기업정보수정(Integer id, MultipartFile file, CompanyUpdateReqDto companyUpdateReqDto)
 			throws Exception {
 		// Optional로 영속화 및 null 체크
 		Optional<CompanyFindById> companyOP = companyDao.findById(id);
@@ -149,10 +150,8 @@ public class CompanyService {
 
 		// 3. update
 		companyDao.update(companyPS);
-		log.debug("디버그 : " + id);
 		Optional<CompanyFindById> companyOP2 = companyDao.findById(id);
-
-		return companyOP2.get();
+		return new CompanyUpdateRespDto(companyOP2.get());
 	}
 
 	// 기업정보 삭제
