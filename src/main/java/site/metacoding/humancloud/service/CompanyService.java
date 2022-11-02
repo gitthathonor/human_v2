@@ -151,6 +151,7 @@ public class CompanyService {
 		companyDao.update(companyPS);
 		log.debug("디버그 : " + id);
 		Optional<CompanyFindById> companyOP2 = companyDao.findById(id);
+
 		return companyOP2.get();
 	}
 
