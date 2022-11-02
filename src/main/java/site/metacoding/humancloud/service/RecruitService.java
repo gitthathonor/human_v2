@@ -105,15 +105,17 @@ public class RecruitService {
         return recruitList;
     }
 
-    public List<Recruit> 분류별채용공고목록보기(String categoryName) {
-        List<Category> categories = categoryDao.findByName(categoryName);
-
-        List<Recruit> recruits = new ArrayList<>();
-        for (Category c : categories) {
-            if (c.getCategoryRecruitId() != null) {
-                recruits.add(recruitDao.findById(c.getCategoryRecruitId()));
-            }
+    public List<Recruit> 분류별채용공고목록보기(String categoryName, Integer page) {
+        // 페이징
+        if (page == null) {
+            page = 0;
         }
+        int startNum = page * 20;
+        PagingDto paging = recruitDao.paging(page);
+        paging.dopaging();
+
+        // 비즈니스로직
+        List<Recruit> recruits = recruitDao.findByCategoryName(startNum);
         return recruits;
     }
 

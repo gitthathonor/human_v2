@@ -5,6 +5,7 @@ import java.util.List;
 import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto.UserResumeDto;
 
 public interface ResumeDao {
 	public void save(SaveDto saveDto);

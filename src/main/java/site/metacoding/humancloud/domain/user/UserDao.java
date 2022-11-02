@@ -1,26 +1,29 @@
 package site.metacoding.humancloud.domain.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
-import site.metacoding.humancloud.dto.dummy.request.user.JoinDto;
 import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByUsername;
 
 public interface UserDao {
-	public int save(JoinDto joinDto);
+	public int save(User user);
 
-	public User findById(Integer id);
+	public Optional<UserFindById> findById(Integer id);
 
 	public List<User> findAll();
 
-	public int update(@Param("id") Integer id, @Param("user") User user);
+	public int update(@Param("user") User user);
 
 	public int deleteById(Integer userId);
 
-	public User findByUsername(String username);
+	public Optional<UserFindByUsername> findByUsername(String username);
 
-	public User findAllUsername(String username);
+	public UserFindByAllUsername findAllUsername(String username);
 
 	public List<CompanyRankingDto> findByRank();
 
