@@ -12,12 +12,12 @@
         where user_id=#{user.userId}
 	</update>
 
-	<select id="findAllUsername" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindByAllUsername">
+	<select id="findAllUsername" resultType="site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto">
 		select *
 		from (
-				 select company_username username from company
+				 select company_id id, company_username username, company_password password from company
 				 union ALL
-				 select username username
+				 select user_id id, username username, password
 				 from user) t
 		where username=#{username}
 	</select>

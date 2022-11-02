@@ -35,7 +35,7 @@ public class FilterConfig {
         log.debug("디버그 : 인가 필터 등록");
         FilterRegistrationBean<JwtAuthorizationFilter> bean = new FilterRegistrationBean<>(
                 new JwtAuthorizationFilter());
-        bean.addUrlPatterns("/s/*"); // 원래 두개인데, 이 친구만 예외
+        bean.addUrlPatterns("/ㅁㅇㄹs/*"); // 원래 두개인데, 이 친구만 예외
         bean.setOrder(2);
         return bean;
     }

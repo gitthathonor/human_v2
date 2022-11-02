@@ -42,16 +42,9 @@ public class UserRespDto {
     @Setter
     @NoArgsConstructor
     public static class UserFindByUsername {
-        private Integer userId;
+        private Integer Id;
         private String username;
         private String password;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class UserFindByAllUsername {
-        private String username;
     }
 
     @Getter
