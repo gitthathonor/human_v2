@@ -1,16 +1,18 @@
 package site.metacoding.humancloud.domain.resume;
 
 import java.util.List;
+import java.util.Optional;
 
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 public interface ResumeDao {
 
 	public void save(ResumeSaveReqDto ResumeSaveReqDto);
 
-	public Resume findById(Integer id);
+	public Optional<ResumeFindById> findById(Integer id);
 
 	public List<Resume> findAll(int startNum);
 

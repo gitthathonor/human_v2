@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.ibatis.annotations.Param;
@@ -26,6 +27,8 @@ import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,15 +70,26 @@ public class ResumeService {
 
     public ResumeDetailRespDto 이력서상세보기(@Param("resumeId") Integer resumeId, @Param("userId") Integer userId) {
         ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
-        User user = userDao.findById(userId);
-        Resume resume = resumeDao.findById(resumeId);
+        Optional<UserFindById> userOP = userDao.findById(userId);
+        Optional<ResumeFindById> resumeOP = resumeDao.findById(resumeId);
         List<Category> categories = categoryDao.findByResumeId(resumeId);
-        log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
-        log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
-        resumeDetailRespDto.toEntity(user);
-        resumeDetailRespDto.toEntity(resume);
+
+        if (userOP.isPresent()) {
+            resumeDetailRespDto.toUserEntity(userOP.get());
+        } else {
+            throw new RuntimeException("해당하는 Id를 가진 유저가 없습니다. 유저 ID : " + userId);
+        }
+
+        if (resumeOP.isPresent()) {
+            resumeDetailRespDto.toResumeEntity(resumeOP.get());
+        } else {
+            throw new RuntimeException("해당하는 Id를 가진 이력서가 없습니다. 이력서 ID : " + resumeId);
+        }
+
         resumeDetailRespDto.setCategoryList(categories);
+
         return resumeDetailRespDto;
+
     }
 
     // 이력서 목록
@@ -101,7 +115,7 @@ public class ResumeService {
 
         for (Category c : categories) {
             if (c.getCategoryResumeId() != null) {
-                resumes.add(resumeDao.findById(c.getCategoryResumeId()));
+                // resumes.add(resumeDao.findById(c.getCategoryResumeId()));
             }
         }
         return resumes;
