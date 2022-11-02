@@ -42,5 +42,14 @@ public class UserReqDto {
         private String name;
         private String email;
         private String phoneNumber;
+
+        public User toEntity() {
+            return User.builder()
+                    .password(this.password)
+                    .name(this.name)
+                    .email(this.email)
+                    .phoneNumber(this.phoneNumber)
+                    .build();
+        }
     }
 }

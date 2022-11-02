@@ -47,7 +47,7 @@ public class UserService {
 
         userUpdateReqDto.setUserId(id);
 
-        userDao.update(userPS.get().toEntity());
+        userDao.update(userUpdateReqDto.toEntity());
 
         return new UserUpdateRespDto(userPS.get());
     }
