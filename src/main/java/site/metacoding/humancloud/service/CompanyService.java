@@ -6,14 +6,15 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
@@ -21,13 +22,13 @@ import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
-import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
-import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
-import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.util.SHA256;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -76,19 +77,20 @@ public class CompanyService {
 		companyDao.save(company);
 	}
 
-	// 기업 정보 상세보기
-	public Company getCompanyDetail(Integer companyId) {
-		Company companyPS = companyDao.findById(companyId);
+	// // 기업 정보 상세보기
+	// public Company getCompanyDetail(Integer companyId) {
+	// Company companyPS = companyDao.findById(companyId);
 
-		// 전화번호 포매팅
-		String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-		if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-			String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat, "$1-$2-$3");
-			companyPS.toPhoneNumber(result);
-		}
+	// // 전화번호 포매팅
+	// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
+	// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
+	// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
+	// "$1-$2-$3");
+	// companyPS.toPhoneNumber(result);
+	// }
 
-		return companyPS;
-	}
+	// return companyPS;
+	// }
 
 	// 기업 리스트 보기
 	public Map<String, Object> getCompanyList(Integer page) {
@@ -106,35 +108,72 @@ public class CompanyService {
 	}
 
 	// 기업정보 수정
-	public void updateCompany(Integer id, UpdateDto updateDto) {
-		// 1. 영속화
-		Company companyPS = companyDao.findById(id);
+	@Transactional
+	public CompanyFindById 기업정보수정(Integer id, MultipartFile file, CompanyUpdateReqDto companyUpdateReqDto)
+			throws Exception {
+		// Optional로 영속화 및 null 체크
+		Optional<CompanyFindById> companyOP = companyDao.findById(id);
+		if (companyOP.isEmpty()) {
+			throw new RuntimeException("기업정보가 없습니다.");
+		}
+
+		// 이미지 파일 작업
+		int pos = file.getOriginalFilename().lastIndexOf(".");
+		String extension = file.getOriginalFilename().substring(pos + 1);
+		String filePath = "C:\\temp\\img\\";
+		String logoSaveName = UUID.randomUUID().toString();
+		String logo = logoSaveName + "." + extension;
+
+		File makeFileFolder = new File(filePath);
+		if (!makeFileFolder.exists()) {
+			if (!makeFileFolder.mkdir()) {
+				throw new Exception("File.mkdir():Fail.");
+			}
+		}
+
+		File dest = new File(filePath, logo);
+		try {
+			Files.copy(file.getInputStream(), dest.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		companyUpdateReqDto.setCompanyLogo(logo);
+
+		String encPassword = sha256.encrypt(companyUpdateReqDto.getCompanyPassword());
+		companyUpdateReqDto.setCompanyPassword(encPassword);
 
 		// 2. updateDto를 companyPS에 업데이트
-		companyPS.update(updateDto);
+		Company companyPS = companyOP.get().toEntity();
+		companyPS.update(companyUpdateReqDto);
 
 		// 3. update
 		companyDao.update(companyPS);
+		log.debug("디버그 : " + id);
+		Optional<CompanyFindById> companyOP2 = companyDao.findById(id);
+		return companyOP2.get();
 	}
 
 	// 기업정보 삭제
+	@Transactional
 	public void deleteCompany(Integer id) {
 		companyDao.deleteById(id);
 	}
 
-	public SessionUser 로그인(CompanyLoginReqDto companyLoginReqDto) {
-		Company companyPS = companyDao.findByUsername(companyLoginReqDto.getCompanyUsername());
-		String encPassword = sha256.encrypt(companyLoginReqDto.getCompanyPassword());
-		if (companyPS == null) {
-			throw new RuntimeException("회원가입 되지 않았습니다.");
-		} else {
-			if (!companyPS.getCompanyPassword().equals(encPassword)) {
-				throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
-			}
-			return SessionUser.builder().company(companyPS).build();
-		}
+	// public SessionUser 로그인(CompanyLoginReqDto companyLoginReqDto) {
+	// Company companyPS =
+	// companyDao.findByUsername(companyLoginReqDto.getCompanyUsername());
+	// String encPassword = sha256.encrypt(companyLoginReqDto.getCompanyPassword());
+	// if (companyPS == null) {
+	// throw new RuntimeException("회원가입 되지 않았습니다.");
+	// } else {
+	// if (!companyPS.getCompanyPassword().equals(encPassword)) {
+	// throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
+	// }
+	// return SessionUser.builder().company(companyPS).build();
+	// }
 
-	}
+	// }
 
 	public List<Recruit> 채용공고리스트불러오기(Integer id) {
 		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {

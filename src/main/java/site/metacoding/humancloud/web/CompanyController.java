@@ -27,7 +27,7 @@ import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
-import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
 
@@ -79,32 +79,9 @@ public class CompanyController {
 	@PutMapping(value = "/company/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public @ResponseBody ResponseDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
-			@RequestPart("updateDto") UpdateDto updateDto) throws Exception {
-		System.out.println("controller실행");
+			@RequestPart("companyUpdateReqDto") CompanyUpdateReqDto companyUpdateReqDto) throws Exception {
 
-		int pos = file.getOriginalFilename().lastIndexOf(".");
-		String extension = file.getOriginalFilename().substring(pos + 1);
-		String filePath = "C:\\temp\\img\\";
-		String logoSaveName = UUID.randomUUID().toString();
-		String logo = logoSaveName + "." + extension;
-
-		File makeFileFolder = new File(filePath);
-		if (!makeFileFolder.exists()) {
-			if (!makeFileFolder.mkdir()) {
-				throw new Exception("File.mkdir():Fail.");
-			}
-		}
-
-		File dest = new File(filePath, logo);
-		try {
-			Files.copy(file.getInputStream(), dest.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		updateDto.setCompanyLogo(logo);
-		companyService.updateCompany(id, updateDto);
-		return new ResponseDto<>(1, "기업정보 수정완료", logo);
+		return new ResponseDto<>(1, "기업정보 수정완료", companyService.기업정보수정(id, file, companyUpdateReqDto));
 	}
 
 	@DeleteMapping("/company/delete/{id}")
@@ -113,10 +90,12 @@ public class CompanyController {
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
 
-	@PostMapping("/company/login")
-	public ResponseDto<?> login(@RequestBody CompanyLoginReqDto companyLoginReqDto) {
-		return new ResponseDto<>(1, "로그인 성공", companyService.로그인(companyLoginReqDto));
-	}
+	// @PostMapping("/company/login")
+	// public ResponseDto<?> login(@RequestBody CompanyLoginReqDto
+	// companyLoginReqDto) {
+	// return new ResponseDto<>(1, "로그인 성공",
+	// companyService.로그인(companyLoginReqDto));
+	// }
 
 	@GetMapping("/company/mypage")
 	public String viewMypage(@RequestParam Integer id, Model model) {
