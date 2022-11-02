@@ -1,24 +1,33 @@
 package site.metacoding.humancloud.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.dto.dummy.request.resume.SaveDto;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ResumeService {
@@ -44,20 +53,29 @@ public class ResumeService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void 이력서저장(SaveDto saveDto) {
-        resumeDao.save(saveDto);
-        for (String category : saveDto.getCategoryList()) {
-            Category categoryElement = new Category(saveDto.getResumeId(), category);
+    public void 이력서저장(MultipartFile file, ResumeSaveReqDto resumeSaveReqDto) throws Exception {
+
+        String imgName = insertImg(file);
+        resumeSaveReqDto.setResumePhoto(imgName);
+
+        resumeDao.save(resumeSaveReqDto);
+        for (String category : resumeSaveReqDto.getCategoryList()) {
+            Category categoryElement = new Category(resumeSaveReqDto.getResumeId(), category);
             categoryDao.save(categoryElement);
         }
     }
 
-    public Map<String, Object> 이력서상세보기(Integer resumeId, Integer userId) {
-        Map<String, Object> resumeDetail = new HashMap<>();
-        resumeDetail.put("resume", resumeDao.findById(resumeId));
-        resumeDetail.put("category", categoryDao.findByResumeId(resumeId));
-        resumeDetail.put("user", userDao.findById(userId));
-        return resumeDetail;
+    public ResumeDetailRespDto 이력서상세보기(@Param("resumeId") Integer resumeId, @Param("userId") Integer userId) {
+        ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
+        User user = userDao.findById(userId);
+        Resume resume = resumeDao.findById(resumeId);
+        List<Category> categories = categoryDao.findByResumeId(resumeId);
+        log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
+        log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
+        resumeDetailRespDto.toEntity(user);
+        resumeDetailRespDto.toEntity(resume);
+        resumeDetailRespDto.setCategoryList(categories);
+        return resumeDetailRespDto;
     }
 
     // 이력서 목록
@@ -119,5 +137,28 @@ public class ResumeService {
 
     public void 열람횟수증가(Integer resumeId) {
         resumeDao.updateReadCount(resumeId);
+    }
+
+    private String insertImg(MultipartFile file) throws Exception {
+        int pos = file.getOriginalFilename().lastIndexOf(".");
+        String extension = file.getOriginalFilename().substring(pos + 1);
+        String filePath = "C:\\temp\\img\\";
+        String imgSaveName = UUID.randomUUID().toString();
+        String imgName = imgSaveName + "." + extension;
+
+        File makeFileFolder = new File(filePath);
+        if (!makeFileFolder.exists()) {
+            if (!makeFileFolder.mkdir()) {
+                throw new Exception("File.mkdir():Fail.");
+            }
+        }
+
+        File dest = new File(filePath, imgName);
+        try {
+            Files.copy(file.getInputStream(), dest.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imgName;
     }
 }

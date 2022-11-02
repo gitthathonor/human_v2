@@ -19,8 +19,8 @@ public class Category {
 		this.categoryResumeId = categoryResumeId;
 	}
 
-	public Category(Integer categoryResumeId, String categoryName) {
+	public Category(Integer categoryResumeId, String category) {
 		this.categoryResumeId = categoryResumeId;
-		this.categoryName = categoryName;
+		this.categoryName = category;
 	}
 }

@@ -2,6 +2,7 @@ package site.metacoding.humancloud.domain.resume;
 
 import java.sql.Timestamp;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class Resume {
 	private Integer resumeUserId;
 	private Timestamp resumeCreatedAt;
 
+	@Builder
 	public Resume(String resumeTitle, String resumePhoto, String resumeEducation, String resumeCareer,
 			String resumeLink, Integer resumeUserId) {
 		this.resumeTitle = resumeTitle;
