@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.dto.subscribe.SubscribeRespDto.SubscribeFindById;
 
 public class CompanyRespDto {
 

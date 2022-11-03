@@ -6,13 +6,18 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.handler.AuthInterceptor;
+import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.handler.TestInterceptor;
+import site.metacoding.humancloud.handler.interceptor.UserAuthInterceptor;
+import site.metacoding.humancloud.handler.interceptor.ResumeInterceptor;
+import site.metacoding.humancloud.handler.interceptor.RoleInterceptor;
 
 @RequiredArgsConstructor
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
 
-    private final AuthInterceptor authInterceptor;
+    private final RoleInterceptor authInterceptor;
+    private final ResumeDao resumeDao;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -22,8 +27,11 @@ public class MyWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/s"); // 이 오류 모름
+        registry.addInterceptor(new RoleInterceptor());
+        registry.addInterceptor(new UserAuthInterceptor())
+                .addPathPatterns("/s/user/**");
+        registry.addInterceptor(new ResumeInterceptor(resumeDao))
+                .addPathPatterns("/s/resume/**");
     }
 
 }

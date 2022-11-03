@@ -36,7 +36,6 @@ public class JwtAuthorizationFilter implements Filter {
 
         // 헤더 Authorization 키값에 Bearer로 적힌 값이 있는지 체크
         String jwtToken = req.getHeader("Authorization");
-        log.debug("디버그토큰2 : " + jwtToken);
         if (jwtToken == null) {
             customResponse("JWT토큰이 없어서 인가할 수 없습니다.", resp);
             return;
