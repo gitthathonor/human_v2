@@ -32,7 +32,7 @@
 		FROM resume
 		) b
 	</select>
-   -->
+
    <select id="orderByRecommend" resultType="site.metacoding.humancloud.domain.resume.Resume">
       select resume.*, result.count from resume
       left join
@@ -101,7 +101,7 @@
       )
    </insert>
 
-   <select id="findById" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="findById" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindById">
       SELECT * FROM resume WHERE resume_id=#{resumeId}
    </select>
 
