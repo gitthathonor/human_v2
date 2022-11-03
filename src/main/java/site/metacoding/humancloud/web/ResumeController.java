@@ -1,10 +1,5 @@
 package site.metacoding.humancloud.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.UUID;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -25,9 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
-import site.metacoding.humancloud.dto.resume.ResumeReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
@@ -66,45 +60,27 @@ public class ResumeController {
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public @ResponseBody ResponseDto<?> updateResume(@PathVariable Integer resumeId,
       @RequestPart("file") MultipartFile file,
-      @RequestPart("updateDto") UpdateDto updateDto) throws Exception {
+      @RequestPart("resumeUpdateReqDto") ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
 
-    int pos = file.getOriginalFilename().lastIndexOf(".");
-    String extension = file.getOriginalFilename().substring(pos + 1);
-    String filePath = "C:\\temp\\img\\";
-    String imgSaveName = UUID.randomUUID().toString();
-    String imgName = imgSaveName + "." + extension;
+    resumeService.이력서수정(resumeId, file, resumeUpdateReqDto);
 
-    File makeFileFolder = new File(filePath);
-    if (!makeFileFolder.exists()) {
-      if (!makeFileFolder.mkdir()) {
-        throw new Exception("File.mkdir():Fail.");
-      }
-    }
+    ResumeDetailRespDto resumeDetailRespDto = resumeService.이력서상세보기(resumeId, resumeUpdateReqDto.getResumeUserId());
 
-    File dest = new File(filePath, imgName);
-    try {
-      Files.copy(file.getInputStream(), dest.toPath());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    updateDto.setResumePhoto(imgName);
-
-    resumeService.이력서수정(resumeId, updateDto);
-
-    return new ResponseDto<>(1, "이력서 수정 성공", null);
+    return new ResponseDto<>(1, "이력서 수정 성공", resumeDetailRespDto);
   }
 
-  @GetMapping("resume/updateForm/{resumeId}/{userId}")
-  public String updatePage(@PathVariable("resumeId") Integer resumeId, @PathVariable("userId") Integer userId,
-      Model model) {
-    // model.addAttribute("resume", resumeService.이력서상세보기(resumeId,
-    // userId).get("resume"));
-    // model.addAttribute("category", resumeService.이력서상세보기(resumeId,
-    // userId).get("category"));
-    // model.addAttribute("user", resumeService.이력서상세보기(resumeId,
-    // userId).get("user"));
-    return "page/resume/updateForm";
-  }
+  // @GetMapping("resume/updateForm/{resumeId}/{userId}")
+  // public String updatePage(@PathVariable("resumeId") Integer resumeId,
+  // @PathVariable("userId") Integer userId,
+  // Model model) {
+  // // model.addAttribute("resume", resumeService.이력서상세보기(resumeId,
+  // // userId).get("resume"));
+  // // model.addAttribute("category", resumeService.이력서상세보기(resumeId,
+  // // userId).get("category"));
+  // // model.addAttribute("user", resumeService.이력서상세보기(resumeId,
+  // // userId).get("user"));
+  // return "page/resume/updateForm";
+  // }
 
   @GetMapping("resume/detail/{resumeId}/{userId}")
   public @ResponseBody ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,

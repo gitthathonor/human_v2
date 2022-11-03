@@ -37,4 +37,6 @@ public interface RecruitDao {
 	public PagingDto paging(Integer page);
 
 	public List<Recruit> findByCategoryName(Integer startNum);
+
+	public void deleteByCompanyId(Integer companyId);
 }

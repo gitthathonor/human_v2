@@ -3,6 +3,7 @@ package site.metacoding.humancloud.dto.recruit;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.resume.Resume;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 
 public class RecruitRespDto {
@@ -59,7 +61,7 @@ public class RecruitRespDto {
         private Timestamp recruitCreatedAt;
         private String recruitStartDay;
 
-        private Company company; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
+        private Optional<CompanyFindById> company; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
 
         private List<Resume> resume; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
 
@@ -72,7 +74,7 @@ public class RecruitRespDto {
             this.recruitStartDay = t;
         }
 
-        public RecruitDetailRespDto(Recruit recruit, Company company, List<Resume> resume) {
+        public RecruitDetailRespDto(Recruit recruit, Optional<CompanyFindById> company, List<Resume> resume) {
             this.recruitId = recruit.getRecruitId();
             this.recruitTitle = recruit.getRecruitTitle();
             this.recruitCareer = recruit.getRecruitCareer();

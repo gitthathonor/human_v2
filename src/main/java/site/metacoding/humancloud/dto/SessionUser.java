@@ -1,25 +1,27 @@
 package site.metacoding.humancloud.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.user.User;
+import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 public class SessionUser {
-    private User user;
-    private Company company;
-    private Integer statue; // 0 = user, 1 = company
+    private Integer id;
+    private String username;
+    private Integer role; // 0 = user, 1 = company
 
-    @Builder
-    public SessionUser(User user, Company company, Integer statue) {
-        this.user = user;
-        this.company = company;
-        this.statue = statue;
+    public SessionUser(UserFindByAllUsernameDto userFindByAllUsernameDto) {
+        this.id = userFindByAllUsernameDto.getId();
+        this.username = userFindByAllUsernameDto.getUsername();
+        this.role = userFindByAllUsernameDto.getRole();
     }
-
 }

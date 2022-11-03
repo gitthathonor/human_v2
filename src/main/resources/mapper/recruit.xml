@@ -101,4 +101,8 @@ order by count DESC
 	<delete id="deleteById">
 		DELETE from recruit where recruit_id=#{recruitId}
 	</delete>
+
+	<delete id="deleteByCompanyId">
+		DELETE from recruit where recruit_company_id=#{recruitCompanyId}
+	</delete>
 </mapper>

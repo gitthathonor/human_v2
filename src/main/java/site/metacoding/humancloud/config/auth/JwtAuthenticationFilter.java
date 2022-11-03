@@ -20,13 +20,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.SessionUser;
-import site.metacoding.humancloud.dto.user.UserReqDto.LoginReqDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByUsername;
-import site.metacoding.humancloud.util.SHA256;
+import site.metacoding.humancloud.dto.auth.LoginDto;
+import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -54,25 +52,18 @@ public class JwtAuthenticationFilter implements Filter {
 
         // Body 값 받기
         ObjectMapper om = new ObjectMapper();
-        LoginReqDto loginReqDto = om.readValue(req.getInputStream(),
-                LoginReqDto.class);
-        log.debug("디버그 : " + loginReqDto.getUsername());
-        log.debug("디버그 : " + loginReqDto.getPassword());
+        LoginDto loginDto = om.readValue(req.getInputStream(),
+                LoginDto.class);
 
-        // 유저네임 있는지 체크
-        Optional<UserFindByUsername> userOP = userDao.findByUsername(loginReqDto.getUsername());
-        if (userOP.isEmpty()) {
-            customResponse("유저네임을 찾을 수 없습니다.", resp);
-            return;
-        }
+        // 유저네임 있는지 체크 : username은 일반+기업에서 유니크
+        Optional<UserFindByAllUsernameDto> usernamePS = userDao.findAllUsername(loginDto.getUsername());
+        usernamePS.orElseThrow(() -> new RuntimeException("아이디를 잘못 입력했습니다."));
 
         // 패스워드 체크
-        UserFindByUsername userPS = userOP.get();
         // SHA256 sh = new SHA256();
         // String encPassword = sh.encrypt(loginReqDto.getPassword());
-
-        String encPassword = loginReqDto.getPassword();
-        if (!userPS.getPassword().equals(encPassword)) {
+        String encPassword = usernamePS.get().getPassword();
+        if (!usernamePS.get().getPassword().equals(encPassword)) {
             customResponse("패스워드가 틀렸습니다.", resp);
             return;
         }
@@ -83,24 +74,24 @@ public class JwtAuthenticationFilter implements Filter {
         String jwtToken = JWT.create()
                 .withSubject("메타코딩")
                 .withExpiresAt(expire)
-                .withClaim("id", userPS.getUsername())
-                .withClaim("username", userPS.getUsername())
-                .sign(Algorithm.HMAC512("뺑소니"));
-        log.debug("디버그 : " + jwtToken);
+                .withClaim("id", usernamePS.get().getId())
+                .withClaim("username", usernamePS.get().getUsername())
+                .withClaim("role", usernamePS.get().getRole())
+                .sign(Algorithm.HMAC512("3조"));
 
         // JWT토큰 응답
-        customJwtResponse(jwtToken, userPS, resp);
+        customJwtResponse("로그인 성공", jwtToken, usernamePS.get(), resp);
 
-        // chain.doFilter(req, resp);
     }
 
-    private void customJwtResponse(String token, UserFindByUsername userPS, HttpServletResponse resp)
+    private void customJwtResponse(String msg, String token, UserFindByAllUsernameDto userFindByAllUsernameDto,
+            HttpServletResponse resp)
             throws IOException, JsonProcessingException {
         resp.setContentType("application/json; charset=utf-8");
         resp.setHeader("Authorization", "Bearer " + token);
         PrintWriter out = resp.getWriter();
         resp.setStatus(200);
-        ResponseDto<?> responseDto = new ResponseDto<>(1, "성공", null); // data에 세션유저
+        ResponseDto<?> responseDto = new ResponseDto<>(1, "성공", new SessionUser(userFindByAllUsernameDto));
         ObjectMapper om = new ObjectMapper();
         String body = om.writeValueAsString(responseDto);
         out.println(body);

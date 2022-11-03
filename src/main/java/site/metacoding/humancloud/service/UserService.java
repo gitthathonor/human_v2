@@ -12,13 +12,14 @@ import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
+import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.JoinRespDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserUpdateRespDto;
+import site.metacoding.humancloud.util.SHA256;
 
 @RequiredArgsConstructor
 @Service
@@ -26,12 +27,18 @@ public class UserService {
     private final UserDao userDao;
     private final ResumeDao resumeDao;
     private final SubscribeDao subscribeDao;
+    private final SHA256 sha256;
 
     public JoinRespDto 회원가입(JoinReqDto joinReqDto) {
-        boolean checkUsername = 유저네임중복체크(joinReqDto.getUsername());
-        if (checkUsername == false) {
-            throw new RuntimeException("아이디 중복 오류");
+        Optional<UserFindByAllUsernameDto> userPS = userDao.findAllUsername(joinReqDto.getUsername());
+        if (userPS.isPresent()) {
+            throw new RuntimeException("중복된 아이디 입니다");
         }
+        // userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
+
+        // String encPassword = sha256.encrypt(joinReqDto.getPassword());
+        // joinReqDto.setPassword(encPassword);
+
         User user = joinReqDto.toEntity();
         userDao.save(user);
         return new JoinRespDto(user);
@@ -41,12 +48,10 @@ public class UserService {
         Optional<UserFindById> userPS = userDao.findById(id);
         userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
 
-        userUpdateReqDto.setUserId(id);
+        User user = userUpdateReqDto.toEntity(userPS.get());
+        userDao.update(user);
 
-        // 영속화
-        userDao.update(userPS.get().toEntity());
-
-        return new UserUpdateRespDto(userPS.get());
+        return new UserUpdateRespDto(user);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -86,14 +91,6 @@ public class UserService {
         Optional<UserFindById> userPS = userDao.findById(userId);
         userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
         return userPS.get();
-    }
-
-    public boolean 유저네임중복체크(String username) {
-        UserFindByAllUsername userPS = userDao.findAllUsername(username);
-        if (userPS == null) {
-            return true;
-        }
-        return false;
     }
 
     // public User 로그인(LoginDto loginDto) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
@@ -36,7 +38,7 @@ public class RecruitService {
 
     public RecruitDetailRespDto 공고상세페이지(Integer recruitId, Integer userId) {
         Recruit recruitPS = recruitDao.findById(recruitId);
-        Company companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
+        Optional<CompanyFindById> companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
         // Resp 게릿
         RecruitDetailRespDto recruitDetailRespDto = new RecruitDetailRespDto(
                 recruitPS, companyPS,
@@ -153,7 +155,7 @@ public class RecruitService {
         List<Company> companies = new ArrayList<>();
         List<Recruit> recruitPS = recruitDao.orderByCreatedAt(); // 내림차순 작성일 정렬
         for (Recruit r : recruitPS) {
-            Company companyPS = companyDao.findById(r.getRecruitCompanyId());
+            Optional<CompanyFindById> companyPS = companyDao.findById(r.getRecruitCompanyId());
             if (companies.size() > 5) {
                 break;
             }
