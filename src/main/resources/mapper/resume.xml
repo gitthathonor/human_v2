@@ -34,24 +34,24 @@
 	</select>
 
    <select id="orderByRecommend" resultType="site.metacoding.humancloud.domain.resume.Resume">
-select resume.*, result.count from resume
-left join
-(select *, count(*) count
-from
-(select c2.* from (select category.*
-from
-(select recruit.* from recruit inner join company
-on company.company_id=recruit.recruit_company_id
-where company_id=1) r
-inner join category
-on r.recruit_id=category.category_recruit_id
-group by category_name) c1
-join (SELECT * FROM category
-WHERE category_resume_id is not null) c2
-on c1.category_name=c2.category_name) list
-group by category_resume_id) result
-on resume.resume_id=result.category_resume_id
-order by count desc
+      select resume.*, result.count from resume
+      left join
+      (select *, count(*) count
+      from
+      (select c2.* from (select category.*
+      from
+      (select recruit.* from recruit inner join company
+      on company.company_id=recruit.recruit_company_id
+      where company_id=1) r
+      inner join category
+      on r.recruit_id=category.category_recruit_id
+      group by category_name) c1
+      join (SELECT * FROM category
+      WHERE category_resume_id is not null) c2
+      on c1.category_name=c2.category_name) list
+      group by category_resume_id) result
+      on resume.resume_id=result.category_resume_id
+      order by count desc
     </select>
 
    <select id="findByUserId" resultType="site.metacoding.humancloud.domain.resume.Resume">

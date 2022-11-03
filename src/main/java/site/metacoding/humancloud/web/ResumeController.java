@@ -56,7 +56,7 @@ public class ResumeController {
     return new ResponseDto<>(1, "이력서 삭제 성공", null);
   }
 
-  @PutMapping(value = "resume/update/{resumeId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+  @PutMapping(value = "/s/resume/update/{resumeId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public @ResponseBody ResponseDto<?> updateResume(@PathVariable Integer resumeId,
       @RequestPart("file") MultipartFile file,
