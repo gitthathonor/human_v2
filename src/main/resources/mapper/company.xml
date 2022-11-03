@@ -16,7 +16,6 @@
 		FROM company
 		) b
 	</select>
-
 	<insert id="save" useGeneratedKeys="true" keyProperty="companyId">
 		INSERT INTO company(company_username, company_password,
 		company_name, company_email, company_phone_number, company_address,

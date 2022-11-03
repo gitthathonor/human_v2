@@ -113,11 +113,6 @@ public class CompanyController {
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
 
-	@PostMapping("/company/login")
-	public ResponseDto<?> login(@RequestBody CompanyLoginReqDto companyLoginReqDto) {
-		return new ResponseDto<>(1, "로그인 성공", companyService.로그인(companyLoginReqDto));
-	}
-
 	@GetMapping("/company/mypage")
 	public String viewMypage(@RequestParam Integer id, Model model) {
 		Integer countApply = companyService.지원목록보기(id).size();
