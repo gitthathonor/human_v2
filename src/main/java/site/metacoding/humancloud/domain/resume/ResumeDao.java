@@ -27,13 +27,13 @@ public interface ResumeDao {
 
 	public Resume sumReadCount(Integer userId);
 
-	public List<Resume> orderByCareer();
+	public List<ResumeFindAllDto> orderByCareer();
 
-	public List<Resume> orderByEducation();
+	public List<ResumeFindAllDto> orderByEducation();
 
-	public List<Resume> orderByCreatedAt();
+	public List<ResumeFindAllDto> orderByCreatedAt();
 
-	public List<Resume> orderByRecommend(Integer companyId);
+	public List<ResumeFindAllDto> orderByRecommend(Integer companyId);
 
 	public PagingDto paging(Integer page);
 

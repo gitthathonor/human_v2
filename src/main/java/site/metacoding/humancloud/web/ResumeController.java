@@ -47,7 +47,7 @@ public class ResumeController {
   }
 
   @PostMapping("/resume/list")
-  public @ResponseBody ResponseDto<?> orderList(@RequestParam("order") String order, @RequestBody Company company) {
+  public ResponseDto<?> orderList(@RequestParam("order") String order, @RequestBody Company company) {
     return new ResponseDto<>(1, "ok", resumeService.정렬하기(order, company.getCompanyId()));
   }
 

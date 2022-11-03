@@ -26,6 +26,7 @@ import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeCategoryDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
@@ -135,7 +136,7 @@ public class ResumeService {
         return resumes;
     }
 
-    public List<Resume> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
+    public List<ResumeFindAllDto> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
         if (orderList.equals("recent")) {
             return 최신순보기();
         } else if (orderList.equals("career")) {
@@ -147,19 +148,19 @@ public class ResumeService {
         }
     }
 
-    public List<Resume> 최신순보기() {
+    public List<ResumeFindAllDto> 최신순보기() {
         return resumeDao.orderByCreatedAt();
     }
 
-    public List<Resume> 경력순보기() {
+    public List<ResumeFindAllDto> 경력순보기() {
         return resumeDao.orderByCareer();
     }
 
-    public List<Resume> 학력순보기() {
+    public List<ResumeFindAllDto> 학력순보기() {
         return resumeDao.orderByEducation();
     }
 
-    public List<Resume> 추천순보기(Integer companyId) {
+    public List<ResumeFindAllDto> 추천순보기(Integer companyId) {
         return resumeDao.orderByRecommend(companyId);
     }
 

@@ -9,5 +9,4 @@ class HumancloudApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
