@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @NoArgsConstructor
 @Builder
@@ -32,4 +29,5 @@ public class User {
 			this.phoneNumber = this.phoneNumber.replaceAll(fomat, "$1-$2-$3");
 		}
 	}
+
 }

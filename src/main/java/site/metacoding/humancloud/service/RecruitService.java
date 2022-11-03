@@ -16,9 +16,14 @@ import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
+import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitSaveRespDto;
 
 @RequiredArgsConstructor
 @Service
@@ -26,51 +31,58 @@ public class RecruitService {
 
     private final RecruitDao recruitDao;
     private final CategoryDao categoryDao;
-    private final CompanyDao companyDao;
+    private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
+    private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
 
-    public Recruit 공고상세페이지(Integer recruitId) {
+    public RecruitDetailRespDto 공고상세페이지(Integer recruitId, Integer userId) {
         Recruit recruitPS = recruitDao.findById(recruitId);
         Company companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
+        // Resp 게릿
+        RecruitDetailRespDto recruitDetailRespDto = new RecruitDetailRespDto(
+                recruitPS, companyPS,
+                resumeDao.findByUserId(userId));
+
         List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
         List<Recruit> recruitListByCompanyId = recruitDao.findByCompanyId(recruitPS.getRecruitCompanyId());
-        recruitPS.setCategory(categoryList);
-        recruitPS.setCompany(companyPS);
-        recruitPS.setRecruitListByCompanyId(recruitListByCompanyId);
-        return recruitPS;
+        recruitDetailRespDto.setCategory(categoryList);
+        recruitDetailRespDto.setCompany(companyPS);
+        recruitDetailRespDto.setRecruitListByCompanyId(recruitListByCompanyId);
+
+        return recruitDetailRespDto;
     }
 
     @Transactional
-    public void 구인공고업데이트(SaveDto saveDto) {
-        // 영속화 : id 로 공고페이지 찾음
-        Recruit recruitPS = recruitDao.findById(saveDto.getRecruitId());
+    public void 구인공고업데이트(Integer id, RecruitUpdateReqDto recruitUpdateReqDto) {
+
+        recruitUpdateReqDto.setRecruitId(id);
+
+        Recruit recruitPS = recruitDao.findById(id);
         if (recruitPS != null) {
-            recruitPS.recruitUpdate(saveDto);
+            Category category = new Category(id, null, null);
+
+            // 기존의 카테고리 없애고
+            categoryDao.deleteByRecruitId(id);
+            // 새로 수정된 사항대로 체크리스트 INSERT
+            for (String i : recruitUpdateReqDto.getRecruitCategoryList()) {
+                category.setCategoryName(i);
+                categoryDao.save(category);
+            }
+            recruitDao.update(recruitUpdateReqDto);
         }
-
-        Category category = new Category(saveDto.getRecruitId(), null, null);
-
-        // 기존의 카테고리 없애고
-        categoryDao.deleteByRecruitId(saveDto.getRecruitId());
-        // 새로 수정된 사항대로 체크리스트 INSERT
-        for (String i : saveDto.getRecruitCategoryList()) {
-            category.setCategoryName(i);
-            categoryDao.save(category);
-        }
-
-        recruitDao.update(recruitPS);
     }
 
     @Transactional
-    public void 구인공고작성(SaveDto saveDto) {
-        recruitDao.save(saveDto);
-        Category category = new Category(saveDto.getRecruitId(), null, null);
+    public RecruitSaveRespDto 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
+        recruitDao.save(recruitSaveReqDto);
+        RecruitSaveRespDto recruitSaveRespDto = new RecruitSaveRespDto(recruitSaveReqDto);
+        Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
 
-        for (String i : saveDto.getRecruitCategoryList()) {
+        for (String i : recruitSaveReqDto.getRecruitCategoryList()) {
             category.setCategoryName(i);
             categoryDao.save(category);
         }
 
-        return;
+        return recruitSaveRespDto;
     }
 
     public List<CompanyRecruitDto> 메인공고목록보기() {

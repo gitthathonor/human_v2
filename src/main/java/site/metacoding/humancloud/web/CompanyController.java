@@ -5,12 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,32 +19,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.company.LoginDto;
-import site.metacoding.humancloud.dto.dummy.request.company.SaveDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
-import site.metacoding.humancloud.dto.dummy.response.user.ResCompanyDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class CompanyController {
 
 	private final CompanyService companyService;
 	private final SubscribeService subscribeService;
 	private final HttpSession session;
-
-	// 기업 회원가입 페이지
-	@GetMapping("/company/saveForm")
-	public String saveForm() {
-		return "page/company/saveForm";
-	}
 
 	// 기업회원 username 중복체크
 	@GetMapping("/company/checkSameUsername")
@@ -56,34 +47,12 @@ public class CompanyController {
 	}
 
 	// 기업 회원가입
-	@PostMapping(value = "/company/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(value = "/company/join", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public @ResponseBody ResponseDto<?> save(@RequestPart("file") MultipartFile file,
-			@RequestPart("saveDto") SaveDto saveDto) throws Exception {
-
-		int pos = file.getOriginalFilename().lastIndexOf(".");
-		String extension = file.getOriginalFilename().substring(pos + 1);
-		String filePath = "C:\\temp\\img\\";
-		String logoSaveName = UUID.randomUUID().toString();
-		String logo = logoSaveName + "." + extension;
-
-		File makeFileFolder = new File(filePath);
-		if (!makeFileFolder.exists()) {
-			if (!makeFileFolder.mkdir()) {
-				throw new Exception("File.mkdir():Fail.");
-			}
-		}
-
-		File dest = new File(filePath, logo);
-		try {
-			Files.copy(file.getInputStream(), dest.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Company company = saveDto.toEntity(logo);
-		companyService.saveCompany(company);
-		return new ResponseDto<>(1, "기업 등록 성공", logo);
+	public ResponseDto<?> save(@RequestPart("file") MultipartFile file,
+			@RequestPart("companyJoinReqDto") CompanyJoinReqDto companyJoinReqDto) throws Exception {
+		companyService.기업회원등록(file, companyJoinReqDto);
+		return new ResponseDto<>(1, "기업 등록 성공", null);
 	}
 
 	// 기업 정보 상세보기
@@ -104,13 +73,6 @@ public class CompanyController {
 	public String getCompanyList(Model model, @Param("page") Integer page) {
 		model.addAttribute("companyList", companyService.getCompanyList(page));
 		return "page/company/companyList";
-	}
-
-	// 기업 정보 수정하기 페이지
-	@GetMapping("/company/updateForm/{id}")
-	public String updateForm(@PathVariable Integer id, Model model) {
-		model.addAttribute("company", companyService.getCompanyDetail(id));
-		return "page/company/updateForm";
 	}
 
 	// 기업 정보 수정
@@ -152,15 +114,8 @@ public class CompanyController {
 	}
 
 	@PostMapping("/company/login")
-	public @ResponseBody ResponseDto<?> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
-		ResCompanyDto result = companyService.로그인(loginDto);
-
-		if (result != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("companyPrincipal", result.getCompany());
-			session.setAttribute("subscribeList", result.getSubscribe());
-		}
-		return new ResponseDto<>(1, "1", result.getCompany());
+	public ResponseDto<?> login(@RequestBody CompanyLoginReqDto companyLoginReqDto) {
+		return new ResponseDto<>(1, "로그인 성공", companyService.로그인(companyLoginReqDto));
 	}
 
 	@GetMapping("/company/mypage")
