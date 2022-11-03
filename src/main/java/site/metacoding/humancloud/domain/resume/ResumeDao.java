@@ -6,6 +6,7 @@ import java.util.Optional;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 public interface ResumeDao {
@@ -14,7 +15,7 @@ public interface ResumeDao {
 
 	public Optional<ResumeFindById> findById(Integer id);
 
-	public List<Resume> findAll(int startNum);
+	public List<ResumeFindAllDto> findAll(int startNum);
 
 	public void update(ResumeUpdateReqDto resumeUpdateReqDto);
 
@@ -26,13 +27,13 @@ public interface ResumeDao {
 
 	public Resume sumReadCount(Integer userId);
 
-	public List<Resume> orderByCareer();
+	public List<ResumeFindAllDto> orderByCareer();
 
-	public List<Resume> orderByEducation();
+	public List<ResumeFindAllDto> orderByEducation();
 
-	public List<Resume> orderByCreatedAt();
+	public List<ResumeFindAllDto> orderByCreatedAt();
 
-	public List<Resume> orderByRecommend(Integer companyId);
+	public List<ResumeFindAllDto> orderByRecommend(Integer companyId);
 
 	public PagingDto paging(Integer page);
 

@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,13 +19,15 @@ import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
-import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
-import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
+import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeCategoryDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
@@ -86,7 +86,7 @@ public class ResumeService {
         ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
         Optional<UserFindById> userOP = userDao.findById(userId);
         Optional<ResumeFindById> resumeOP = resumeDao.findById(resumeId);
-        List<Category> categories = categoryDao.findByResumeId(resumeId);
+        List<CategoryFindByResumeId> categories = categoryDao.findByResumeId(resumeId);
 
         if (userOP.isPresent()) {
             resumeDetailRespDto.toUserEntity(userOP.get());
@@ -107,19 +107,20 @@ public class ResumeService {
     }
 
     // 이력서 목록
-    public Map<String, Object> 이력서목록보기(Integer page) {
+    public ResumeFindAllRespDto 이력서목록보기(Integer page) {
         if (page == null) {
             page = 0;
         }
         int startNum = page * 20;
         PagingDto paging = resumeDao.paging(page);
         paging.dopaging();
+        ResumeFindAllRespDto resumeFindAllRespDto = new ResumeFindAllRespDto();
+        resumeFindAllRespDto.dopaging(paging);
 
-        Map<String, Object> resumeList = new HashMap<>();
-        resumeList.put("paging", paging);
-        resumeList.put("resume", resumeDao.findAll(startNum));
-        resumeList.put("category", categoryDao.distinctName());
-        return resumeList;
+        resumeFindAllRespDto.setResumeList(resumeDao.findAll(startNum));
+        resumeFindAllRespDto.setCategoryList(categoryDao.distinctName());
+
+        return resumeFindAllRespDto;
     }
 
     public List<Resume> 분류별이력서목록보기(String category) {
@@ -135,7 +136,7 @@ public class ResumeService {
         return resumes;
     }
 
-    public List<Resume> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
+    public List<ResumeFindAllDto> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
         if (orderList.equals("recent")) {
             return 최신순보기();
         } else if (orderList.equals("career")) {
@@ -147,19 +148,19 @@ public class ResumeService {
         }
     }
 
-    public List<Resume> 최신순보기() {
+    public List<ResumeFindAllDto> 최신순보기() {
         return resumeDao.orderByCreatedAt();
     }
 
-    public List<Resume> 경력순보기() {
+    public List<ResumeFindAllDto> 경력순보기() {
         return resumeDao.orderByCareer();
     }
 
-    public List<Resume> 학력순보기() {
+    public List<ResumeFindAllDto> 학력순보기() {
         return resumeDao.orderByEducation();
     }
 
-    public List<Resume> 추천순보기(Integer companyId) {
+    public List<ResumeFindAllDto> 추천순보기(Integer companyId) {
         return resumeDao.orderByRecommend(companyId);
     }
 

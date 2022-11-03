@@ -57,33 +57,29 @@
         select r.* from resume r where resume_user_id=#{userId}
     </select>
 
-   <select id="orderByCreatedAt" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="orderByCreatedAt" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
         select *
         from resume
         order by resume_created_at desc
     </select>
 
-   <select id="orderByEducation" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="orderByEducation" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
         select * from resume
-        order by FIELD(resume_education, '고졸', '초대졸', '대졸'),
-                 resume_education ASC
+        order by FIELD(resume_education,  '대학원졸업', '4년제대학졸업', '3년제대학졸업', '2년제대학졸업', '고졸'),
+         resume_education
     </select>
 
-   <select id="orderByCareer" resultType="site.metacoding.humancloud.domain.resume.Resume">
-      select * from resume order by
-      (
-         CASE WHEN ASCII(SUBSTRING(resume_career,1)) BETWEEN 48 AND 57 THEN 3
-	      WHEN ASCII(SUBSTRING(resume_career,1))
-      <![CDATA[<]]>
-      123 THEN 2 ELSE 1 END
-      ), binary(resume_career)
+   <select id="orderByCareer" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
+      select * from resume
+      order by FIELD(resume_career,  '6년이상', '3년이상 ~ 5년미만', '1년이상 ~ 3년미만', '1년미만', '신입'),
+       resume_education
    </select>
 
    <select id="sumReadCount" resultType="site.metacoding.humancloud.domain.resume.Resume">
       select sum(resume_read_count) resumeReadCount from resume where resume_user_id=#{userId}
    </select>
 
-   <select id="findAll" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="findAll" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       SELECT * FROM resume
       order by resume_created_at
 		limit 20 offset #{startNum}
