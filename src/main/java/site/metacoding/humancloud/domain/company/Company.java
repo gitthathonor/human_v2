@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 
 @NoArgsConstructor
 @Getter
@@ -71,13 +71,13 @@ public class Company {
 		this.companyCreatedAt = companyCreatedAt;
 	}
 
-	public void update(UpdateDto updateDto) {
-		this.companyPassword = updateDto.getCompanyPassword();
-		this.companyName = updateDto.getCompanyName();
-		this.companyEmail = updateDto.getCompanyEmail();
-		this.companyPhoneNumber = updateDto.getCompanyPhoneNumber();
-		this.companyAddress = updateDto.getCompanyAddress();
-		this.companyLogo = updateDto.getCompanyLogo();
+	public void update(CompanyUpdateReqDto companyUpdateReqDto) {
+		this.companyPassword = companyUpdateReqDto.getCompanyPassword();
+		this.companyName = companyUpdateReqDto.getCompanyName();
+		this.companyEmail = companyUpdateReqDto.getCompanyEmail();
+		this.companyPhoneNumber = companyUpdateReqDto.getCompanyPhoneNumber();
+		this.companyAddress = companyUpdateReqDto.getCompanyAddress();
+		this.companyLogo = companyUpdateReqDto.getCompanyLogo();
 	}
 
 	public void toPhoneNumber(String num) {

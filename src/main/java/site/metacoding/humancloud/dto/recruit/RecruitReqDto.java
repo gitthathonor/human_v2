@@ -1,12 +1,9 @@
 package site.metacoding.humancloud.dto.recruit;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.category.Category;
-import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 
 public class RecruitReqDto {
@@ -14,7 +11,7 @@ public class RecruitReqDto {
     @Getter
     @Setter
     public static class RecruitSaveReqDto {
-        private Integer recruitId;
+        private Integer recruitId; // 카테고리 INSERT 때문에 필요함, Mybatis 에서 INSERT 시 ID 값을 리턴해줌
         private String recruitTitle;
         private String recruitCareer;
         private Integer recruitSalary;

@@ -76,6 +76,7 @@ order by count DESC
 	<select id="findByTitle" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail">
 		SELECT * FROM recruit WHERE recruit_title LIKE '%'||#{recruitTitle}||'%'
 	</select>
+
 	<select id="findById" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
 	select * from recruit 
 	WHERE recruit_id = #{id}
@@ -100,5 +101,9 @@ order by count DESC
 	</update>
 	<delete id="deleteById">
 		DELETE from recruit where recruit_id=#{recruitId}
+	</delete>
+
+	<delete id="deleteByCompanyId">
+		DELETE from recruit where recruit_company_id=#{recruitCompanyId}
 	</delete>
 </mapper>

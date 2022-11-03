@@ -12,6 +12,8 @@ import site.metacoding.humancloud.handler.AuthInterceptor;
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
 
+    private final AuthInterceptor authInterceptor;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**")

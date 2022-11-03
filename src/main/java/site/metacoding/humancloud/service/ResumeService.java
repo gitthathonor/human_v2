@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.ibatis.annotations.Param;
@@ -25,7 +26,10 @@ import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
+import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,11 +47,24 @@ public class ResumeService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public void 이력서수정(Integer resumeId, UpdateDto updateDto) {
-        resumeDao.update(updateDto);
-        categoryDao.deleteByResumeId(resumeId);
-        for (String category : updateDto.getCategoryList()) {
-            Category categoryElement = new Category(resumeId, category);
+    public void 이력서수정(Integer resumeId, MultipartFile file, ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
+        Optional<ResumeFindById> resumeOP = resumeDao.findById(resumeId);
+
+        if (!(resumeOP.isPresent())) {
+            throw new RuntimeException("해당 하는 이력서가 없습니다. 이력서 Id : " + resumeId);
+        }
+
+        if (resumeOP.get().getResumeUserId() != resumeUpdateReqDto.getResumeUserId()) {
+            throw new RuntimeException("해당 유저는 이력서 Id가 " + resumeId + "인 이력서를 수정할 권한이 없습니다.");
+        }
+
+        String imgName = insertImg(file);
+        resumeUpdateReqDto.setResumePhoto(imgName);
+
+        resumeDao.update(resumeUpdateReqDto);
+        categoryDao.deleteByResumeId(resumeUpdateReqDto.getResumeId());
+        for (String category : resumeUpdateReqDto.getCategoryList()) {
+            Category categoryElement = new Category(resumeUpdateReqDto.getResumeId(), category);
             categoryDao.save(categoryElement);
         }
     }
@@ -67,15 +84,26 @@ public class ResumeService {
 
     public ResumeDetailRespDto 이력서상세보기(@Param("resumeId") Integer resumeId, @Param("userId") Integer userId) {
         ResumeDetailRespDto resumeDetailRespDto = new ResumeDetailRespDto();
-        // User user = userDao.findById(userId);
-        // Resume resume = resumeDao.findById(resumeId);
-        // List<Category> categories = categoryDao.findByResumeId(resumeId);
-        // log.debug("디버그 : " + user.getName() + user.getPhoneNumber());
-        // log.debug("디버그 : " + resume.getResumeCareer() + resume.getResumeLink());
-        // resumeDetailRespDto.toEntity(user);
-        // resumeDetailRespDto.toEntity(resume);
-        // resumeDetailRespDto.setCategoryList(categories);
+        Optional<UserFindById> userOP = userDao.findById(userId);
+        Optional<ResumeFindById> resumeOP = resumeDao.findById(resumeId);
+        List<Category> categories = categoryDao.findByResumeId(resumeId);
+
+        if (userOP.isPresent()) {
+            resumeDetailRespDto.toUserEntity(userOP.get());
+        } else {
+            throw new RuntimeException("해당하는 Id를 가진 유저가 없습니다. 유저 ID : " + userId);
+        }
+
+        if (resumeOP.isPresent()) {
+            resumeDetailRespDto.toResumeEntity(resumeOP.get());
+        } else {
+            throw new RuntimeException("해당하는 Id를 가진 이력서가 없습니다. 이력서 ID : " + resumeId);
+        }
+
+        resumeDetailRespDto.setCategoryList(categories);
+
         return resumeDetailRespDto;
+
     }
 
     // 이력서 목록
@@ -101,7 +129,7 @@ public class ResumeService {
 
         for (Category c : categories) {
             if (c.getCategoryResumeId() != null) {
-                resumes.add(resumeDao.findById(c.getCategoryResumeId()));
+                // resumes.add(resumeDao.findById(c.getCategoryResumeId()));
             }
         }
         return resumes;

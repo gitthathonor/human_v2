@@ -27,7 +27,7 @@ import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
-import site.metacoding.humancloud.dto.dummy.request.company.UpdateDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
 
@@ -40,16 +40,17 @@ public class CompanyController {
 	private final HttpSession session;
 
 	// 기업회원 username 중복체크
-	@GetMapping("/company/checkSameUsername")
-	public @ResponseBody ResponseDto<?> checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
-		boolean isSame = companyService.checkSameUsername(companyUsername);
-		return new ResponseDto<>(1, "통신 성공", isSame);
-	}
+	// @GetMapping("/company/checkSameUsername")
+	// public @ResponseBody ResponseDto<?>
+	// checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
+	// boolean isSame = companyService.checkSameUsername(companyUsername);
+	// return new ResponseDto<>(1, "통신 성공", isSame);
+	// }
 
 	// 기업 회원가입
 	@PostMapping(value = "/company/join", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseDto<?> save(@RequestPart("file") MultipartFile file,
+	public ResponseDto<?> joinCompanyInfo(@RequestPart("file") MultipartFile file,
 			@RequestPart("companyJoinReqDto") CompanyJoinReqDto companyJoinReqDto) throws Exception {
 		companyService.기업회원등록(file, companyJoinReqDto);
 		return new ResponseDto<>(1, "기업 등록 성공", null);
@@ -76,42 +77,26 @@ public class CompanyController {
 	}
 
 	// 기업 정보 수정
-	@PutMapping(value = "/company/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/company/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
-	public @ResponseBody ResponseDto<?> update(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
-			@RequestPart("updateDto") UpdateDto updateDto) throws Exception {
-		System.out.println("controller실행");
-
-		int pos = file.getOriginalFilename().lastIndexOf(".");
-		String extension = file.getOriginalFilename().substring(pos + 1);
-		String filePath = "C:\\temp\\img\\";
-		String logoSaveName = UUID.randomUUID().toString();
-		String logo = logoSaveName + "." + extension;
-
-		File makeFileFolder = new File(filePath);
-		if (!makeFileFolder.exists()) {
-			if (!makeFileFolder.mkdir()) {
-				throw new Exception("File.mkdir():Fail.");
-			}
-		}
-
-		File dest = new File(filePath, logo);
-		try {
-			Files.copy(file.getInputStream(), dest.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		updateDto.setCompanyLogo(logo);
-		companyService.updateCompany(id, updateDto);
-		return new ResponseDto<>(1, "기업정보 수정완료", logo);
+	public ResponseDto<?> updateCompanyInfo(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
+			@RequestPart("companyUpdateReqDto") CompanyUpdateReqDto companyUpdateReqDto) throws Exception {
+		return new ResponseDto<>(1, "기업정보 수정완료", companyService.기업정보수정(id, file, companyUpdateReqDto));
 	}
 
-	@DeleteMapping("/company/delete/{id}")
-	public @ResponseBody ResponseDto<?> delete(@PathVariable Integer id) {
-		companyService.deleteCompany(id);
+	// 기업 정보 삭제
+	@DeleteMapping("/company/{id}")
+	public ResponseDto<?> deleteCompanyInfo(@PathVariable Integer id) {
+		companyService.기업정보삭제(id);
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
+
+	// @PostMapping("/company/login")
+	// public ResponseDto<?> login(@RequestBody CompanyLoginReqDto
+	// companyLoginReqDto) {
+	// return new ResponseDto<>(1, "로그인 성공",
+	// companyService.로그인(companyLoginReqDto));
+	// }
 
 	@GetMapping("/company/mypage")
 	public String viewMypage(@RequestParam Integer id, Model model) {
