@@ -42,16 +42,9 @@ public class UserRespDto {
     @Setter
     @NoArgsConstructor
     public static class UserFindByUsername {
-        private Integer userId;
+        private Integer Id;
         private String username;
         private String password;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class UserFindByAllUsername {
-        private String username;
     }
 
     @Getter
@@ -86,7 +79,7 @@ public class UserRespDto {
         private String email;
         private String phoneNumber;
 
-        public UserUpdateRespDto(UserFindById user) {
+        public UserUpdateRespDto(User user) {
             this.userId = user.getUserId();
             this.username = user.getUsername();
             this.password = user.getPassword();

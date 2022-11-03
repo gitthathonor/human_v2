@@ -122,20 +122,6 @@ public class CompanyService {
 		companyDao.deleteById(id);
 	}
 
-	public SessionUser 로그인(CompanyLoginReqDto companyLoginReqDto) {
-		Company companyPS = companyDao.findByUsername(companyLoginReqDto.getCompanyUsername());
-		String encPassword = sha256.encrypt(companyLoginReqDto.getCompanyPassword());
-		if (companyPS == null) {
-			throw new RuntimeException("회원가입 되지 않았습니다.");
-		} else {
-			if (!companyPS.getCompanyPassword().equals(encPassword)) {
-				throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
-			}
-			return SessionUser.builder().company(companyPS).build();
-		}
-
-	}
-
 	public List<Recruit> 채용공고리스트불러오기(Integer id) {
 		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {
 			System.out.println(recruitDao.findByCompanyId(id).get(i).getRecruitTitle());

@@ -23,7 +23,6 @@
 		FROM recruit
 		) b
 	</select>
-
 	<select id="joinCompanyRecruit" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto">
 		select * from recruit
 		inner join company
