@@ -54,7 +54,7 @@ public class ResumeService {
             throw new RuntimeException("해당 하는 이력서가 없습니다. 이력서 Id : " + resumeId);
         }
 
-        if (resumeOP.get().getResumeId() != resumeUpdateReqDto.getResumeId()) {
+        if (resumeOP.get().getResumeUserId() != resumeUpdateReqDto.getResumeUserId()) {
             throw new RuntimeException("해당 유저는 이력서 Id가 " + resumeId + "인 이력서를 수정할 권한이 없습니다.");
         }
 
