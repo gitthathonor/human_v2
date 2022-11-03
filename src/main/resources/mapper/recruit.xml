@@ -73,19 +73,24 @@ order by count DESC
 	</insert>
 
 
-	<select id="findByTitle" resultType="site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail">
+	<select id="findByTitle" resultType="site.metacoding.humancloud.dto.recruit.RecruitRespDto$RecruitDetailRespDto">
 		SELECT * FROM recruit WHERE recruit_title LIKE '%'||#{recruitTitle}||'%'
 	</select>
-
-	<select id="findById" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
-	select * from recruit 
-	WHERE recruit_id = #{id}
+	<select id="findById" resultType="site.metacoding.humancloud.dto.recruit.RecruitRespDto$RecruitDetailRespDto">
+		SELECT * FROM recruit
+		LEFT JOIN company
+		ON recruit.recruit_company_id = company.company_id
+		WHERE recruit.recruit_id = #{id}
 	</select>
-	<select id="findByCompanyId" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
+	<select id="findByIdyet" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
+		SELECT * FROM recruit
+		WHERE recruit.recruit_id = #{id}
+	</select>
+	<select id="findByCompanyId" resultType="site.metacoding.humancloud.dto.recruit.RecruitRespDto$RecruitListByCompanyIdRespDto">
 		SELECT *
 		FROM recruit WHERE recruit_company_id = #{recruitCompanyId}
 	</select>
-	<select id="findAll" resultType="site.metacoding.humancloud.domain.recruit.Recruit">
+	<select id="findAll" resultType="site.metacoding.humancloud.dto.recruit.RecruitRespDto$RecruitDetailRespDto">
 		select * from recruit
 
 	</select>
