@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.company.Company;
@@ -25,8 +26,10 @@ import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitSaveRespDto;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RecruitService {
@@ -36,21 +39,15 @@ public class RecruitService {
     private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
     private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
 
-    public RecruitDetailRespDto 공고상세페이지(Integer recruitId, Integer userId) {
-        Recruit recruitPS = recruitDao.findById(recruitId);
-        Optional<CompanyFindById> companyPS = companyDao.findById(recruitPS.getRecruitCompanyId());
-        // Resp 게릿
-        RecruitDetailRespDto recruitDetailRespDto = new RecruitDetailRespDto(
-                recruitPS, companyPS,
-                resumeDao.findByUserId(userId));
-
+    public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
+        Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
         List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-        List<Recruit> recruitListByCompanyId = recruitDao.findByCompanyId(recruitPS.getRecruitCompanyId());
-        recruitDetailRespDto.setCategory(categoryList);
-        recruitDetailRespDto.setCompany(companyPS);
-        recruitDetailRespDto.setRecruitListByCompanyId(recruitListByCompanyId);
+        List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
+                .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+        recruitOP.get().setCategory(categoryList);
+        recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
 
-        return recruitDetailRespDto;
+        return recruitOP;
     }
 
     @Transactional
@@ -58,8 +55,8 @@ public class RecruitService {
 
         recruitUpdateReqDto.setRecruitId(id);
 
-        Recruit recruitPS = recruitDao.findById(id);
-        if (recruitPS != null) {
+        Optional<Recruit> recruitPS = recruitDao.findByIdyet(id);
+        if (recruitPS.isPresent()) {
             Category category = new Category(id, null, null);
 
             // 기존의 카테고리 없애고
@@ -70,6 +67,8 @@ public class RecruitService {
                 categoryDao.save(category);
             }
             recruitDao.update(recruitUpdateReqDto);
+        } else {
+            throw new RuntimeException("Recruit : 업데이트 할 항목이 존재하지 않습니다.");
         }
     }
 
@@ -168,7 +167,7 @@ public class RecruitService {
 
     @Transactional
     public Integer 공고삭제하기(Integer recruitId) {
-        Recruit recruitPS = recruitDao.findById(recruitId);
+        Optional<Recruit> recruitPS = recruitDao.findByIdyet(recruitId);
         if (recruitPS != null) {
             // 기존의 카테고리 없애고
             categoryDao.deleteByRecruitId(recruitId);

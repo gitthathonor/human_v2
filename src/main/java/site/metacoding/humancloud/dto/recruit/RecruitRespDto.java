@@ -61,36 +61,64 @@ public class RecruitRespDto {
         private Timestamp recruitCreatedAt;
         private String recruitStartDay;
 
-        private Optional<CompanyFindById> company; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
+        private Integer companyId;
+        private String companyName;
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private String companyAddress;
+        private String companyLogo;
 
         private List<Resume> resume; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
 
         private List<Category> category;
-        private List<Recruit> recruitListByCompanyId;
+        private List<RecruitListByCompanyIdRespDto> recruitListByCompanyId;
 
         public void getRecruitStartDay(Timestamp recruitCreatedAt) {
             SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
             String t = form.format(recruitCreatedAt);
             this.recruitStartDay = t;
         }
+        /*
+         * public RecruitDetailRespDto(RecruitDetailRespDto recruit,List<Resume> resume)
+         * 
+         * {
+         * this.recruitId = recruit.getRecruitId();
+         * this.recruitTitle = recruit.getRecruitTitle();
+         * this.recruitCareer = recruit.getRecruitCareer();
+         * this.recruitSalary = recruit.getRecruitSalary();
+         * this.recruitLocation = recruit.getRecruitContent();
+         * this.recruitContent = recruit.getRecruitContent();
+         * this.recruitReadCount = recruit.getRecruitReadCount();
+         * this.recruitCompanyId = recruit.getRecruitCompanyId();
+         * this.recruitDeadline = recruit.getRecruitDeadline();
+         * this.recruitCreatedAt = recruit.getRecruitCreatedAt();
+         * this.getRecruitStartDay(recruit.getRecruitCreatedAt());
+         * this.category = recruit.getCategory();
+         * this.recruitListByCompanyId = recruit.getRecruitListByCompanyId();
+         * this.resume = resume;
+         * this.companyId = recruit.getCompanyId();
+         * this.companyName =recruit.getCompanyName();
+         * this.companyEmail = recruit.getCompanyEmail();
+         * this.companyPhoneNumber = recruit.getCompanyPhoneNumber();
+         * this.companyAddress = company.get().getCompanyAddress();
+         * this.companyLogo = company.get().getCompanyLogo();
+         * }
+         */
+    }
 
-        public RecruitDetailRespDto(Recruit recruit, Optional<CompanyFindById> company, List<Resume> resume) {
-            this.recruitId = recruit.getRecruitId();
-            this.recruitTitle = recruit.getRecruitTitle();
-            this.recruitCareer = recruit.getRecruitCareer();
-            this.recruitSalary = recruit.getRecruitSalary();
-            this.recruitLocation = recruit.getRecruitContent();
-            this.recruitContent = recruit.getRecruitContent();
-            this.recruitReadCount = recruit.getRecruitReadCount();
-            this.recruitCompanyId = recruit.getRecruitCompanyId();
-            this.recruitDeadline = recruit.getRecruitDeadline();
-            this.recruitCreatedAt = recruit.getRecruitCreatedAt();
-            this.getRecruitStartDay(recruit.getRecruitCreatedAt());
-            this.category = recruit.getCategory();
-            this.recruitListByCompanyId = recruit.getRecruitListByCompanyId();
-            this.resume = resume;
-            this.company = company;
-        }
+    @Getter
+    @Setter
+    public static class RecruitListByCompanyIdRespDto {
+        private Integer recruitId;
+        private String recruitTitle;
+        private String recruitCareer;
+        private Integer recruitSalary;
+        private String recruitLocation;
+        private String recruitContent;
+        private Integer recruitReadCount;
+        private Integer recruitCompanyId;
+        private String recruitDeadline;
+        private Timestamp recruitCreatedAt;
     }
 
 }

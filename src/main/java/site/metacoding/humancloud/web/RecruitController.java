@@ -60,6 +60,7 @@ public class RecruitController {
   @GetMapping("/recruit/detail/{id}/{userId}")
   public ResponseDto<?> recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId,
       Model model) {
+
     return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id, userId));
   }
 
