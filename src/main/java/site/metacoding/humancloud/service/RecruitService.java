@@ -44,6 +44,7 @@ public class RecruitService {
         List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
         List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
                 .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+        recruitOP.get().setResume(resumeDao.findByUserId(userId));
         recruitOP.get().setCategory(categoryList);
         recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
 

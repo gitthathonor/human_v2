@@ -73,7 +73,7 @@ public class RecruitRespDto {
         private List<Category> category;
         private List<RecruitListByCompanyIdRespDto> recruitListByCompanyId;
 
-        public void getRecruitStartDay(Timestamp recruitCreatedAt) {
+        public void setRecruitCreatedAt(Timestamp recruitCreatedAt) {
             SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
             String t = form.format(recruitCreatedAt);
             this.recruitStartDay = t;
@@ -119,6 +119,14 @@ public class RecruitRespDto {
         private Integer recruitCompanyId;
         private String recruitDeadline;
         private Timestamp recruitCreatedAt;
+        private String recruitStartDay;
+
+        public void setRecruitCreatedAt(Timestamp recruitCreatedAt) {
+            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
+            String t = form.format(recruitCreatedAt);
+            this.recruitStartDay = t;
+        }
+
     }
 
 }
