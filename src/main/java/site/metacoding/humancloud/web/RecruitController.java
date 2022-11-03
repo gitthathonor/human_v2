@@ -51,10 +51,7 @@ public class RecruitController {
   @PutMapping("recruit/update/{id}")
   public @ResponseBody ResponseDto<?> update(@PathVariable Integer id,
       @RequestBody RecruitUpdateReqDto recruitUpdateReqDto) {
-
-    recruitService.구인공고업데이트(id, recruitUpdateReqDto);
-
-    return new ResponseDto<>(1, "성공", null);
+    return new ResponseDto<>(1, "성공", recruitService.구인공고업데이트(id, recruitUpdateReqDto));
   }
 
   @GetMapping("/recruit/detail/{id}/{userId}")

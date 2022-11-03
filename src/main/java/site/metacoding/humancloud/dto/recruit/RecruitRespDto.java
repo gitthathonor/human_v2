@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
@@ -13,37 +14,48 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class RecruitRespDto {
+    private Integer recruitId;
+    private String recruitTitle;
+    private String recruitCareer;
+    private Integer recruitSalary;
+    private String recruitLocation;
+    private Integer recruitReadCount;
+    private String recruitContent;
+    private Integer recruitCompanyId;
+    private String recruitDeadline;
 
-    @Getter
-    @Setter
-    public static class RecruitSaveRespDto {
-        private Integer recruitId;
-        private String recruitTitle;
-        private String recruitCareer;
-        private Integer recruitSalary;
-        private String recruitLocation;
-        private Integer recruitReadCount;
-        private String recruitContent;
-        private Integer recruitCompanyId;
-        private String recruitDeadline;
+    private List<String> recruitCategoryList;
 
-        private List<String> recruitCategoryList;
+    public RecruitRespDto(RecruitSaveReqDto recruitSaveReqDto) {
+        this.recruitId = recruitSaveReqDto.getRecruitId();
+        this.recruitTitle = recruitSaveReqDto.getRecruitTitle();
+        this.recruitCareer = recruitSaveReqDto.getRecruitCareer();
+        this.recruitSalary = recruitSaveReqDto.getRecruitSalary();
+        this.recruitLocation = recruitSaveReqDto.getRecruitLocation();
+        this.recruitReadCount = recruitSaveReqDto.getRecruitReadCount();
+        this.recruitContent = recruitSaveReqDto.getRecruitContent();
+        this.recruitCompanyId = recruitSaveReqDto.getRecruitCompanyId();
+        this.recruitDeadline = recruitSaveReqDto.getRecruitDeadline();
+        this.recruitCategoryList = recruitSaveReqDto.getRecruitCategoryList();
+    }
 
-        public RecruitSaveRespDto(RecruitSaveReqDto recruitSaveReqDto) {
-            this.recruitId = recruitSaveReqDto.getRecruitId();
-            this.recruitTitle = recruitSaveReqDto.getRecruitTitle();
-            this.recruitCareer = recruitSaveReqDto.getRecruitCareer();
-            this.recruitSalary = recruitSaveReqDto.getRecruitSalary();
-            this.recruitLocation = recruitSaveReqDto.getRecruitLocation();
-            this.recruitReadCount = recruitSaveReqDto.getRecruitReadCount();
-            this.recruitContent = recruitSaveReqDto.getRecruitContent();
-            this.recruitCompanyId = recruitSaveReqDto.getRecruitCompanyId();
-            this.recruitDeadline = recruitSaveReqDto.getRecruitDeadline();
-            this.recruitCategoryList = recruitSaveReqDto.getRecruitCategoryList();
-        }
-
+    public RecruitRespDto(RecruitUpdateReqDto recruitSaveReqDto) {
+        this.recruitId = recruitSaveReqDto.getRecruitId();
+        this.recruitTitle = recruitSaveReqDto.getRecruitTitle();
+        this.recruitCareer = recruitSaveReqDto.getRecruitCareer();
+        this.recruitSalary = recruitSaveReqDto.getRecruitSalary();
+        this.recruitLocation = recruitSaveReqDto.getRecruitLocation();
+        this.recruitReadCount = recruitSaveReqDto.getRecruitReadCount();
+        this.recruitContent = recruitSaveReqDto.getRecruitContent();
+        this.recruitCompanyId = recruitSaveReqDto.getRecruitCompanyId();
+        this.recruitDeadline = recruitSaveReqDto.getRecruitDeadline();
+        this.recruitCategoryList = recruitSaveReqDto.getRecruitCategoryList();
     }
 
     @Getter
