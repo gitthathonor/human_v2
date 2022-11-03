@@ -1,17 +1,11 @@
 package site.metacoding.humancloud.service;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.subscribe.Subscribe;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.dto.subscribe.SubscribeReqDto.SubscribeSaveReqDto;
 import site.metacoding.humancloud.dto.subscribe.SubscribeRespDto.SubscribeSaveRespDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto.SubscribeCompanyDto;
 
 @RequiredArgsConstructor
 @Service

@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
+import site.metacoding.humancloud.dto.subscribe.SubscribeRespDto.SubscribeFindById;
 
 public class CompanyRespDto {
 
@@ -73,31 +75,32 @@ public class CompanyRespDto {
 
     }
 
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class CompanyDetailRespDto {
-        private String companyUsername;
         private String companyName;
         private String companyEmail;
         private String companyPhoneNumber;
         private String companyAddress;
         private String companyLogo;
+        private boolean isSub;
 
-        public CompanyDetailRespDto(CompanyFindById companyFindById) {
-            this.companyUsername = companyFindById.getCompanyUsername();
+        public CompanyDetailRespDto(CompanyFindById companyFindById, Boolean isSub) {
             this.companyName = companyFindById.getCompanyName();
             this.companyEmail = companyFindById.getCompanyEmail();
             this.companyPhoneNumber = companyFindById.getCompanyPhoneNumber();
             this.companyAddress = companyFindById.getCompanyAddress();
             this.companyLogo = companyFindById.getCompanyLogo();
+            this.isSub = isSub;
         }
 
     }
 
-    @Setter
-    @Getter
-    public static class CompanyMypageRespDto {
+    // @Setter
+    // @Getter
+    // public static class CompanyMypageRespDto {
 
-    }
+    // }
 
 }

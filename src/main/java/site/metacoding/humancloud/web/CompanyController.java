@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
+import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
@@ -50,19 +51,17 @@ public class CompanyController {
 
 	// 기업 정보 상세보기
 	@GetMapping("/company/{id}")
-	public String getCompanyDetail(@PathVariable Integer id, Model model) {
-		User userSession = (User) session.getAttribute("principal");
-		if (userSession == null) {
-			model.addAttribute("company", companyService.getCompanyDetail(id));
-		} else {
-			model.addAttribute("company", companyService.getCompanyDetail(id));
-			model.addAttribute("isSub", subscribeService.구독확인(userSession.getUserId(), id));
+	public ResponseDto<?> getCompanyDetail(@PathVariable Integer id) {
+		SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+		Integer userId = 0;
+		if (sessionUser == null) {
+			userId = sessionUser.getId();
 		}
-		return "page/company/detail";
+		return new ResponseDto<>(1, "기업정보 상세보기 성공", companyService.기업정보상세보기(userId, id));
 	}
 
 	// 기업 리스트 보기
-	@GetMapping("/companys")
+	@GetMapping("/company")
 	public String getCompanyList(Model model, @Param("page") Integer page) {
 		model.addAttribute("companyList", companyService.getCompanyList(page));
 		return "page/company/companyList";

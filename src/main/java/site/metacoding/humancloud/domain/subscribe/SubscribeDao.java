@@ -1,11 +1,10 @@
 package site.metacoding.humancloud.domain.subscribe;
 
-import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto.SubscribeCompanyDto;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import site.metacoding.humancloud.dto.user.UserRespDto.UserMypageRespDto.SubscribeCompanyDto;
 
 public interface SubscribeDao {
 	public void save(Subscribe subscribe);

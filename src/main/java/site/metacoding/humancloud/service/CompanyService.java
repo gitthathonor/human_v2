@@ -21,11 +21,13 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.domain.subscribe.Subscribe;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
@@ -87,20 +89,26 @@ public class CompanyService {
 		companyDao.save(company);
 	}
 
-	// // 기업 정보 상세보기
-	// public Company getCompanyDetail(Integer companyId) {
-	// Company companyPS = companyDao.findById(companyId);
+	// 기업 정보 상세보기
+	@Transactional(readOnly = true)
+	public CompanyDetailRespDto 기업정보상세보기(Integer userId, Integer companyId) {
+		Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
+		if (subscribeDao.findById(userId, companyId) == null) {
+			return false;
+		}
+		return true;
+		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), true);
 
-	// // 전화번호 포매팅
-	// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-	// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-	// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
-	// "$1-$2-$3");
-	// companyPS.toPhoneNumber(result);
-	// }
+		// 전화번호 포매팅
+		String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
+		if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
+			String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
+					"$1-$2-$3");
+			companyPS.toPhoneNumber(result);
+		}
 
-	// return companyPS;
-	// }
+		return companyPS;
+	}
 
 	// 기업 리스트 보기
 	public Map<String, Object> getCompanyList(Integer page) {
