@@ -45,7 +45,7 @@ public class CompanyService {
 
 	// 회원 username 중복체크
 	public boolean 유저네임중복체크(String companyUsername) {
-		Optional<UserFindByAllUsernameDto> username = userDao.findAllUsername(companyUsername);
+		UserFindByAllUsernameDto username = userDao.findAllUsername(companyUsername);
 		if (username == null) {
 			return true;
 		}
