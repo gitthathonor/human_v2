@@ -43,7 +43,7 @@ public class UserController {
         return new ResponseDto<>(1, "ok", null);
     }
 
-    @Auth(role = 1)
+    @Auth(role = 0)
     @GetMapping("/s/mypage/{id}")
     public ResponseDto<?> viewUserMypage(@PathVariable Integer id) {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
