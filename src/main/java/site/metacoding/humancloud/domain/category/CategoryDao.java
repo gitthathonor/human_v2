@@ -3,6 +3,8 @@ package site.metacoding.humancloud.domain.category;
 import java.util.List;
 
 import site.metacoding.humancloud.domain.resume.Resume;
+import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryDistinctNameDto;
+import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 
 public interface CategoryDao {
 	public void save(Category category);
@@ -19,11 +21,11 @@ public interface CategoryDao {
 
 	public void deleteByRecruitId(Integer recruitId);
 
-	public List<Category> distinctName();
+	public List<String> distinctName();
 
 	public List<Category> findByName(String name);
 
-	public List<Category> findByResumeId(Integer resumeId);
+	public List<CategoryFindByResumeId> findByResumeId(Integer resumeId);
 
 	public List<Category> findByRecruitId(Integer recruitId);
 

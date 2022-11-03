@@ -23,7 +23,7 @@ import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeUpdateRespDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
 
@@ -36,9 +36,9 @@ public class ResumeController {
   private final UserService userService;
 
   @GetMapping("/resume")
-  public String viewList(Model model, @Param("page") Integer page) {
-    model.addAttribute("resumeData", resumeService.이력서목록보기(page));
-    return "page/resume/resumeList";
+  public ResponseDto<?> viewList(@Param("page") Integer page) {
+    ResumeFindAllRespDto resumeFindAllRespDto = resumeService.이력서목록보기(page);
+    return new ResponseDto<>(1, "OK", resumeFindAllRespDto);
   }
 
   @PostMapping("/resume")
@@ -52,14 +52,14 @@ public class ResumeController {
   }
 
   @DeleteMapping("/resume/deleteById/{resumeId}")
-  public @ResponseBody ResponseDto<?> deleteResume(@PathVariable Integer resumeId) {
+  public ResponseDto<?> deleteResume(@PathVariable Integer resumeId) {
     resumeService.이력서삭제(resumeId);
     return new ResponseDto<>(1, "이력서 삭제 성공", null);
   }
 
   @PutMapping(value = "resume/update/{resumeId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
-  public @ResponseBody ResponseDto<?> updateResume(@PathVariable Integer resumeId,
+  public ResponseDto<?> updateResume(@PathVariable Integer resumeId,
       @RequestPart("file") MultipartFile file,
       @RequestPart("resumeUpdateReqDto") ResumeUpdateReqDto resumeUpdateReqDto) throws Exception {
 
@@ -84,7 +84,7 @@ public class ResumeController {
   // }
 
   @GetMapping("resume/detail/{resumeId}/{userId}")
-  public @ResponseBody ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,
+  public ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,
       @PathVariable("userId") Integer userId) {
 
     resumeService.열람횟수증가(resumeId);
@@ -101,7 +101,7 @@ public class ResumeController {
 
   @PostMapping(value = "/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
-  public @ResponseBody ResponseDto<?> create(@RequestPart("file") MultipartFile file,
+  public ResponseDto<?> create(@RequestPart("file") MultipartFile file,
       @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
     resumeService.이력서저장(file, resumeSaveReqDto);

@@ -84,7 +84,7 @@ order by count desc
       select sum(resume_read_count) resumeReadCount from resume where resume_user_id=#{userId}
    </select>
 
-   <select id="findAll" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="findAll" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       SELECT * FROM resume
       order by resume_created_at
 		limit 20 offset #{startNum}
