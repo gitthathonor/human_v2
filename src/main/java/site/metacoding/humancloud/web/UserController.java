@@ -13,12 +13,18 @@ import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
 import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
 import site.metacoding.humancloud.service.UserService;
+import site.metacoding.humancloud.util.annotation.Auth;
 
 @RequiredArgsConstructor
 @RestController
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/sw")
+    public void test() {
+
+    }
 
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {
@@ -37,6 +43,7 @@ public class UserController {
         return new ResponseDto<>(1, "ok", null);
     }
 
+    @Auth(role = 1)
     @GetMapping("/s/mypage/{id}")
     public ResponseDto<?> viewUserMypage(@PathVariable Integer id) {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));

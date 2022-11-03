@@ -8,16 +8,16 @@
 	</insert>
 
 	<update id="update">
-        update user set name=#{user.name}, password=#{user.password}, email= #{user.email}, phone_number=#{user.phoneNumber}
-        where user_id=#{user.userId}
+        update user set name=#{name}, password=#{password}, email= #{email}, phone_number=#{phoneNumber}
+        where user_id=#{userId}
 	</update>
 
-	<select id="findAllUsername" resultType="site.metacoding.humancloud.dto.user.UserRespDto$UserFindByAllUsername">
+	<select id="findAllUsername" resultType="site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto">
 		select *
 		from (
-				 select company_username username from company
+				 select company_id id, company_username username, company_password password from company
 				 union ALL
-				 select username username
+				 select user_id id, username username, password
 				 from user) t
 		where username=#{username}
 	</select>

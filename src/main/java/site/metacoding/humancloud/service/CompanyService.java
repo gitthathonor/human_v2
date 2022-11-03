@@ -23,12 +23,12 @@ import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
+import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
-import site.metacoding.humancloud.dto.user.UserRespDto.UserFindByAllUsername;
 import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
@@ -45,7 +45,7 @@ public class CompanyService {
 
 	// 회원 username 중복체크
 	public boolean 유저네임중복체크(String companyUsername) {
-		UserFindByAllUsername username = userDao.findAllUsername(companyUsername);
+		UserFindByAllUsernameDto username = userDao.findAllUsername(companyUsername);
 		if (username == null) {
 			return true;
 		}

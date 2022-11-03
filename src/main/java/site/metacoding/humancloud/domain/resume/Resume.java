@@ -22,8 +22,9 @@ public class Resume {
 	private Timestamp resumeCreatedAt;
 
 	@Builder
-	public Resume(String resumeTitle, String resumePhoto, String resumeEducation, String resumeCareer,
+	public Resume(Integer resumeId, String resumeTitle, String resumePhoto, String resumeEducation, String resumeCareer,
 			String resumeLink, Integer resumeUserId) {
+		this.resumeId = resumeId;
 		this.resumeTitle = resumeTitle;
 		this.resumePhoto = resumePhoto;
 		this.resumeEducation = resumeEducation;
