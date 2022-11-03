@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.handler;
+package site.metacoding.humancloud.handler.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class TestInterceptor implements HandlerInterceptor {
+public class ResumeInterceptor implements HandlerInterceptor {
 
     private final ResumeDao resumeDao;
 

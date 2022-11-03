@@ -1,4 +1,4 @@
-package site.metacoding.humancloud.handler;
+package site.metacoding.humancloud.handler.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import site.metacoding.humancloud.util.annotation.Auth;
 
 @Slf4j
 @Component
-public class AuthInterceptor implements HandlerInterceptor {
+public class RoleInterceptor implements HandlerInterceptor {
 
   // 핸들러(컨트룰러 메서드)가 실행되기 전 : 권한을 확인하기 위해
 

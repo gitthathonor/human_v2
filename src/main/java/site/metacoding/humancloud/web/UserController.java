@@ -21,11 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/sw")
-    public void test() {
-
-    }
-
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {
         return new ResponseDto<>(1, "ok", userService.회원가입(joinReqDto));
@@ -46,7 +41,7 @@ public class UserController {
     }
 
     @Auth(role = 0)
-    @GetMapping("/s/mypage/{id}")
+    @GetMapping("/s/user/mypage/{id}")
     public ResponseDto<?> viewUserMypage(@PathVariable Integer id) {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
     }
