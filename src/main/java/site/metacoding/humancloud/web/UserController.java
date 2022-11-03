@@ -21,22 +21,19 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/sw")
-    public void test() {
-
-    }
-
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {
         return new ResponseDto<>(1, "ok", userService.회원가입(joinReqDto));
     }
 
+    @Auth(role = 0)
     @PutMapping("/s/user/{id}")
     public ResponseDto<?> update(@PathVariable Integer id,
             @RequestBody UserUpdateReqDto userUpdateReqDto) {
         return new ResponseDto<>(1, "ok", userService.회원업데이트(id, userUpdateReqDto));
     }
 
+    @Auth(role = 0)
     @DeleteMapping("/s/user/{id}")
     public ResponseDto<?> delete(@PathVariable Integer id) {
         userService.회원탈퇴(id);
