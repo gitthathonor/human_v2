@@ -23,10 +23,7 @@ public class MyWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/sw")
-                .excludePathPatterns("/css/**", "/fonts/**", "/plugin/**", "/scripts/**");
-
-        // .addPathPatterns("/s");
+                .addPathPatterns("/s");
     }
 
 }

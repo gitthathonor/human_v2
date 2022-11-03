@@ -32,11 +32,6 @@
 		FROM resume
 		) b
 	</select>
-<<<<<<< HEAD
-
-=======
-   -->
->>>>>>> 25cd49f0f9acf7209ee8be800e86ce684b3b7ded
    <select id="orderByRecommend" resultType="site.metacoding.humancloud.domain.resume.Resume">
 select resume.*, result.count from resume
 left join

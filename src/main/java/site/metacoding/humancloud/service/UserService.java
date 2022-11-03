@@ -31,6 +31,9 @@ public class UserService {
 
     public JoinRespDto 회원가입(JoinReqDto joinReqDto) {
         Optional<UserFindByAllUsernameDto> userPS = userDao.findAllUsername(joinReqDto.getUsername());
+        if (!userPS.isPresent()) {
+            throw new RuntimeException("중복된 아이디 입니다");
+        }
         // userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
 
         // String encPassword = sha256.encrypt(joinReqDto.getPassword());
