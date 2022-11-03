@@ -73,4 +73,31 @@ public class CompanyRespDto {
 
     }
 
+    @Setter
+    @Getter
+    public static class CompanyDetailRespDto {
+        private String companyUsername;
+        private String companyName;
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private String companyAddress;
+        private String companyLogo;
+
+        public CompanyDetailRespDto(CompanyFindById companyFindById) {
+            this.companyUsername = companyFindById.getCompanyUsername();
+            this.companyName = companyFindById.getCompanyName();
+            this.companyEmail = companyFindById.getCompanyEmail();
+            this.companyPhoneNumber = companyFindById.getCompanyPhoneNumber();
+            this.companyAddress = companyFindById.getCompanyAddress();
+            this.companyLogo = companyFindById.getCompanyLogo();
+        }
+
+    }
+
+    @Setter
+    @Getter
+    public static class CompanyMypageRespDto {
+        private String
+    }
+
 }
