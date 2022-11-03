@@ -39,14 +39,6 @@ public class CompanyController {
 	private final SubscribeService subscribeService;
 	private final HttpSession session;
 
-	// 기업회원 username 중복체크
-	// @GetMapping("/company/checkSameUsername")
-	// public @ResponseBody ResponseDto<?>
-	// checkSameUsername(@RequestParam("companyUsername") String companyUsername) {
-	// boolean isSame = companyService.checkSameUsername(companyUsername);
-	// return new ResponseDto<>(1, "통신 성공", isSame);
-	// }
-
 	// 기업 회원가입
 	@PostMapping(value = "/company/join", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -90,13 +82,6 @@ public class CompanyController {
 		companyService.기업정보삭제(id);
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
-
-	// @PostMapping("/company/login")
-	// public ResponseDto<?> login(@RequestBody CompanyLoginReqDto
-	// companyLoginReqDto) {
-	// return new ResponseDto<>(1, "로그인 성공",
-	// companyService.로그인(companyLoginReqDto));
-	// }
 
 	@GetMapping("/company/mypage")
 	public String viewMypage(@RequestParam Integer id, Model model) {

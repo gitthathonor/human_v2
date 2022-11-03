@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 
 @Builder

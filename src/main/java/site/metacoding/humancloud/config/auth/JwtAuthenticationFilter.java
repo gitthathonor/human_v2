@@ -25,12 +25,14 @@ import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.auth.LoginDto;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
+import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
 
     private final UserDao userDao; // DI (FilterConfig 주입받음)
+    private final SHA256 sha256;
 
     // /login 요청시
     // post 요청시
@@ -58,11 +60,11 @@ public class JwtAuthenticationFilter implements Filter {
         // 유저네임 있는지 체크 : username은 일반+기업에서 유니크
         Optional<UserFindByAllUsernameDto> usernamePS = userDao.findAllUsername(loginDto.getUsername());
         usernamePS.orElseThrow(() -> new RuntimeException("아이디를 잘못 입력했습니다."));
-
+        usernamePS.get().setRole(loginDto.getRole());
         // 패스워드 체크
-        // SHA256 sh = new SHA256();
-        // String encPassword = sh.encrypt(loginReqDto.getPassword());
-        String encPassword = usernamePS.get().getPassword();
+
+        String encPassword = sha256.encrypt(loginDto.getPassword());
+        // String encPassword = usernamePS.get().getPassword();
         if (!usernamePS.get().getPassword().equals(encPassword)) {
             customResponse("패스워드가 틀렸습니다.", resp);
             return;

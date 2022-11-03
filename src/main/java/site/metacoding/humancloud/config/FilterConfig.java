@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.config.auth.JwtAuthenticationFilter;
 import site.metacoding.humancloud.config.auth.JwtAuthorizationFilter;
 import site.metacoding.humancloud.domain.user.UserDao;
+import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,13 +18,14 @@ import site.metacoding.humancloud.domain.user.UserDao;
 public class FilterConfig {
 
     private final UserDao userDao; // DI (스프링 IoC 컨테이너에서 옴)
+    private final SHA256 sha256;
 
     // IoC등록 (서버 실행시)
     @Bean
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegister() {
         log.debug("디버그 : 인증 필터 등록");
         FilterRegistrationBean<JwtAuthenticationFilter> bean = new FilterRegistrationBean<>(
-                new JwtAuthenticationFilter(userDao));
+                new JwtAuthenticationFilter(userDao, sha256));
         bean.addUrlPatterns("/login");
         bean.setOrder(1); // 낮은 순서대로 실행
         return bean;
