@@ -23,7 +23,7 @@ public class MyWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/s");
+                .addPathPatterns("/s"); // 이 오류 모름
     }
 
 }
