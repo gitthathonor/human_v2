@@ -1,7 +1,6 @@
 package site.metacoding.humancloud.domain.recruit;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import lombok.Builder;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
-import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 
 @NoArgsConstructor
 @Getter

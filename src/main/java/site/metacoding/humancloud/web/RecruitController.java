@@ -60,11 +60,7 @@ public class RecruitController {
   @GetMapping("/recruit/detail/{id}/{userId}")
   public ResponseDto<?> recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId,
       Model model) {
-    Recruit recruitPS = recruitService.공고상세페이지(id);
-    model.addAttribute("Recruit", recruitPS);
-    model.addAttribute("company", companyService.getCompanyDetail(recruitPS.getRecruitCompanyId()));
-    model.addAttribute("apply", applyService.이력서목록보기(userId));
-    return new ResponseDto<>(1, "성공", model);
+    return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id, userId));
   }
 
   // @GetMapping("/recruit/saveForm/{companyId}")
@@ -75,8 +71,7 @@ public class RecruitController {
 
   @PostMapping("/recruit/save")
   public @ResponseBody ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
-    recruitService.구인공고작성(recruitSaveReqDto);
-    return new ResponseDto<>(1, "성공", null);
+    return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }
 
   @GetMapping("/recruit/list")

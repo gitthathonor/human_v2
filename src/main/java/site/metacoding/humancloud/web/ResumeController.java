@@ -1,10 +1,5 @@
 package site.metacoding.humancloud.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.UUID;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -25,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
-import site.metacoding.humancloud.dto.dummy.request.resume.UpdateDto;
-import site.metacoding.humancloud.dto.resume.ResumeReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
