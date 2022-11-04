@@ -48,4 +48,3 @@ VALUES('채용공고2', '2년제대학졸업', 3200 , '부산 동구 망양로94
 
 INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES('채용공고3', '3년제대학졸업', 3600 , '부산 동구 망양로945번길 19 (범일동)', '3', 0, 3, NOW(), NOW());
-
