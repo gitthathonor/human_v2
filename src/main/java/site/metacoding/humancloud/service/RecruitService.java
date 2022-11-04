@@ -167,15 +167,15 @@ public class RecruitService {
 
     @Transactional
     public Integer 공고삭제하기(Integer recruitId) {
-        Optional<Recruit> recruitPS = recruitDao.findByIdyet(recruitId);
-        if (recruitPS != null) {
+        Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
+        if (recruitOP.isPresent()) {
             // 기존의 카테고리 없애고
             categoryDao.deleteByRecruitId(recruitId);
             recruitDao.deleteById(recruitId);
-
             return 1;
+        } else {
+            throw new RuntimeException("삭제 할 게시글이 존재하지 않습니다.");
         }
-        return 0;
 
     }
 }
