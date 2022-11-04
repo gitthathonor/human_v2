@@ -16,5 +16,4 @@ spring:
 
 logging:
   level:
-    '[org.hibernate.SQL]': DEBUG
     '[site.metacoding.humancloud]': DEBUG

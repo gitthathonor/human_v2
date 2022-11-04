@@ -100,15 +100,16 @@ public class CompanyService {
 		}
 		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), isSub);
 
-		// 전화번호 포매팅
-		String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-		if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-			String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
-					"$1-$2-$3");
-			companyPS.toPhoneNumber(result);
-		}
+		// // 전화번호 포매팅
+		// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
+		// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
+		// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
+		// "$1-$2-$3");
+		// companyPS.toPhoneNumber(result);
+		// }
 
-		return companyPS;
+		// return companyPS;
+		return null;
 	}
 
 	// 기업 리스트 보기

@@ -94,7 +94,7 @@ public class CompanyController {
 		}
 
 		model.addAttribute("countApply", countApply);
-		model.addAttribute("company", companyService.getCompanyDetail(id));
+		// model.addAttribute("company", companyService.getCompanyDetail(id));
 		model.addAttribute("recruitList", companyService.채용공고리스트불러오기(id));
 		return "page/user/mypage";
 	}
