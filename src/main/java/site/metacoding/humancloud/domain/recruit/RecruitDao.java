@@ -3,10 +3,8 @@ package site.metacoding.humancloud.domain.recruit;
 import java.util.List;
 import java.util.Optional;
 
-import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
-import site.metacoding.humancloud.dto.dummy.response.recruit.RecruitDetail;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
@@ -31,7 +29,7 @@ public interface RecruitDao {
 
 	public void findByCareer();
 
-	public List<RecruitListByCompanyIdRespDto> findByCompanyId(Integer id);
+	public Optional<List<RecruitListByCompanyIdRespDto>> findByCompanyId(Integer id);
 
 	public List<CompanyRecruitDto> joinCompanyRecruit(int startNum);
 

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
-import site.metacoding.humancloud.domain.subscribe.Subscribe;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
@@ -31,6 +31,7 @@ import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDt
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 import site.metacoding.humancloud.util.SHA256;
 
 @Slf4j
@@ -92,13 +93,12 @@ public class CompanyService {
 	// 기업 정보 상세보기
 	@Transactional(readOnly = true)
 	public CompanyDetailRespDto 기업정보상세보기(Integer userId, Integer companyId) {
-		// Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
-		// if (subscribeDao.findById(userId, companyId) == null) {
-		// return false;
-		// }
-		// return true;
-		// CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(),
-		// true);
+		Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
+		boolean isSub = false;
+		if (subscribeDao.findById(userId, companyId) != null) {
+			isSub = true;
+		}
+		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), isSub);
 
 		// // 전화번호 포매팅
 		// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
@@ -180,20 +180,18 @@ public class CompanyService {
 		companyOP.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
 		// 해당 Company의 채용공고 삭제
-		// List<Recruit> recruits = recruitDao.findByCompanyId(id);
-		// if (recruits != null) {
-		// recruitDao.deleteById(id);
-		// }
+		Optional<List<RecruitListByCompanyIdRespDto>> recruitListOP = recruitDao.findByCompanyId(id);
+		if (recruitListOP.isPresent()) {
+			companyDao.deleteById(id);
+		}
 
-		// companyDao.deleteById(id);
 	}
 
-	public List<Recruit> 채용공고리스트불러오기(Integer id) {
-		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {
-			System.out.println(recruitDao.findByCompanyId(id).get(i).getRecruitTitle());
+	public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
+		for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
+			System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
 		}
-		// return recruitDao.findByCompanyId(id);
-		return null;
+		return recruitDao.findByCompanyId(id).get();
 	}
 
 	public List<Resume> 지원목록보기(Integer companyId) {

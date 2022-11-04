@@ -47,7 +47,4 @@ public class Company {
 		this.companyLogo = companyUpdateReqDto.getCompanyLogo();
 	}
 
-	public void toPhoneNumber(String num) {
-		this.companyPhoneNumber = num;
-	}
 }

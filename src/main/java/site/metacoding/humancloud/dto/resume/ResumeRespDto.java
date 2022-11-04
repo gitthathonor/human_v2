@@ -9,8 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.resume.Resume;
+import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByName;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class ResumeRespDto {
@@ -175,12 +177,7 @@ public class ResumeRespDto {
       this.lastPageNum = paging.getLastPageNum();
       this.blockPage = paging.getBlockPage();
       this.blockPageCount = paging.getBlockPageCount();
-
     }
-  }
-
-  public void dopaging(PagingDto paging) {
-
   }
 
   @Getter
@@ -197,4 +194,44 @@ public class ResumeRespDto {
     }
   }
 
+  @Getter
+  @Setter
+  public static class ResumeOrderByOrderListDto {
+    private List<ResumeFindAllDto> resumeList;
+    private List<ResumeCategoryDto> categoryList;
+
+    private Integer startPageNum;
+    private Integer lastPageNum;
+    private Integer blockPage;
+    private Integer blockPageCount;
+
+    public void setCategoryFindByName(List<CategoryFindByName> categoryList) {
+      List<ResumeCategoryDto> resumeCategoryLists = new ArrayList<>();
+      for (CategoryFindByName category : categoryList) {
+        resumeCategoryLists.add(new ResumeCategoryDto(category));
+      }
+      this.categoryList = resumeCategoryLists;
+    }
+
+    public void dopaging(PagingDto paging) {
+      this.startPageNum = paging.getStartPageNum();
+      this.lastPageNum = paging.getLastPageNum();
+      this.blockPage = paging.getBlockPage();
+      this.blockPageCount = paging.getBlockPageCount();
+    }
+
+    @Getter
+    @Setter
+    public static class ResumeCategoryDto {
+      private Integer categoryId;
+      private Integer categoryResumeId;
+      private String categoryName;
+
+      public ResumeCategoryDto(CategoryFindByName category) {
+        this.categoryId = category.getCategoryId();
+        this.categoryResumeId = category.getCategoryResumeId();
+        this.categoryName = category.getCategoryName();
+      }
+    }
+  }
 }

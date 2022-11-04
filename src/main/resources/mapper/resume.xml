@@ -32,7 +32,7 @@
 		FROM resume
 		) b
 	</select>
-   <select id="orderByRecommend" resultType="site.metacoding.humancloud.domain.resume.Resume">
+   <select id="orderByRecommend" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       select resume.*, result.count from resume
       left join
       (select *, count(*) count
@@ -50,7 +50,8 @@
       on c1.category_name=c2.category_name) list
       group by category_resume_id) result
       on resume.resume_id=result.category_resume_id
-      order by count desc
+      order by count desc 		
+      limit 20 offset #{startNum}
     </select>
 
    <select id="findByUserId" resultType="site.metacoding.humancloud.domain.resume.Resume">
@@ -60,19 +61,22 @@
    <select id="orderByCreatedAt" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
         select *
         from resume
-        order by resume_created_at desc
+        order by resume_created_at desc 		
+        limit 20 offset #{startNum}
     </select>
 
    <select id="orderByEducation" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
         select * from resume
         order by FIELD(resume_education,  '대학원졸업', '4년제대학졸업', '3년제대학졸업', '2년제대학졸업', '고졸'),
-         resume_education
+         resume_education 		
+         limit 20 offset #{startNum}
     </select>
 
    <select id="orderByCareer" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       select * from resume
       order by FIELD(resume_career,  '6년이상', '3년이상 ~ 5년미만', '1년이상 ~ 3년미만', '1년미만', '신입'),
-       resume_education
+       resume_education 
+       limit 20 offset #{startNum}
    </select>
 
    <select id="sumReadCount" resultType="site.metacoding.humancloud.domain.resume.Resume">
@@ -96,7 +100,7 @@
       )
    </insert>
 
-   <select id="findById" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindById">
+   <select id="findById" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       SELECT * FROM resume WHERE resume_id=#{resumeId}
    </select>
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryDistinctNameDto;
+import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByName;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 
 public interface CategoryDao {
@@ -23,7 +24,7 @@ public interface CategoryDao {
 
 	public List<String> distinctName();
 
-	public List<Category> findByName(String name);
+	public List<CategoryFindByName> findByName(String name);
 
 	public List<CategoryFindByResumeId> findByResumeId(Integer resumeId);
 
