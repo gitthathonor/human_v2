@@ -31,6 +31,7 @@ import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
+import site.metacoding.humancloud.util.annotation.Auth;
 
 @RestController
 @RequiredArgsConstructor
@@ -69,6 +70,7 @@ public class CompanyController {
 	}
 
 	// 기업 정보 수정
+	@Auth(role = 1)
 	@PutMapping(value = "/s/company/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseDto<?> updateCompanyInfo(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
@@ -77,7 +79,8 @@ public class CompanyController {
 	}
 
 	// 기업 정보 삭제
-	@DeleteMapping("/company/{id}")
+	@Auth(role = 1)
+	@DeleteMapping("/s/company/{id}")
 	public ResponseDto<?> deleteCompanyInfo(@PathVariable Integer id) {
 		companyService.기업정보삭제(id);
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);

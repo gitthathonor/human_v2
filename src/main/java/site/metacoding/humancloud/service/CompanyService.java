@@ -183,9 +183,7 @@ public class CompanyService {
 		if (recruitListOP.isPresent()) {
 			companyDao.deleteById(id);
 		}
-		// if (recruits != null) {
-		// recruitDao.deleteById(id);
-		// }
+
 	}
 
 	public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
