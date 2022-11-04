@@ -99,10 +99,4 @@ public class CompanyRespDto {
         }
     }
 
-    // @Setter
-    // @Getter
-    // public static class CompanyMypageRespDto {
-
-    // }
-
 }

@@ -50,7 +50,7 @@ public class JwtAuthorizationFilter implements Filter {
             Integer role = decodedJWT.getClaim("role").asInt();
             HttpSession session = req.getSession();
             session.setAttribute("sessionUser",
-                    new SessionUser().builder().id(id).username(username).role(role).build());
+                    SessionUser.builder().id(id).username(username).role(role).build());
         } catch (Exception e) {
             customResponse("토큰 검증 실패", resp);
         }

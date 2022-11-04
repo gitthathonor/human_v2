@@ -54,8 +54,9 @@ public class CompanyController {
 	public ResponseDto<?> getCompanyDetail(@PathVariable Integer id) {
 		SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
 		Integer userId = 0;
-		if (sessionUser == null) {
+		if (sessionUser != null && sessionUser.getRole() == 0) {
 			userId = sessionUser.getId();
+			return new ResponseDto<>(1, "기업정보 상세보기 성공", companyService.기업정보상세보기(userId, id));
 		}
 		return new ResponseDto<>(1, "기업정보 상세보기 성공", companyService.기업정보상세보기(userId, id));
 	}
@@ -68,7 +69,7 @@ public class CompanyController {
 	}
 
 	// 기업 정보 수정
-	@PutMapping(value = "/company/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/s/company/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseDto<?> updateCompanyInfo(@PathVariable Integer id, @RequestPart("file") MultipartFile file,
 			@RequestPart("companyUpdateReqDto") CompanyUpdateReqDto companyUpdateReqDto) throws Exception {

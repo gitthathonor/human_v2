@@ -179,8 +179,8 @@ public class CompanyService {
 		companyOP.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
 		// 해당 Company의 채용공고 삭제
-		Optional<List<RecruitListByCompanyIdRespDto>> recruitsOP = recruitDao.findByCompanyId(id);
-		if (recruitsOP.isPresent()) {
+		Optional<List<RecruitListByCompanyIdRespDto>> recruitListOP = recruitDao.findByCompanyId(id);
+		if (recruitListOP.isPresent()) {
 			companyDao.deleteById(id);
 		}
 		// if (recruits != null) {
@@ -188,11 +188,11 @@ public class CompanyService {
 		// }
 	}
 
-	public List<Recruit> 채용공고리스트불러오기(Integer id) {
-		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {
-			System.out.println(recruitDao.findByCompanyId(id).get(i).getRecruitTitle());
+	public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
+		for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
+			System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
 		}
-		return recruitDao.findByCompanyId(id);
+		return recruitDao.findByCompanyId(id).get();
 	}
 
 	public List<Resume> 지원목록보기(Integer companyId) {

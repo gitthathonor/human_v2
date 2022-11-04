@@ -36,8 +36,8 @@ public class UserService {
         }
         // userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
 
-        // String encPassword = sha256.encrypt(joinReqDto.getPassword());
-        // joinReqDto.setPassword(encPassword);
+        String encPassword = sha256.encrypt(joinReqDto.getPassword());
+        joinReqDto.setPassword(encPassword);
 
         User user = joinReqDto.toEntity();
         userDao.save(user);
