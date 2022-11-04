@@ -24,6 +24,7 @@ import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.RecruitService;
+import site.metacoding.humancloud.util.annotation.Auth;
 
 @RequiredArgsConstructor
 @RestController
@@ -66,8 +67,8 @@ public class RecruitController {
   // model.addAttribute("company", companyService.getCompanyDetail(companyId));
   // return "page/recruit/saveForm";
   // }
-
-  @PostMapping("/recruit/save")
+  @Auth(role = 1)
+  @PostMapping("/s/recruit/save")
   public @ResponseBody ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
     return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }

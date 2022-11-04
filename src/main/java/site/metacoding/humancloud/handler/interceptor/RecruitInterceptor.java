@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RcruitInterceptor implements HandlerInterceptor {
+public class RecruitInterceptor implements HandlerInterceptor {
 
     private final RecruitDao recruitDao;
 
@@ -32,10 +32,10 @@ public class RcruitInterceptor implements HandlerInterceptor {
         String[] uriArray = uri.split("/");
         int reqResumeId = Integer.parseInt(uriArray[uriArray.length - 1]);
 
-        Optional<RecruitDetailRespDto> rcruitOP = recruitDao.findById(reqResumeId);
-        Integer recruitId = rcruitOP.get().getRecruitCompanyId();
+        Optional<RecruitDetailRespDto> resumePS = recruitDao.findById(reqResumeId);
+        Integer recruitId = resumePS.get().getRecruitCompanyId();
 
-        // 세션의 id [ company or user ]
+        // 세션의 id
         HttpSession session = request.getSession();
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         int sessionUserId = sessionUser.getId();
