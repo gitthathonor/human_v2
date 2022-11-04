@@ -5,3 +5,4 @@ truncate table resume;
 truncate table recruit;
 truncate table apply;
 truncate table subscribe;
+
