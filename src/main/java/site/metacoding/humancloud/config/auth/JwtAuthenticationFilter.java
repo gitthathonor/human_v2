@@ -13,6 +13,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Profile;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,6 +29,7 @@ import site.metacoding.humancloud.dto.auth.LoginDto;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.util.SHA256;
 
+@Profile("dev")
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
