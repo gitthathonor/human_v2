@@ -42,11 +42,11 @@ public class RecruitService {
     public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
         List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-        List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
+        Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
                 .findByCompanyId(recruitOP.get().getRecruitCompanyId());
         recruitOP.get().setResume(resumeDao.findByUserId(userId));
         recruitOP.get().setCategory(categoryList);
-        recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
+        recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
 
         return recruitOP;
     }
