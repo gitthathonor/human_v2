@@ -3,16 +3,12 @@ package site.metacoding.humancloud.dto.recruit;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Optional;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.category.Category;
-import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.resume.Resume;
-import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 

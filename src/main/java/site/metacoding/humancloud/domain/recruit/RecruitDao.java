@@ -31,7 +31,7 @@ public interface RecruitDao {
 
 	public void findByCareer();
 
-	public List<RecruitListByCompanyIdRespDto> findByCompanyId(Integer id);
+	public Optional<List<RecruitListByCompanyIdRespDto>> findByCompanyId(Integer id);
 
 	public List<CompanyRecruitDto> joinCompanyRecruit(int startNum);
 

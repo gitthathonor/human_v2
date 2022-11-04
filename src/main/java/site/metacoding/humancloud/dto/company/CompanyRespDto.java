@@ -94,6 +94,9 @@ public class CompanyRespDto {
             this.isSub = isSub;
         }
 
+        public void toPhoneNumber(String num) {
+            this.companyPhoneNumber = num;
+        }
     }
 
     // @Setter
