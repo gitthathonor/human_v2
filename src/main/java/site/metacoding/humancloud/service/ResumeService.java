@@ -3,7 +3,6 @@ package site.metacoding.humancloud.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,18 +16,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
-import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeCategoryDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeOrderByOrderList;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Slf4j
@@ -123,20 +121,23 @@ public class ResumeService {
         return resumeFindAllRespDto;
     }
 
-    public List<Resume> 분류별이력서목록보기(String category) {
-        List<Category> categories = categoryDao.findByName(category);
-
-        List<Resume> resumes = new ArrayList<>();
-
-        for (Category c : categories) {
-            if (c.getCategoryResumeId() != null) {
-                // resumes.add(resumeDao.findById(c.getCategoryResumeId()));
-            }
+    public ResumeOrderByOrderList 분류별이력서목록보기(String category, Integer page) {
+        if (page == null) {
+            page = 0;
         }
-        return resumes;
+        int startNum = page * 20;
+        PagingDto paging = resumeDao.paging(page);
+        paging.dopaging();
+        ResumeOrderByOrderList resumeOrderByOrderList = new ResumeOrderByOrderList();
+        resumeOrderByOrderList.dopaging(paging);
+        resumeOrderByOrderList.setResumeList(resumeDao.findAll(startNum));
+        resumeOrderByOrderList.setCategoryFindByName(categoryDao.findByName(category));
+
+        return resumeOrderByOrderList;
     }
 
     public List<ResumeFindAllDto> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
+
         if (orderList.equals("recent")) {
             return 최신순보기();
         } else if (orderList.equals("career")) {

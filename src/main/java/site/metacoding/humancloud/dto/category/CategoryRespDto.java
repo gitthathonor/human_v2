@@ -19,4 +19,11 @@ public class CategoryRespDto {
     private String CategoryName;
   }
 
+  @Getter
+  @Setter
+  public static class CategoryFindByName {
+    private Integer categoryId;
+    private Integer categoryResumeId;
+    private String categoryName;
+  }
 }

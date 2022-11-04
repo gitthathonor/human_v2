@@ -7,6 +7,7 @@ import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 public interface ResumeDao {

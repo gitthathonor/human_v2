@@ -35,15 +35,17 @@ public class ResumeController {
   private final ResumeService resumeService;
   private final UserService userService;
 
+  // http://localhost:8000/resume?page=0
   @GetMapping("/resume")
   public ResponseDto<?> viewList(@Param("page") Integer page) {
     ResumeFindAllRespDto resumeFindAllRespDto = resumeService.이력서목록보기(page);
     return new ResponseDto<>(1, "OK", resumeFindAllRespDto);
   }
 
+  // http://localhost:8000/resume?page=0&category=Java
   @PostMapping("/resume")
-  public @ResponseBody ResponseDto<?> viewCategory(@RequestBody Category category) {
-    return new ResponseDto<>(1, "OK", resumeService.분류별이력서목록보기(category.getCategoryName()));
+  public @ResponseBody ResponseDto<?> viewCategory(@RequestBody Category category, Integer page) {
+    return new ResponseDto<>(1, "OK", resumeService.분류별이력서목록보기(category.getCategoryName(), page));
   }
 
   @PostMapping("/resume/list")
