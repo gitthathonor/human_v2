@@ -177,12 +177,7 @@ public class ResumeRespDto {
       this.lastPageNum = paging.getLastPageNum();
       this.blockPage = paging.getBlockPage();
       this.blockPageCount = paging.getBlockPageCount();
-
     }
-  }
-
-  public void dopaging(PagingDto paging) {
-
   }
 
   @Getter
@@ -201,7 +196,7 @@ public class ResumeRespDto {
 
   @Getter
   @Setter
-  public static class ResumeOrderByOrderList {
+  public static class ResumeOrderByOrderListDto {
     private List<ResumeFindAllDto> resumeList;
     private List<ResumeCategoryDto> categoryList;
 

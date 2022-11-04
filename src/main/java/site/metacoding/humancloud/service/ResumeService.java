@@ -26,7 +26,7 @@ import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeOrderByOrderList;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeOrderByOrderListDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Slf4j
@@ -121,48 +121,61 @@ public class ResumeService {
         return resumeFindAllRespDto;
     }
 
-    public ResumeOrderByOrderList 분류별이력서목록보기(String category, Integer page) {
+    public ResumeOrderByOrderListDto 분류별이력서목록보기(String category, Integer page) {
         if (page == null) {
             page = 0;
         }
         int startNum = page * 20;
         PagingDto paging = resumeDao.paging(page);
         paging.dopaging();
-        ResumeOrderByOrderList resumeOrderByOrderList = new ResumeOrderByOrderList();
-        resumeOrderByOrderList.dopaging(paging);
-        resumeOrderByOrderList.setResumeList(resumeDao.findAll(startNum));
-        resumeOrderByOrderList.setCategoryFindByName(categoryDao.findByName(category));
+        ResumeOrderByOrderListDto resumeOrderByOrderListDto = new ResumeOrderByOrderListDto();
+        resumeOrderByOrderListDto.dopaging(paging);
+        resumeOrderByOrderListDto.setResumeList(resumeDao.findAll(startNum));
+        resumeOrderByOrderListDto.setCategoryFindByName(categoryDao.findByName(category));
 
-        return resumeOrderByOrderList;
+        return resumeOrderByOrderListDto;
     }
 
-    public List<ResumeFindAllDto> 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId) {
+    public ResumeFindAllRespDto 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId,
+            Integer page) {
+
+        if (page == null) {
+            page = 0;
+        }
+        int startNum = page * 20;
+        PagingDto paging = resumeDao.paging(page);
+        paging.dopaging();
+
+        ResumeFindAllRespDto resumeFindAllRespDto = new ResumeFindAllRespDto();
+        resumeFindAllRespDto.dopaging(paging);
+        resumeFindAllRespDto.setCategoryList(categoryDao.distinctName());
 
         if (orderList.equals("recent")) {
-            return 최신순보기();
+            resumeFindAllRespDto.setResumeList(최신순보기(startNum));
         } else if (orderList.equals("career")) {
-            return 경력순보기();
+            resumeFindAllRespDto.setResumeList(경력순보기(startNum));
         } else if (orderList.equals("education")) {
-            return 학력순보기();
+            resumeFindAllRespDto.setResumeList(학력순보기(startNum));
         } else {
-            return 추천순보기(companyId);
+            resumeFindAllRespDto.setResumeList(추천순보기(companyId, startNum));
         }
+        return resumeFindAllRespDto;
     }
 
-    public List<ResumeFindAllDto> 최신순보기() {
-        return resumeDao.orderByCreatedAt();
+    public List<ResumeFindAllDto> 최신순보기(int startNum) {
+        return resumeDao.orderByCreatedAt(startNum);
     }
 
-    public List<ResumeFindAllDto> 경력순보기() {
-        return resumeDao.orderByCareer();
+    public List<ResumeFindAllDto> 경력순보기(int startNum) {
+        return resumeDao.orderByCareer(startNum);
     }
 
-    public List<ResumeFindAllDto> 학력순보기() {
-        return resumeDao.orderByEducation();
+    public List<ResumeFindAllDto> 학력순보기(int startNum) {
+        return resumeDao.orderByEducation(startNum);
     }
 
-    public List<ResumeFindAllDto> 추천순보기(Integer companyId) {
-        return resumeDao.orderByRecommend(companyId);
+    public List<ResumeFindAllDto> 추천순보기(Integer companyId, Integer startNum) {
+        return resumeDao.orderByRecommend(companyId, startNum);
     }
 
     public void 열람횟수증가(Integer resumeId) {

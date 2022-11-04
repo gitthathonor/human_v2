@@ -3,6 +3,8 @@ package site.metacoding.humancloud.domain.resume;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.ibatis.annotations.Param;
+
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
@@ -28,13 +30,14 @@ public interface ResumeDao {
 
 	public Resume sumReadCount(Integer userId);
 
-	public List<ResumeFindAllDto> orderByCareer();
+	public List<ResumeFindAllDto> orderByCareer(int startNum);
 
-	public List<ResumeFindAllDto> orderByEducation();
+	public List<ResumeFindAllDto> orderByEducation(int startNum);
 
-	public List<ResumeFindAllDto> orderByCreatedAt();
+	public List<ResumeFindAllDto> orderByCreatedAt(int startNum);
 
-	public List<ResumeFindAllDto> orderByRecommend(Integer companyId);
+	public List<ResumeFindAllDto> orderByRecommend(@Param("companyId") Integer companyId,
+			@Param("startNum") Integer startNum);
 
 	public PagingDto paging(Integer page);
 
