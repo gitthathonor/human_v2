@@ -10,15 +10,16 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
 
 @Slf4j
 @RequiredArgsConstructor
-public class RecruitInterceptor implements HandlerInterceptor {
+public class CompanyInterceptor implements HandlerInterceptor {
 
-    private final RecruitDao recruitDao;
+    private final CompanyDao companyDao;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
