@@ -27,14 +27,6 @@ public class UserReqDto {
         }
     }
 
-    // @Getter
-    // @Setter
-    // public static class LoginReqDto extends AuthUser {
-    // private String username;
-    // private String password;
-    // private int role;
-    // }
-
     @Getter
     @Setter
     public static class UserUpdateReqDto {
