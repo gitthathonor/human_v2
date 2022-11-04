@@ -1,5 +1,5 @@
 SET REFERENTIAL_INTEGRITY FALSE;
-truncate table comment;
+truncate table user;
 truncate table board;
 truncate table users;
 SET REFERENTIAL_INTEGRITY TRUE;

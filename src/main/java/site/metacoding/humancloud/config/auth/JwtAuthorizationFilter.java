@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Profile;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.SessionUser;
 
+@Profile("dev")
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter implements Filter {
@@ -50,7 +53,7 @@ public class JwtAuthorizationFilter implements Filter {
             Integer role = decodedJWT.getClaim("role").asInt();
             HttpSession session = req.getSession();
             session.setAttribute("sessionUser",
-                    new SessionUser().builder().id(id).username(username).role(role).build());
+                    SessionUser.builder().id(id).username(username).role(role).build());
         } catch (Exception e) {
             customResponse("토큰 검증 실패", resp);
         }

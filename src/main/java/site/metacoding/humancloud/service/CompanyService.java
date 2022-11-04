@@ -92,22 +92,24 @@ public class CompanyService {
 	// 기업 정보 상세보기
 	@Transactional(readOnly = true)
 	public CompanyDetailRespDto 기업정보상세보기(Integer userId, Integer companyId) {
-		Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
-		if (subscribeDao.findById(userId, companyId) == null) {
-			return false;
-		}
-		return true;
-		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), true);
+		// Optional<CompanyFindById> companyOP = companyDao.findById(companyId);
+		// if (subscribeDao.findById(userId, companyId) == null) {
+		// return false;
+		// }
+		// return true;
+		// CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(),
+		// true);
 
-		// 전화번호 포매팅
-		String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-		if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-			String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
-					"$1-$2-$3");
-			companyPS.toPhoneNumber(result);
-		}
+		// // 전화번호 포매팅
+		// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
+		// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
+		// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
+		// "$1-$2-$3");
+		// companyPS.toPhoneNumber(result);
+		// }
 
-		return companyPS;
+		// return companyPS;
+		return null;
 	}
 
 	// 기업 리스트 보기
@@ -178,19 +180,20 @@ public class CompanyService {
 		companyOP.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
 
 		// 해당 Company의 채용공고 삭제
-		List<Recruit> recruits = recruitDao.findByCompanyId(id);
-		if (recruits != null) {
-			recruitDao.deleteById(id);
-		}
+		// List<Recruit> recruits = recruitDao.findByCompanyId(id);
+		// if (recruits != null) {
+		// recruitDao.deleteById(id);
+		// }
 
-		companyDao.deleteById(id);
+		// companyDao.deleteById(id);
 	}
 
 	public List<Recruit> 채용공고리스트불러오기(Integer id) {
 		for (int i = 0; i < recruitDao.findByCompanyId(id).size(); i++) {
 			System.out.println(recruitDao.findByCompanyId(id).get(i).getRecruitTitle());
 		}
-		return recruitDao.findByCompanyId(id);
+		// return recruitDao.findByCompanyId(id);
+		return null;
 	}
 
 	public List<Resume> 지원목록보기(Integer companyId) {
