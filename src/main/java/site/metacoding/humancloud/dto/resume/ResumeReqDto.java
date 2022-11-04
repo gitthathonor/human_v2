@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.user.User;
 
 public class ResumeReqDto {
 

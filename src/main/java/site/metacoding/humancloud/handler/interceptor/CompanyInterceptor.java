@@ -16,7 +16,7 @@ import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ResumeInterceptor implements HandlerInterceptor {
+public class CompanyInterceptor implements HandlerInterceptor {
 
     private final ResumeDao resumeDao;
 
