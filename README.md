@@ -1,18 +1,20 @@
 # 미니프로젝트 humancloud2 - Rest하게 서버 만들기
 
 ### 개요
+
 - Controller는 RestController로 변경
 - Service의 모든 메서드에는 @Transactional 작성
 - 각 도메인의 ReqDto와 RespDto 내에서 static으로 세부 Dto 만들어서 사용
 - mybatis 경로 주의
 - Exception은 throw new RuntimeException("필요한 메세지")로 작성
-- Controller의 경로는 인증이 필요한 메서드들은 "/s"를 앞에 붙이고, 그 이외의 것들은 "/도메인/**" 방식으로 작성
+- Controller의 경로는 인증이 필요한 메서드들은 "/s"를 앞에 붙이고, 그 이외의 것들은 "/도메인/\*\*" 방식으로 작성
 - Entity 생성자에는 @Builder 작성
 - toEntity()는 Dto마다 작성, 관련 Dto 들도 각각 Dto 내에서 작성해서 사용
 - insert는 SaveDto, update는 UpdateDto로 작성. 리스트를 보여주는 Dto는 도메인AllRespDto로 작성
 - List 객체들의 변수명은 "도메인명List"로 작성
 
 ### DB - user생성 및 권한 부여
+
 ```sql
 CREATE USER 'human'@'%' IDENTIFIED BY 'human1234';
 CREATE database humandb;
@@ -20,12 +22,13 @@ GRANT ALL PRIVILEGES ON *.* TO 'human'@'%';
 ```
 
 ### 테이블 생성
+
 ```sql
--- 구직자(유저) 
+-- 구직자(유저)
 CREATE TABLE user (
 	user_id INT auto_increment PRIMARY KEY,
 	username VARCHAR(50) UNIQUE NOT null,
-	password VARCHAR(500) NOT null,
+	password VARCHAR(50) NOT null,
 	name VARCHAR(50) NOT null,
 	email VARCHAR(120) UNIQUE NOT null,
 	phone_number VARCHAR(100) UNIQUE,
@@ -40,11 +43,11 @@ CREATE TABLE category (
 	category_name VARCHAR(50)
 ) engine=InnoDB default charset=UTF8;
 
--- 회사 
+-- 회사
 CREATE TABLE company (
 	company_id INT auto_increment PRIMARY KEY,
 	company_username VARCHAR(50) UNIQUE NOT null,
-	company_password VARCHAR(500) NOT null,
+	company_password VARCHAR(50) NOT null,
 	company_name VARCHAR(50) UNIQUE NOT null,
 	company_email VARCHAR(120) UNIQUE NOT null,
 	company_phone_number VARCHAR(100) UNIQUE,
@@ -53,21 +56,21 @@ CREATE TABLE company (
 	company_created_at TimeStamp
 ) engine=InnoDB default charset=UTF8;
 
--- 이력서 
+-- 이력서
 CREATE TABLE resume(
 	resume_id INT AUTO_INCREMENT PRIMARY KEY,
 	resume_title VARCHAR(50) NOT null,
 	resume_photo VARCHAR(500),
 	resume_education VARCHAR(50),
 	resume_career VARCHAR(50),
-	resume_link VARCHAR(500), 
+	resume_link VARCHAR(500),
 	resume_read_count INT,
 	resume_user_id INT,
 	resume_created_at TIMESTAMP
 ) engine=InnoDB default charset=UTF8;
 
 
--- 채용 공고 
+-- 채용 공고
 CREATE TABLE recruit(
 	recruit_id int auto_increment PRIMARY KEY,
 	recruit_title VARCHAR(50) NOT NULL,
@@ -81,11 +84,11 @@ CREATE TABLE recruit(
 	recruit_created_at TIMESTAMP
 ) engine=InnoDB default charset=UTF8;
 
--- 채용 지원 
+-- 채용 지원
 CREATE TABLE apply(
 	apply_id INT AUTO_INCREMENT PRIMARY KEY,
-	apply_recruit_id INT, 
-	apply_resume_id INT, 
+	apply_recruit_id INT,
+	apply_resume_id INT,
 	apply_created_at TIMESTAMP
 ) engine=InnoDB default charset=UTF8;
 
@@ -99,6 +102,7 @@ CREATE TABLE subscribe(
 ```
 
 ### fk 제약조건
+
 ```sql
 -- 이력서 테이블 fk
 ALTER TABLE resume ADD FOREIGN KEY(resume_user_id) REFERENCES user(user_id);
@@ -117,6 +121,7 @@ ALTER TABLE comment ADD FOREIGN KEY(subscribe_company_id) REFERENCES company(com
 ```
 
 ### utf-8 변경
+
 ```sql
 alter table user convert to character set utf8;
 
@@ -134,6 +139,7 @@ alter table subscribe convert to character set utf8;
 ```
 
 ### 더미 데이터
+
 ```sql
 -- user 더미 데이터
 insert into user(username, password, name, email, phone_number, created_at)
@@ -158,96 +164,96 @@ insert into user(username, password, name, email, phone_number, created_at)
 VALUES ("herry", "1234", "윙가디움레비오싸씨", "porter@naver.com", "01044444444", NOW());
 
 -- company 더미 데이터
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("adt", "1234", "ADT", "adt@never.com", "01020203060", "부산진구청", "ADT.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("gsbuilt", "1234", "GS건설", "gs@never.com", "01025259999", "광주광역시청", "GS건설.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("ktds", "1234", "KT다이노소얼", "kt_ds@never.com", "01088259999", "대구광역시청", "kt_ds.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("sgc", "1234", "(주)SGC", "SGC@never.com", "01080569999", "인천공항", "SGC.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("naver", "1234", "네이버", "네이버@never.com", "01078964123", "잠실역", "네이버.jpg", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("dbcar", "1234", "동부 자동차 손해보험", "dbcar@never.com", "010555584123", "G7 레지던스", "동부 자동차 손해보험.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("dongwon", "1234", "동원그룹", "동원그룹@never.com", "010555546423", "사직야구장", "동원그룹.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("ssg", "1234", "신세계 푸드", "신세계 푸드@never.com", "010623143123", "센텀시티 신세계백화점", "신세계 푸드.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("yogiyo", "1234", "요기요", "요기요@never.com", "010797184123", "SM엔터테인먼트", "요기요.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("woah", "1234", "우아한 청년들", "우아한 청년들@never.com", "01079444123", "용산역", "우아한 청년들.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("yosin", "1234", "유신", "유신@never.com", "010666184123", "부산역", "유신.png", NOW());
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("jumpit", "1234", "점핏", "점핏@never.com", "010889984123", "남산타워", "점핏.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("koreabio", "1234", "코리아 바이오 협회", "koreaBio@never.com", "01082184123", "짚신", "코리아 바이오 협회.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("coupang", "1234", "쿠팡", "쿠팡@never.com", "010989884123", "양산시 물금역", "쿠팡.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("toss", "1234", "토스", "toss@never.com", "010444484123", "국민은행", "토스.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("posco", "1234", "포스코플로우", "posco@never.com", "010400684123", "포항역", "포스코플로우.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("korealand", "1234", "한국 토지 신탁", "koreaLand@never.com", "010998884123", "남포역", "한국 토지 신탁.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("hyundaidep", "1234", "현대 백화점 그룹", "hd@never.com", "010797184523", "현대 백화점", "현대 백화점 그룹.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("hyundai", "1234", "현대", "hytund@never.com", "010796684123", "현대 백화점", "현대.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("hmobis", "1234", "현대모비스", "hmobis@never.com", "010797180000", "현대 자동차", "현대모비스.png", NOW());
 
 
-INSERT INTO company(company_username, company_password, company_name, company_email, 
+INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES("welding", "1234", "현대종합금속", "hwelding@never.com", "010696984123", "울산 현대", "현대종합금속.png", NOW());
 
@@ -371,67 +377,67 @@ insert into category(category_resume_id, category_recruit_id, category_name) VAL
 insert into category(category_resume_id, category_recruit_id, category_name) VALUES (20, NULL, 'Python');
 
 -- recruit 더미데이터
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고1", "고졸", 2400 , "부산 동구 망양로945번길 19 (범일동)", "1", 0, 1, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고2", "2년제대학졸업", 3200 , "부산 동구 망양로945번길 19 (범일동)", "2", 0, 2, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고3", "3년제대학졸업", 3600 , "부산 동구 망양로945번길 19 (범일동)", "3", 0, 3, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고4", "4년제대학졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "4", 0, 4, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고5", "고졸", 2400 , "부산 동구 망양로945번길 19 (범일동)", "5", 0, 5, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고6", "2년제대학졸업", 3200 , "부산 동구 망양로945번길 19 (범일동)", "6", 0, 6, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고7", "대학원졸업", 3600 , "부산 동구 망양로945번길 19 (범일동)", "7", 0, 7, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고8", "4년제대학졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "8", 0, 8, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고9", "고졸", 2400 , "부산 동구 망양로945번길 19 (범일동)", "9", 0, 9, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고10", "2년제대학졸업", 3200 , "부산 동구 망양로945번길 19 (범일동)", "10", 0, 10, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고11", "대학원졸업", 3600 , "부산 동구 망양로945번길 19 (범일동)", "11", 0, 11, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고12", "2년제대학졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "12", 12, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고13", "고졸", 2400 , "부산 동구 망양로945번길 19 (범일동)", "13", 0, 13, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고14", "대학원졸업", 3200 , "부산 동구 망양로945번길 19 (범일동)", "14", 0, 14, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고15", "3년제대학졸업", 3600 , "부산 동구 망양로945번길 19 (범일동)", "15", 0, 15, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고16", "대학원졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "16", 0, 16, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고17", "고졸", 2400 , "부산 동구 망양로945번길 19 (범일동)", "17", 0, 17, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고18", "고졸", 3200 , "부산 동구 망양로945번길 19 (범일동)", "18", 0, 18, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고19", "4년제대학졸업", 3600 , "부산 동구 망양로945번길 19 (범일동)", "19", 0, 19, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고20", "3년제대학졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "20", 0, 20, NOW(), NOW());
 
-INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at) 
+INSERT INTO recruit(recruit_title, recruit_career, recruit_salary, recruit_location, recruit_content, recruit_read_count, recruit_company_id, recruit_deadline, recruit_created_at)
 VALUES("채용공고21", "2년제대학졸업", 4000 , "부산 동구 망양로945번길 19 (범일동)", "21", 0, 21, NOW(), NOW());
 
 -- recruit용 category
@@ -509,10 +515,10 @@ insert into category(category_resume_id, category_recruit_id, category_name) VAL
 insert into category(category_resume_id, category_recruit_id, category_name) VALUES (NULL, 21, 'Python');
 ```
 
-
 ### recruit-detail 수정사항 메모
+
 PathVarilable 이 해당 프로젝트에서는 동작하지않아, 쿼리스트릥으로
-Get 요청을 받아  findById 메서드 실행을 한 후,
+Get 요청을 받아 findById 메서드 실행을 한 후,
 jstl 로 view 페이지에 로드 했음
 
 layout/header.jsp 에서 충돌나는 헤드 코드 saveForm 에서만 쓰일 수 있도록 코드 옮김. 이 전의 코드를 참고.
