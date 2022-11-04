@@ -24,6 +24,8 @@ import site.metacoding.humancloud.dto.SessionUser;
 @RequiredArgsConstructor
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class UserControllerTest {
+
+    // header json
     private static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
     @Autowired

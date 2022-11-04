@@ -32,6 +32,8 @@ import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 @RequiredArgsConstructor
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class SettingTest {
+
+    // header json
     private static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
     @Autowired

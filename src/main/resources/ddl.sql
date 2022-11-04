@@ -1,3 +1,11 @@
+DROP TABLE  if exists user;
+DROP TABLE  if exists category;
+DROP TABLE  if exists company;
+DROP TABLE  if exists resume;
+DROP TABLE  if exists recruit;
+DROP TABLE  if exists apply;
+DROP TABLE  if exists subscribe;
+
 CREATE TABLE user (
 	user_id INT auto_increment PRIMARY KEY,
 	username VARCHAR(50) UNIQUE NOT null,
