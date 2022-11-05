@@ -20,6 +20,7 @@ public class RoleInterceptor implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    log.debug("디버그 : " + "인터셉터 작동");
 
     HandlerMethod method = (HandlerMethod) handler; // 요청을 처리할 메서드
     Auth auth = method.getMethodAnnotation(Auth.class); // 어노테이셔 ㄴ값 받아오기
@@ -37,6 +38,7 @@ public class RoleInterceptor implements HandlerInterceptor {
     int sessionUserRole = test.getRole();
 
     if (role == sessionUserRole) {
+      log.debug("디버그 : " + "role 통과");
       return true;
     }
 

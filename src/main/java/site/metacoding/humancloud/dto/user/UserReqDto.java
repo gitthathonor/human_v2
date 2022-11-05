@@ -1,12 +1,18 @@
 package site.metacoding.humancloud.dto.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class UserReqDto {
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Getter
     @Setter
     public static class JoinReqDto {
@@ -35,6 +41,9 @@ public class UserReqDto {
     // private int role;
     // }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     @Getter
     @Setter
     public static class UserUpdateReqDto {

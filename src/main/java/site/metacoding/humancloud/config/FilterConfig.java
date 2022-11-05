@@ -23,7 +23,6 @@ public class FilterConfig {
     // IoC등록 (서버 실행시)
     @Bean
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegister() {
-        log.debug("디버그 : 인증 필터 등록");
         FilterRegistrationBean<JwtAuthenticationFilter> bean = new FilterRegistrationBean<>(
                 new JwtAuthenticationFilter(userDao, sha256));
         bean.addUrlPatterns("/login");

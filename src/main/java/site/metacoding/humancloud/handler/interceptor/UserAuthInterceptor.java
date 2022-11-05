@@ -30,6 +30,7 @@ public class UserAuthInterceptor implements HandlerInterceptor {
     String httpMethod = request.getMethod();
     if (httpMethod.equals("PUT") || httpMethod.equals("DELETE") || httpMethod.equals("GET")) {
       if (reqId == sessionUserId) {
+        log.debug("디버그 : " + "유저 인터셉터 통과");
         return true;
       }
       throw new RuntimeException("권한이 없습니다.");
