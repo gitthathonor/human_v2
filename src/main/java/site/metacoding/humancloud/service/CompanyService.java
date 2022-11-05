@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +55,10 @@ public class CompanyService {
 	// }
 	// return false;
 	// }
+
+	public ResponseEntity hello() {
+		return new ResponseEntity<>(null);
+	}
 
 	// 기업 회원 등록
 	@Transactional
