@@ -21,6 +21,12 @@ public class UserController {
 
     private final UserService userService;
 
+    @Auth(role = 0)
+    @GetMapping("/test")
+    public void TestInterceptor() {
+
+    }
+
     @PostMapping("/join")
     public ResponseDto<?> joinUser(@RequestBody JoinReqDto joinReqDto) {
         return new ResponseDto<>(1, "ok", userService.회원가입(joinReqDto));

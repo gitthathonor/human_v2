@@ -16,7 +16,6 @@ import site.metacoding.humancloud.handler.interceptor.UserAuthInterceptor;
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
 
-    private final RoleInterceptor authInterceptor;
     private final ResumeDao resumeDao;
 
     @Override

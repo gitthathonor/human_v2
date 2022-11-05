@@ -33,7 +33,7 @@ public class SettingTest {
     @Autowired
     private ObjectMapper om;
     @Autowired
-    private static MockMvc mvc;
+    private MockMvc mvc;
     private MockHttpSession session;
     @Autowired
     private UserDao userDao;

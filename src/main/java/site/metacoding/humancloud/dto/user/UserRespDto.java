@@ -65,7 +65,7 @@ public class UserRespDto {
             this.name = user.getName();
             this.email = user.getEmail();
             this.phoneNumber = user.getPhoneNumber();
-            this.createdAt = user.getCreatedAt();
+            this.createdAt = new Timestamp(System.currentTimeMillis());
         }
     }
 
