@@ -37,8 +37,7 @@ public class CompanyController {
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseDto<?> joinCompanyInfo(@RequestPart("file") MultipartFile file,
 			@RequestPart("companyJoinReqDto") CompanyJoinReqDto companyJoinReqDto) throws Exception {
-		companyService.기업회원등록(file, companyJoinReqDto);
-		return new ResponseDto<>(1, "기업 등록 성공", null);
+		return new ResponseDto<>(1, "기업 등록 성공", companyService.기업회원등록(file, companyJoinReqDto));
 	}
 
 	// 기업 정보 상세보기

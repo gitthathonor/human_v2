@@ -53,6 +53,29 @@ public class CompanyRespDto {
 
     }
 
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class CompanyJoinRespDto {
+        private String companyName;
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private String companyAddress;
+        private String companyLogo;
+
+        public CompanyJoinRespDto(CompanyFindById companyFindById) {
+            this.companyName = companyFindById.getCompanyName();
+            this.companyEmail = companyFindById.getCompanyEmail();
+            this.companyPhoneNumber = companyFindById.getCompanyPhoneNumber();
+            this.companyAddress = companyFindById.getCompanyAddress();
+            this.companyLogo = companyFindById.getCompanyLogo();
+        }
+
+        public void toPhoneNumber(String num) {
+            this.companyPhoneNumber = num;
+        }
+    }
+
     @Setter
     @Getter
     public static class CompanyUpdateRespDto {
