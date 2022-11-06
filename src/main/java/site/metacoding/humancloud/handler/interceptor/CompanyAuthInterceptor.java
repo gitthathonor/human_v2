@@ -17,13 +17,13 @@ public class CompanyAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-
+        log.debug("디버그 : 기업 아서 11");
         // url요청의 {id}
         String uri = request.getRequestURI();
         String[] uriArray = uri.split("/");
         int companyId = Integer.parseInt(uriArray[uriArray.length - 1]);
         log.debug("디버그 : " + companyId);
-
+        log.debug("디버그 : 기업 아서 222");
         // 세션의 id
         HttpSession session = request.getSession();
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");

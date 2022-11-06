@@ -23,7 +23,7 @@ public class RoleInterceptor implements HandlerInterceptor {
     log.debug("디버그 : " + "인터셉터 작동");
     HandlerMethod method = (HandlerMethod) handler; // 요청을 처리할 메서드
     Auth auth = method.getMethodAnnotation(Auth.class); // 어노테이셔 ㄴ값 받아오기
-
+    log.debug("디버그 : " + auth);
     if (auth == null) {
       return true;
     } // 어노테이션이 없는 경우, 권한 필요 없는 메서드임 => 통과

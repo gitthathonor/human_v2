@@ -100,7 +100,7 @@
       )
    </insert>
 
-   <select id="findById" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
+   <select id="findById" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindById">
       SELECT * FROM resume WHERE resume_id=#{resumeId}
    </select>
 
