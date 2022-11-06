@@ -33,6 +33,7 @@ public class UserAuthInterceptor implements HandlerInterceptor {
         log.debug("디버그 : " + "유저 인터셉터 통과");
         return true;
       }
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       throw new RuntimeException("권한이 없습니다.");
     }
 

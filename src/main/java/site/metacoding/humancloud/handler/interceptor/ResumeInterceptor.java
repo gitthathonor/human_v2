@@ -13,6 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -22,7 +24,8 @@ public class ResumeInterceptor implements HandlerInterceptor {
     private final ResumeDao resumeDao;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         String httpMethod = request.getMethod();
 
         if (!(httpMethod.equals("PUT") || httpMethod.equals("DELETE"))) {
@@ -48,6 +51,7 @@ public class ResumeInterceptor implements HandlerInterceptor {
             if (resumeUserId == sessionUserId) {
                 return true;
             }
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             throw new RuntimeException("권한이 없습니다.");
         }
 
