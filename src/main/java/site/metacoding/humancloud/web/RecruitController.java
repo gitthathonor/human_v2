@@ -48,7 +48,8 @@ public class RecruitController {
   // return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id));
   // }
 
-  @PutMapping("recruit/update/{id}")
+  @Auth(role = 1)
+  @PutMapping("/s/recruit/update/{id}")
   public @ResponseBody ResponseDto<?> update(@PathVariable Integer id,
       @RequestBody RecruitUpdateReqDto recruitUpdateReqDto) {
     return new ResponseDto<>(1, "성공", recruitService.구인공고업데이트(id, recruitUpdateReqDto));

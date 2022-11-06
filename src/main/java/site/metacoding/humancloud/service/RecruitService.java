@@ -40,6 +40,7 @@ public class RecruitService {
     private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
     private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
 
+    
     public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
 
@@ -51,10 +52,11 @@ public class RecruitService {
             recruitOP.get().setCategory(categoryList);
             recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
     
-            return recruitOP;
         }else{
             throw new RuntimeException("공고가 존재하지 않습니다");
         }
+        
+        return recruitOP;
         
     }
 
