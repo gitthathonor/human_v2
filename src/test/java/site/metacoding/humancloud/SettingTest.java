@@ -1,5 +1,9 @@
 package site.metacoding.humancloud;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +14,19 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
@@ -41,7 +51,7 @@ public class SettingTest {
     @BeforeEach
     public void sessionInit() {
         session = new MockHttpSession();
-        session.setAttribute("sessionUser", SessionUser.builder().id(1).username("ssar").role(0).build());
+        session.setAttribute("sessionUser", SessionUser.builder().id(1).username("adt").role(1).build());
     }
 
     @Test
@@ -51,4 +61,80 @@ public class SettingTest {
         System.out.println("username : " + user.getUsername());
     }
 
+    @Test
+    public void detailResume_test() throws Exception {
+        // given
+        Integer resumeId = 1;
+        Integer userId = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                MockMvcRequestBuilders.get("/s/resume/detail/" + resumeId + "/" + userId)
+                        .accept(APPLICATION_JSON)
+                        .session(session));
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+
+    }
+
+    @Test
+    public void create_test() throws Exception {
+        // given
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add("Java");
+        categoryList.add("JavaScript");
+
+        String fileName = "testCustomerUpload.jpg";
+
+        ResumeSaveReqDto resumeSaveReqDto = ResumeSaveReqDto.builder()
+                .resumeId(1)
+                .resumeUserId(1)
+                .resumeTitle("test")
+                .resumeEducation("high")
+                .resumeCareer("1년")
+                .resumePhoto(fileName)
+                .resumeLink("link.com")
+                .categoryList(Arrays.asList("자바"))
+                .build();
+
+        String body = om.writeValueAsString(resumeSaveReqDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                MockMvcRequestBuilders.post(
+                        "/s/resume/save")
+                        .content(body).contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON).session(userSession));
+
+        // then
+        MvcResult mvcResult = resultActions.andReturn();
+
+        log.debug("디버그 : " + mvcResult);
+
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+    }
+
+    @Test
+    public void viewCategory_test() throws Exception {
+        // given
+        Category category = new Category(1, "Java");
+        Integer page = 0;
+        String testCategory = "Java";
+
+        String body = om.writeValueAsString(category);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                MockMvcRequestBuilders.post(
+                        "/resume")
+                        .content(body).contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON).session(session));
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+    }
 }

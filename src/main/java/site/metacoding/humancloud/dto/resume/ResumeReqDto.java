@@ -4,12 +4,18 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.user.User;
 
 public class ResumeReqDto {
 
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   @Getter
   @Setter
   public static class ResumeSaveReqDto {

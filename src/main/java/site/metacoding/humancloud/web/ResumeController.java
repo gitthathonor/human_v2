@@ -1,5 +1,8 @@
 package site.metacoding.humancloud.web;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
@@ -27,6 +30,7 @@ import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeOrderByOrderListDto;
 import site.metacoding.humancloud.service.ResumeService;
 import site.metacoding.humancloud.service.UserService;
+import site.metacoding.humancloud.util.annotation.Auth;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -51,7 +55,8 @@ public class ResumeController {
   }
 
   // http://localhost:8000/resume/list?page=0&order=education
-  @PostMapping("/resume/list")
+  @Auth(role = 1)
+  @PostMapping("/s/resume/list")
   public ResponseDto<?> orderList(@RequestParam("order") String order, @RequestBody Company company,
       @Param("page") Integer page) {
     return new ResponseDto<>(1, "ok", resumeService.정렬하기(order, company.getCompanyId(), page));
@@ -89,7 +94,7 @@ public class ResumeController {
   // return "page/resume/updateForm";
   // }
 
-  @GetMapping("resume/detail/{resumeId}/{userId}")
+  @GetMapping("/s/resume/detail/{resumeId}/{userId}")
   public ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,
       @PathVariable("userId") Integer userId) {
 
@@ -111,6 +116,9 @@ public class ResumeController {
       @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
     resumeService.이력서저장(file, resumeSaveReqDto);
+
+    List<String> test = Arrays.asList("생성");
+    log.debug("리스트 테스트 : " + test.get(0));
 
     return new ResponseDto<>(1, "업로드 성공", null);
   }
