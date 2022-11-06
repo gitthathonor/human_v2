@@ -46,11 +46,11 @@ public class RecruitService {
 
         if(recruitOP.isPresent()){
             List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-            Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
-                    .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+            //Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
+             //       .findByCompanyId(recruitOP.get().getRecruitCompanyId());
             recruitOP.get().setResume(resumeDao.findByUserId(userId));
             recruitOP.get().setCategory(categoryList);
-            recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
+            //recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
     
         }else{
             throw new RuntimeException("공고가 존재하지 않습니다");
