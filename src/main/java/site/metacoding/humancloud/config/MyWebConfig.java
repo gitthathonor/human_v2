@@ -26,7 +26,8 @@ public class MyWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RoleInterceptor());
+        registry.addInterceptor(new RoleInterceptor())
+                .order(0);
         registry.addInterceptor(new UserAuthInterceptor())
                 .addPathPatterns("/s/user/**");
         registry.addInterceptor(new ResumeInterceptor(resumeDao))

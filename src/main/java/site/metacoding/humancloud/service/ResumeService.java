@@ -126,7 +126,6 @@ public class ResumeService {
             page = 0;
         }
         int startNum = page * 20;
-        log.debug("디버그 페이지 : " + page);
         PagingDto paging = resumeDao.paging(page);
         paging.dopaging();
         ResumeOrderByOrderListDto resumeOrderByOrderListDto = new ResumeOrderByOrderListDto();

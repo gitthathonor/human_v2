@@ -106,7 +106,7 @@ public class SettingTest {
                 MockMvcRequestBuilders.post(
                         "/s/resume/save")
                         .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(userSession));
+                        .accept(APPLICATION_JSON).session(session));
 
         // then
         MvcResult mvcResult = resultActions.andReturn();

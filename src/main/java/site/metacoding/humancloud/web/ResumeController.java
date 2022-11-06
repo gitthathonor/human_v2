@@ -47,7 +47,7 @@ public class ResumeController {
     return new ResponseDto<>(1, "OK", resumeFindAllRespDto);
   }
 
-  // http://localhost:8000/resume?page=0&category=Java
+  // http://localhost:8000/resume
   @PostMapping("/resume")
   public ResponseDto<?> viewCategory(@RequestBody Category category, Integer page) {
     ResumeOrderByOrderListDto resumeOrderByOrderListDto = resumeService.분류별이력서목록보기(category.getCategoryName(), page);
