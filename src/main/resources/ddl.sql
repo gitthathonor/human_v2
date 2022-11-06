@@ -28,7 +28,7 @@ CREATE TABLE category (
 CREATE TABLE company (
 	company_id INT auto_increment PRIMARY KEY,
 	company_username VARCHAR(50) UNIQUE NOT null,
-	company_password VARCHAR(50) NOT null,
+	company_password VARCHAR(500) NOT null,
 	company_name VARCHAR(50) UNIQUE NOT null,
 	company_email VARCHAR(120) UNIQUE NOT null,
 	company_phone_number VARCHAR(100) UNIQUE,

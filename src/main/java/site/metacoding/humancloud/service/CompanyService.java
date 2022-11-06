@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +28,7 @@ import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
@@ -55,10 +55,6 @@ public class CompanyService {
 	// }
 	// return false;
 	// }
-
-	public ResponseEntity hello() {
-		return new ResponseEntity<>(null);
-	}
 
 	// 기업 회원 등록
 	@Transactional
@@ -111,17 +107,8 @@ public class CompanyService {
 			isSub = true;
 		}
 		CompanyDetailRespDto companyPS = new CompanyDetailRespDto(companyOP.get(), isSub);
-
-		// // 전화번호 포매팅
-		// String fomat = "(\\d{2,3})(\\d{3,4})(\\d{4})";
-		// if (Pattern.matches(fomat, companyPS.getCompanyPhoneNumber())) {
-		// String result = companyPS.getCompanyPhoneNumber().replaceAll(fomat,
-		// "$1-$2-$3");
-		// companyPS.toPhoneNumber(result);
-		// }
-
-		// return companyPS;
-		return null;
+		companyPS.toPhoneNumber(companyOP.get().getCompanyPhoneNumber());
+		return companyPS;
 	}
 
 	// 기업 리스트 보기
@@ -208,5 +195,14 @@ public class CompanyService {
 
 	public List<Resume> 지원목록보기(Integer companyId) {
 		return resumeDao.applyResumeList(companyId);
+	}
+
+	public CompanyMypageRespDto 마이페이지보기() {
+		// Integer countApply = companyService.지원목록보기(companyId).size();
+		// if (companyService.지원목록보기(companyId) == null) {
+		// countApply = 0;
+		// }
+
+		return new CompanyMypageRespDto();
 	}
 }

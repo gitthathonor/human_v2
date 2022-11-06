@@ -76,17 +76,9 @@ public class CompanyController {
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
 
-	@GetMapping("/company/mypage")
-	public String viewMypage(@RequestParam Integer id, Model model) {
-		Integer countApply = companyService.지원목록보기(id).size();
-		if (companyService.지원목록보기(id) == null) {
-			countApply = 0;
-		}
-
-		model.addAttribute("countApply", countApply);
-		// model.addAttribute("company", companyService.getCompanyDetail(id));
-		model.addAttribute("recruitList", companyService.채용공고리스트불러오기(id));
-		return "page/user/mypage";
+	@GetMapping("/company/mypage/{id}")
+	public ResponseDto<?> viewMypage(@PathVariable Integer companyId) {
+		return new ResponseDto<>(1, "마이페이지 보기 성공", companyService.마이페이지보기());
 	}
 
 	@GetMapping("/company/{companyId}/applyList")
