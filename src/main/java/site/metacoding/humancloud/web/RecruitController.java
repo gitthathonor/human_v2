@@ -36,8 +36,7 @@ public class RecruitController {
 
   // main
   @GetMapping("/")
-  public ResponseDto<?> main(Model model) {
-    model.addAttribute("list", recruitService.메인공고목록보기());
+  public ResponseDto<?> main() {
     return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
   }
 

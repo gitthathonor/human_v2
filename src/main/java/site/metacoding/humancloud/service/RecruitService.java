@@ -26,6 +26,7 @@ import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.CompanyRecruitDtoRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 
@@ -41,14 +42,20 @@ public class RecruitService {
 
     public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
-        List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-        Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
-                .findByCompanyId(recruitOP.get().getRecruitCompanyId());
-        recruitOP.get().setResume(resumeDao.findByUserId(userId));
-        recruitOP.get().setCategory(categoryList);
-        recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
 
-        return recruitOP;
+        if(recruitOP.isPresent()){
+            List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
+            Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
+                    .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+            recruitOP.get().setResume(resumeDao.findByUserId(userId));
+            recruitOP.get().setCategory(categoryList);
+            recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
+    
+            return recruitOP;
+        }else{
+            throw new RuntimeException("공고가 존재하지 않습니다");
+        }
+        
     }
 
     @Transactional
@@ -86,21 +93,28 @@ public class RecruitService {
         return new RecruitRespDto(recruitSaveReqDto);
     }
 
-    public List<CompanyRecruitDto> 메인공고목록보기() {
-        List<CompanyRecruitDto> recruitPS = recruitDao.joinCompanyRecruit(0);
-        List<CompanyRecruitDto> result = new ArrayList<>();
+
+    public List<CompanyRecruitDtoRespDto> 메인공고목록보기() {
+        Optional<List<CompanyRecruitDtoRespDto>> recruitPS = recruitDao.joinCompanyRecruit(0);
+        List<CompanyRecruitDtoRespDto> result = new ArrayList<>();
         int endFor;
-        if (recruitPS.size() < 5) {
-            endFor = recruitPS.size();
-        } else {
-            endFor = 6;
+        if(recruitPS.isPresent()){
+            if (recruitPS.get().size() < 5) {
+                endFor = recruitPS.get().size();
+            } else {
+                endFor = 6;
+            }
+    
+            for (int i = 0; i < endFor; i++) {
+                result.add(recruitPS.get().get(i));
+            }
+            return result;
+        }else{
+            throw new RuntimeException("목록이 없습네당");
         }
+        
 
-        for (int i = 0; i < endFor; i++) {
-            result.add(recruitPS.get(i));
-        }
-
-        return result;
+        
     }
 
     public Map<String, Object> 채용공고목록보기(Integer page) {
