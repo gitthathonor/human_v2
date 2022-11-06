@@ -81,7 +81,7 @@ public class JwtAuthenticationFilter implements Filter {
                 .withExpiresAt(expire)
                 .withClaim("id", usernamePS.get().getId())
                 .withClaim("username", usernamePS.get().getUsername())
-                .withClaim("role", 1)
+                .withClaim("role", usernamePS.get().getRole())
                 .sign(Algorithm.HMAC512("3조"));
 
         // JWT토큰 응답
