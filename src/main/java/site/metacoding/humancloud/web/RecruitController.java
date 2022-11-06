@@ -69,7 +69,7 @@ public class RecruitController {
   // }
   @Auth(role = 1)
   @PostMapping("/s/recruit/save")
-  public @ResponseBody ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
+  public ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
     return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }
 
@@ -89,7 +89,8 @@ public class RecruitController {
     return new ResponseDto<>(1, "ok", recruitService.정렬하기(order, user.getUserId()));
   }
 
-  @DeleteMapping("/recruit/delete/{recruitId}")
+  @Auth(role = 1)
+  @DeleteMapping("/s/recruit/delete/{recruitId}")
   public @ResponseBody ResponseDto<?> recruitDelete(@PathVariable Integer recruitId) {
     Integer code = recruitService.공고삭제하기(recruitId);
     return new ResponseDto<>(code, "ok", null);
