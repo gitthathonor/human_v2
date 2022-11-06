@@ -22,8 +22,12 @@ public class ResumeInterceptor implements HandlerInterceptor {
     private final ResumeDao resumeDao;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        String httpMethod = request.getMethod();
+
+        if (!(httpMethod.equals("PUT") || httpMethod.equals("DELETE"))) {
+            return true;
+        }
 
         // url요청의 {id}
         String uri = request.getRequestURI();
@@ -39,7 +43,7 @@ public class ResumeInterceptor implements HandlerInterceptor {
         int sessionUserId = sessionUser.getId();
 
         // 업데이트 딜리트
-        String httpMethod = request.getMethod();
+
         if (httpMethod.equals("PUT") || httpMethod.equals("DELETE")) {
             if (resumeUserId == sessionUserId) {
                 return true;

@@ -30,7 +30,7 @@
 			select * from category where category_resume_id=#{resuemId}
 	</select>
 
-	<select id="findByName" resultType="site.metacoding.humancloud.domain.category.Category">
+	<select id="findByName" resultType="site.metacoding.humancloud.dto.category.CategoryRespDto$CategoryFindByName">
 		select * from category where category_name=#{name}
 	</select>
 
