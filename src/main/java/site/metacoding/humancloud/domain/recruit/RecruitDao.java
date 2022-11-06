@@ -3,8 +3,8 @@ package site.metacoding.humancloud.domain.recruit;
 import java.util.List;
 import java.util.Optional;
 
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
-import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.CompanyRecruitDtoRespDto;
@@ -43,4 +43,7 @@ public interface RecruitDao {
 	public List<Recruit> findByCategoryName(Integer startNum);
 
 	public void deleteByCompanyId(Integer companyId);
+
+	// 기업 마이페이지 시에 작성한 채용공고 리스트 보여주기
+	public List<CompanyRecruitDto> findByCompanyId2(Integer companyId);
 }

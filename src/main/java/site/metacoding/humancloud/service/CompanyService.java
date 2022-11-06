@@ -30,6 +30,7 @@ import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 import site.metacoding.humancloud.util.SHA256;
@@ -193,16 +194,27 @@ public class CompanyService {
 		return recruitDao.findByCompanyId(id).get();
 	}
 
-	public List<Resume> 지원목록보기(Integer companyId) {
-		return resumeDao.applyResumeList(companyId);
+	@Transactional
+	public CompanyMypageRespDto 마이페이지보기(Integer companyId) {
+
+		// MyPageRespDto 생성 및 company정보 생성자 주입
+		Optional<CompanyFindById> companyFindByIdOP = companyDao.findById(companyId);
+		System.out.println(companyFindByIdOP.get().getCompanyName());
+
+		CompanyMypageRespDto companyMypageRespDto = new CompanyMypageRespDto(companyFindByIdOP.get());
+
+		try {
+			List<CompanyRecruitDto> companyRecruitList = recruitDao.findByCompanyId2(companyId);
+			companyMypageRespDto.setCompanyRecruitList(companyRecruitList);
+		} catch (Exception e) {
+			companyMypageRespDto.setCompanyRecruitList(null);
+			throw new RuntimeException("채용공고가 없습니다.");
+		}
+
+		return companyMypageRespDto;
 	}
 
-	public CompanyMypageRespDto 마이페이지보기() {
-		// Integer countApply = companyService.지원목록보기(companyId).size();
-		// if (companyService.지원목록보기(companyId) == null) {
-		// countApply = 0;
-		// }
-
-		return new CompanyMypageRespDto();
+	public Object 기업리스트보기() {
+		return null;
 	}
 }

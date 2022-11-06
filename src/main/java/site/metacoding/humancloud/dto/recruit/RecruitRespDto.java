@@ -149,7 +149,7 @@ public class RecruitRespDto {
         private String companyAddress;
         private String companyLogo;
         private Timestamp companyCreatedAt;
-    
+
         private Integer recruitId;
         private String recruitTitle;
         private String recruitCareer;

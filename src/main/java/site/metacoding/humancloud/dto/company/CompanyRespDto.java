@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
-import site.metacoding.humancloud.domain.recruit.Recruit;
 
 public class CompanyRespDto {
 
@@ -130,9 +129,20 @@ public class CompanyRespDto {
     public static class CompanyMypageRespDto {
         private String companyEmail; // 이메일
         private String companyPhoneNumber; // 전화번호
-        private int applyCount; // 지원횟수
-        private List<Recruit> recruitList; // 기업회원이 작성한 공고 리스트
+        private List<CompanyRecruitDto> companyRecruitList; // 기업이 작성한 공고리스트
 
+        public CompanyMypageRespDto(CompanyFindById companyFindById) {
+            this.companyEmail = companyFindById.getCompanyEmail();
+            this.companyPhoneNumber = companyFindById.getCompanyPhoneNumber();
+        }
+
+        @Setter
+        @Getter
+        public static class CompanyRecruitDto {
+            private String recruitTitle;
+            private Integer recruitReadCount;
+            private Timestamp recruitCreatedAt;
+        }
     }
 
 }

@@ -54,9 +54,8 @@ public class CompanyController {
 
 	// 기업 리스트 보기
 	@GetMapping("/company")
-	public String getCompanyList(Model model, @Param("page") Integer page) {
-		model.addAttribute("companyList", companyService.getCompanyList(page));
-		return "page/company/companyList";
+	public ResponseDto<?> getCompanyList(@Param("page") Integer page) {
+		return new ResponseDto<>(1, "기업 리스트 불러오기 성공", companyService.기업리스트보기());
 	}
 
 	// 기업 정보 수정
@@ -76,15 +75,16 @@ public class CompanyController {
 		return new ResponseDto<>(1, "기업정보 삭제 완료", null);
 	}
 
-	@GetMapping("/company/mypage/{id}")
-	public ResponseDto<?> viewMypage(@PathVariable Integer companyId) {
-		return new ResponseDto<>(1, "마이페이지 보기 성공", companyService.마이페이지보기());
+	@Auth(role = 1)
+	@GetMapping("/s/company/mypage/{id}")
+	public ResponseDto<?> viewMypage(@PathVariable Integer id) {
+		return new ResponseDto<>(1, "마이페이지 보기 성공", companyService.마이페이지보기(id));
 	}
 
-	@GetMapping("/company/{companyId}/applyList")
-	public String applyList(@PathVariable Integer companyId, Model model) {
-		model.addAttribute("apply", companyService.지원목록보기(companyId));
-		return "page/company/applyList";
-	}
+	// @GetMapping("/company/{companyId}/applyList")
+	// public String applyList(@PathVariable Integer companyId, Model model) {
+	// model.addAttribute("apply", companyService.지원목록보기(companyId));
+	// return "page/company/applyList";
+	// }
 
 }

@@ -12,7 +12,6 @@ import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByName;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class ResumeRespDto {

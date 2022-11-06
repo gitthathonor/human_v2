@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +13,9 @@ import site.metacoding.humancloud.dto.SessionUser.SessionUserBuilder;
 
 public class ResumeReqDto {
 
-  @Builder
+  // @Builder
   @NoArgsConstructor
-  @AllArgsConstructor
+  // @AllArgsConstructor
   @Getter
   @Setter
   public static class ResumeSaveReqDto {
@@ -28,8 +29,10 @@ public class ResumeReqDto {
     private List<String> categoryList;
     private MultipartFile[] file;
 
-    public ResumeSaveReqDto(Integer resumeUserId, String resumeTitle, String resumeEducation,
+    @Builder
+    public ResumeSaveReqDto(Integer resumeId, Integer resumeUserId, String resumeTitle, String resumeEducation,
         String resumeCareer, String resumePhoto, String resumeLink, List<String> categoryList) {
+      this.resumeId = resumeId;
       this.resumeUserId = resumeUserId;
       this.resumeTitle = resumeTitle;
       this.resumeEducation = resumeEducation;

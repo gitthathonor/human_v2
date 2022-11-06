@@ -111,4 +111,9 @@ order by count DESC
 	<delete id="deleteByCompanyId">
 		DELETE from recruit where recruit_company_id=#{recruitCompanyId}
 	</delete>
+	<select id="findByCompanyId2" resultType="site.metacoding.humancloud.dto.company.CompanyRespDto$CompanyMypageRespDto$CompanyRecruitDto">
+		SELECT recruit_title, recruit_read_count, recruit_created_at
+		FROM recruit
+		WHERE recruit_company_id = #{recruitCompanyId}
+	</select>
 </mapper>
