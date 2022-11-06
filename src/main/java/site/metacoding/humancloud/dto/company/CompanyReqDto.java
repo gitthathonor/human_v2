@@ -9,6 +9,7 @@ public class CompanyReqDto {
     @Setter
     @Getter
     public static class CompanyJoinReqDto {
+        private Integer companyId;
         private String companyUsername;
         private String companyPassword;
         private String companyName;
@@ -18,6 +19,7 @@ public class CompanyReqDto {
 
         public Company toEntity(String companyLogo) {
             return Company.builder()
+                    .companyId(companyId)
                     .companyUsername(companyUsername)
                     .companyPassword(companyPassword)
                     .companyName(companyName)

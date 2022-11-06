@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
-import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
@@ -29,6 +28,7 @@ import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
@@ -56,9 +56,13 @@ public class CompanyService {
 	// return false;
 	// }
 
+	public ResponseEntity hello() {
+		return new ResponseEntity<>(null);
+	}
+
 	// 기업 회원 등록
 	@Transactional
-	public void 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {
+	public CompanyJoinRespDto 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {
 		Optional<UserFindByAllUsernameDto> usernameDto = userDao
 				.findAllUsername(companyJoinReqDto.getCompanyUsername());
 		if (usernameDto.isPresent()) {
@@ -88,6 +92,14 @@ public class CompanyService {
 		companyJoinReqDto.setCompanyPassword(encPassword);
 		Company company = companyJoinReqDto.toEntity(logo);
 		companyDao.save(company);
+		log.debug("디버그 : " + company.getCompanyId());
+		Optional<CompanyFindById> companyOP = companyDao.findById(company.getCompanyId());
+		if (companyOP.isEmpty()) {
+			throw new RuntimeException("기업회원이 등록되지 않았습니다.");
+		}
+		CompanyJoinRespDto companyJoinRespDto = new CompanyJoinRespDto(companyOP.get());
+		companyJoinRespDto.toPhoneNumber(companyJoinRespDto.getCompanyPhoneNumber());
+		return companyJoinRespDto;
 	}
 
 	// 기업 정보 상세보기

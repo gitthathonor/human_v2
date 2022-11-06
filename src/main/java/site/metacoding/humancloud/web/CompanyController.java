@@ -1,10 +1,5 @@
 package site.metacoding.humancloud.web;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.UUID;
-
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.annotations.Param;
@@ -15,19 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
-import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyLoginReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.service.CompanyService;
 import site.metacoding.humancloud.service.SubscribeService;
@@ -46,8 +37,7 @@ public class CompanyController {
 			MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseDto<?> joinCompanyInfo(@RequestPart("file") MultipartFile file,
 			@RequestPart("companyJoinReqDto") CompanyJoinReqDto companyJoinReqDto) throws Exception {
-		companyService.기업회원등록(file, companyJoinReqDto);
-		return new ResponseDto<>(1, "기업 등록 성공", null);
+		return new ResponseDto<>(1, "기업 등록 성공", companyService.기업회원등록(file, companyJoinReqDto));
 	}
 
 	// 기업 정보 상세보기

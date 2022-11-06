@@ -13,6 +13,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +26,11 @@ public class ResumeInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        String httpMethod = request.getMethod();
+
+        if (!(httpMethod.equals("PUT") || httpMethod.equals("DELETE"))) {
+            return true;
+        }
 
         // url요청의 {id}
         String uri = request.getRequestURI();
@@ -39,11 +46,12 @@ public class ResumeInterceptor implements HandlerInterceptor {
         int sessionUserId = sessionUser.getId();
 
         // 업데이트 딜리트
-        String httpMethod = request.getMethod();
+
         if (httpMethod.equals("PUT") || httpMethod.equals("DELETE")) {
             if (resumeUserId == sessionUserId) {
                 return true;
             }
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             throw new RuntimeException("권한이 없습니다.");
         }
 

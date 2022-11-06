@@ -41,14 +41,18 @@ public class ResumeController {
   private final UserService userService;
 
   // http://localhost:8000/resume?page=0
-  @GetMapping("/resume")
+  @Auth(role = 1)
+  @GetMapping("/s/resume")
   public ResponseDto<?> viewList(@Param("page") Integer page) {
+
     ResumeFindAllRespDto resumeFindAllRespDto = resumeService.이력서목록보기(page);
+
     return new ResponseDto<>(1, "OK", resumeFindAllRespDto);
   }
 
-  // http://localhost:8000/resume
-  @PostMapping("/resume")
+  // http://localhost:8000/resume?page=0&category=Java
+  @Auth(role = 1)
+  @PostMapping("/s/resume")
   public ResponseDto<?> viewCategory(@RequestBody Category category, Integer page) {
     ResumeOrderByOrderListDto resumeOrderByOrderListDto = resumeService.분류별이력서목록보기(category.getCategoryName(), page);
     return new ResponseDto<>(1, "OK", resumeOrderByOrderListDto);
@@ -59,15 +63,18 @@ public class ResumeController {
   @PostMapping("/s/resume/list")
   public ResponseDto<?> orderList(@RequestParam("order") String order, @RequestBody Company company,
       @Param("page") Integer page) {
-    return new ResponseDto<>(1, "ok", resumeService.정렬하기(order, company.getCompanyId(), page));
+    ResumeFindAllRespDto resumeFindAllRespDto = resumeService.정렬하기(order, company.getCompanyId(), page);
+    return new ResponseDto<>(1, "ok", resumeFindAllRespDto);
   }
 
-  @DeleteMapping("/resume/deleteById/{resumeId}")
+  @Auth(role = 0)
+  @DeleteMapping("/s/resume/deleteById/{resumeId}")
   public ResponseDto<?> deleteResume(@PathVariable Integer resumeId) {
     resumeService.이력서삭제(resumeId);
     return new ResponseDto<>(1, "이력서 삭제 성공", null);
   }
 
+  @Auth(role = 0)
   @PutMapping(value = "/s/resume/update/{resumeId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseDto<?> updateResume(@PathVariable Integer resumeId,
@@ -110,7 +117,8 @@ public class ResumeController {
     return "page/resume/saveForm";
   }
 
-  @PostMapping(value = "/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
+  @Auth(role = 0)
+  @PostMapping(value = "/s/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseDto<?> create(@RequestPart("file") MultipartFile file,
       @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
