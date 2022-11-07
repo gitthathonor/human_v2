@@ -93,6 +93,7 @@ public class ResumeReqDto {
 
   }
 
+  @AllArgsConstructor
   @NoArgsConstructor
   @Getter
   @Setter
@@ -100,6 +101,7 @@ public class ResumeReqDto {
     private String order;
     private Integer companyId;
     private Integer page;
+    private Integer startNum;
 
     public ResumeViewOrderListReqDto(String order, Integer companyId, Integer page) {
       this.order = order;
