@@ -35,9 +35,9 @@ public class RecruitController {
   private final ApplyService applyService;
 
   // main
-  @GetMapping("/")
-  public ResponseDto<?> main() {
-    return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
+  @GetMapping("/{page}")
+  public ResponseDto<?> main(@PathVariable("page") int startNum) {
+    return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기(startNum));
   }
 
   // @GetMapping("recruit/update/{id}")
