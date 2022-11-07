@@ -1,11 +1,19 @@
 package site.metacoding.humancloud.dto.company;
 
+import org.apache.ibatis.type.Alias;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
 
 public class CompanyReqDto {
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class CompanyJoinReqDto {

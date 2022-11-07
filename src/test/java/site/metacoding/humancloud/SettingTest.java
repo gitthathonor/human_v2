@@ -1,7 +1,9 @@
 package site.metacoding.humancloud;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
-import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
+import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
@@ -51,7 +54,41 @@ public class SettingTest {
     @BeforeEach
     public void sessionInit() {
         session = new MockHttpSession();
-        session.setAttribute("sessionUser", SessionUser.builder().id(1).username("adt").role(1).build());
+        session.setAttribute("sessionUser",
+                SessionUser.builder().id(1).username("adt").role(1).build());
+    }
+
+    @Test
+    public void 기업회원가입테스트() throws Exception {
+        // given
+
+        // 요청 dto 객체 멀티파트로 변환
+        CompanyJoinReqDto companyJoinReqDtoData = CompanyJoinReqDto.builder()
+                .companyId(4)
+                .companyUsername("test")
+                .companyPassword("123")
+                .companyName("comtest")
+                .companyEmail("test@natev.com")
+                .companyPhoneNumber("01099988873")
+                .companyAddress("s")
+                .build();
+        String joinData = om.writeValueAsString(companyJoinReqDtoData);
+        MockMultipartFile companyJoinReqDto = new MockMultipartFile("companyJoinReqDto", "companyJoinReqDtoData",
+                "application/json", joinData.getBytes(StandardCharsets.UTF_8));
+
+        // 요청 파일 멀티파트로 변환
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "form-data",
+                "test file".getBytes(StandardCharsets.UTF_8));
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                multipart("/company/join")
+                        .file(file)
+                        .file(companyJoinReqDto));
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
     }
 
     @Test

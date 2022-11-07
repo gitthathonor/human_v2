@@ -56,7 +56,7 @@ public class CompanyControllerTest {
     public void sessionInit() {
         session = new MockHttpSession();
         session.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("ssar").role(1).build());
+                SessionUser.builder().id(1).username("adt").role(1).build());
     }
 
     @BeforeEach

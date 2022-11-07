@@ -2,10 +2,10 @@ package site.metacoding.humancloud.domain.apply;
 
 import java.util.List;
 
-import site.metacoding.humancloud.dto.dummy.request.apply.SaveDto;
+import site.metacoding.humancloud.dto.apply.ApplyReqDto.ApplySaveReqDto;
 
 public interface ApplyDao {
-	public void save(SaveDto saveDto);
+	public int save(ApplySaveReqDto applySaveReqDto);
 
 	public Apply findById(Integer id);
 
