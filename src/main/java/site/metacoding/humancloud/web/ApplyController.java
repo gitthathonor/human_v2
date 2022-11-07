@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.dto.ResponseDto;
@@ -16,7 +17,7 @@ import site.metacoding.humancloud.service.ApplyService;
 import site.metacoding.humancloud.service.ResumeService;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ApplyController {
   private final ApplyService applyService;
   private final ResumeService resumeService;

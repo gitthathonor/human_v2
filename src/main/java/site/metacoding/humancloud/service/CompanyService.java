@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
+import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
@@ -111,6 +112,7 @@ public class CompanyService {
 	}
 
 	// 기업 리스트 보기
+	@Transactional(readOnly = true)
 	public CompanyFindAllRespDto 기업리스트보기(Integer page) {
 		if (page == null) {
 			page = 0;
@@ -186,12 +188,12 @@ public class CompanyService {
 
 	}
 
-	public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
-		for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
-			System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
-		}
-		return recruitDao.findByCompanyId(id).get();
-	}
+	// public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
+	// for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
+	// System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
+	// }
+	// return recruitDao.findByCompanyId(id).get();
+	// }
 
 	@Transactional
 	public CompanyMypageRespDto 마이페이지보기(Integer companyId) {
@@ -211,6 +213,10 @@ public class CompanyService {
 		}
 
 		return companyMypageRespDto;
+	}
+
+	public List<Resume> 지원목록보기(Integer companyId) {
+		return resumeDao.applyResumeList(companyId);
 	}
 
 }

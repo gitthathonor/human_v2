@@ -1,13 +1,18 @@
 package site.metacoding.humancloud.dto.company;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
 
 public class CompanyReqDto {
-
+    @Builder
     @Setter
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CompanyJoinReqDto {
         private Integer companyId;
         private String companyUsername;
@@ -45,6 +50,9 @@ public class CompanyReqDto {
         }
     }
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Setter
     @Getter
     public static class CompanyUpdateReqDto {
