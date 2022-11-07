@@ -13,6 +13,6 @@
 	<select id="findAll" resultType="site.metacoding.humancloud.domain.apply.Apply"></select>
 	<update id="update"></update>
 	<delete id="deleteById">
-		DELETE FROM apply WHERE apply_recruit_id = #{applyRecruitId} and apply_resume_id =#{applyResumeId} 
+		DELETE FROM apply WHERE apply_recruit_id = #{recruitId} and apply_resume_id =#{resumeId} 
 	</delete>
 </mapper>

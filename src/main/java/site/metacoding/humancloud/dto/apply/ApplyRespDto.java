@@ -40,11 +40,11 @@ public class ApplyRespDto {
         private Integer applyResumeId;
         private Timestamp applyCreatedAt;
 
-        public ApplySaveRespDto(ApplySaveReqDto applySaveReqDto, int id) {
-            this.applyId = id;
+        public ApplySaveRespDto(ApplySaveReqDto applySaveReqDto) {
+            this.applyId = applySaveReqDto.getApplyId();
             this.applyRecruitId = applySaveReqDto.getApplyRecruitId();
             this.applyResumeId = applySaveReqDto.getApplyResumeId();
-            this.applyCreatedAt = applySaveReqDto.getApplyCreatedAt();
+            this.applyCreatedAt = new Timestamp(System.currentTimeMillis());
         }
     }
 }

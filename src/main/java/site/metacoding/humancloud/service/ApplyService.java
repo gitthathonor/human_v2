@@ -27,8 +27,8 @@ public class ApplyService {
   }
 
   public ApplySaveRespDto 기업공고에지원하기(ApplySaveReqDto applySaveReqDto) {
-    int id = applyDao.save(applySaveReqDto);
-    return new ApplySaveRespDto(applySaveReqDto, id);
+    applyDao.save(applySaveReqDto);
+    return new ApplySaveRespDto(applySaveReqDto);
   }
 
   public void 기업공고지원취소(Integer recruitId, Integer resumeId) {
