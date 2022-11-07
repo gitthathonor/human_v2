@@ -89,7 +89,6 @@ public class SettingTest {
         String fileName = "testCustomerUpload.jpg";
 
         ResumeSaveReqDto resumeSaveReqDto = ResumeSaveReqDto.builder()
-                .resumeId(1)
                 .resumeUserId(1)
                 .resumeTitle("test")
                 .resumeEducation("high")

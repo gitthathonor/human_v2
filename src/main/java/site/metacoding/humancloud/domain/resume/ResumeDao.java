@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewCategoryReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
@@ -15,6 +16,8 @@ import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 public interface ResumeDao {
 
 	public void save(ResumeSaveReqDto ResumeSaveReqDto);
+
+	public List<ResumeFindAllDto> findByCategoryName(ResumeViewCategoryReqDto resumeViewCategoryReqDto);
 
 	public Optional<ResumeFindById> findById(Integer id);
 

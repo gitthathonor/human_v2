@@ -1,7 +1,11 @@
 package site.metacoding.humancloud.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -66,7 +72,7 @@ public class ResumeControllerTest {
     @BeforeEach
     public void userSessionInit() {
         userSession.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("ssar").role(1).build());
+                SessionUser.builder().id(1).username("ssar").role(0).build());
     }
 
     @BeforeEach
@@ -87,16 +93,32 @@ public class ResumeControllerTest {
         categoryList.add("Java");
         categoryList.add("JavaScript");
 
-        String fileName = "testCustomerUpload.jpg";
+        MultipartFile file = new MockMultipartFile("file", "testCustomerUpload.jpg", "/img/**",
+                "<<jpg data>>".getBytes());
+
+        int pos = file.getOriginalFilename().lastIndexOf(".");
+        String extension = file.getOriginalFilename().substring(pos + 1);
+        String filePath = "C:\\temp\\img\\";
+        String imgSaveName = UUID.randomUUID().toString();
+        String imgName = imgSaveName + "." + extension;
+
+        File dest = new File(filePath, imgName);
+        try {
+            Files.copy(file.getInputStream(), dest.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
                 1,
                 "이력서 테스트중",
                 "1년이상 ~ 3년미만",
                 "신입",
-                fileName,
+                imgName,
                 "http:localhost:8000",
                 categoryList);
+        log.debug("디버그 : 파일" + file.getInputStream());
+        resumeSaveReqDto.setFile(file);
 
         String body = om.writeValueAsString(resumeSaveReqDto);
         // when
@@ -104,7 +126,7 @@ public class ResumeControllerTest {
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.post(
                         "/s/resume/save")
-                        .content(body).contentType(APPLICATION_JSON)
+                        .content(body).contentType("multipart/form-data")
                         .accept(APPLICATION_JSON).session(userSession));
 
         // then
@@ -188,11 +210,10 @@ public class ResumeControllerTest {
     @Test
     public void viewList_test() throws Exception {
         // given
-        Integer page = 1;
 
         // when
         ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/s/resume?page=" + page)
+                MockMvcRequestBuilders.get("/s/resume")
                         .accept(APPLICATION_JSON)
                         .session(companySession));
 
@@ -208,14 +229,12 @@ public class ResumeControllerTest {
         // given
         Category category = new Category(1, "Java");
 
-        Integer page = 0;
-
         String body = om.writeValueAsString(category);
 
         // when
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.post(
-                        "/s/resume?page=" + page + "&category=" + category.getCategoryName())
+                        "/s/resume?category=" + category.getCategoryName())
                         .content(body).contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON).session(companySession));
 

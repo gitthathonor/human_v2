@@ -4,18 +4,18 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.dto.SessionUser.SessionUserBuilder;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 
 public class ResumeReqDto {
 
-  @Builder
-  @NoArgsConstructor
   @AllArgsConstructor
+  @NoArgsConstructor
   @Getter
   @Setter
   public static class ResumeSaveReqDto {
@@ -27,8 +27,9 @@ public class ResumeReqDto {
     private String resumePhoto;
     private String resumeLink;
     private List<String> categoryList;
-    private MultipartFile[] file;
+    private MultipartFile file;
 
+    @Builder
     public ResumeSaveReqDto(Integer resumeUserId, String resumeTitle, String resumeEducation,
         String resumeCareer, String resumePhoto, String resumeLink, List<String> categoryList) {
       this.resumeUserId = resumeUserId;
@@ -38,6 +39,10 @@ public class ResumeReqDto {
       this.resumePhoto = resumePhoto;
       this.resumeLink = resumeLink;
       this.categoryList = categoryList;
+    }
+
+    public void setFile(MultipartFile file) {
+      this.file = file;
     }
 
   }
@@ -65,5 +70,38 @@ public class ResumeReqDto {
       this.resumeLink = resumeLink;
       this.categoryList = categoryList;
     }
+  }
+
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Getter
+  @Setter
+  public static class ResumeViewCategoryReqDto {
+    private List<ResumeFindAllDto> resumeList;
+    private String categoryName;
+    private Integer page;
+    private Integer startNum;
+
+    public ResumeViewCategoryReqDto(String categoryName, Integer page) {
+      this.categoryName = categoryName;
+      this.page = page;
+    }
+
+  }
+
+  @NoArgsConstructor
+  @Getter
+  @Setter
+  public static class ResumeViewOrderListReqDto {
+    private String order;
+    private Integer companyId;
+    private Integer page;
+
+    public ResumeViewOrderListReqDto(String order, Integer companyId, Integer page) {
+      this.order = order;
+      this.companyId = companyId;
+      this.page = page;
+    }
+
   }
 }

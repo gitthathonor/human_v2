@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.metacoding.humancloud.domain.resume.ResumeDao">
 
+
+   <select id="findByCategoryName" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
+		select r.* from resume r
+		left join category c
+		on r.resume_id=c.category_resume_id
+		where c.category_name=#{categoryName}
+		limit 20 offset #{startNum}
+	</select>
+
+
    <select id="applyResumeList" resultType="site.metacoding.humancloud.domain.resume.Resume">
       select resume.* from resume
       inner join

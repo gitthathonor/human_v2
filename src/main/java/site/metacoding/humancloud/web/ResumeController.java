@@ -25,6 +25,8 @@ import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewCategoryReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewOrderListReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeOrderByOrderListDto;
@@ -53,17 +55,16 @@ public class ResumeController {
   // http://localhost:8000/resume?page=0&category=Java
   @Auth(role = 1)
   @PostMapping("/s/resume")
-  public ResponseDto<?> viewCategory(@RequestBody Category category, Integer page) {
-    ResumeOrderByOrderListDto resumeOrderByOrderListDto = resumeService.분류별이력서목록보기(category.getCategoryName(), page);
+  public ResponseDto<?> viewCategory(@RequestBody ResumeViewCategoryReqDto resumeViewCategoryReqDto) {
+    ResumeOrderByOrderListDto resumeOrderByOrderListDto = resumeService.분류별이력서목록보기(resumeViewCategoryReqDto);
     return new ResponseDto<>(1, "OK", resumeOrderByOrderListDto);
   }
 
   // http://localhost:8000/resume/list?page=0&order=education
   @Auth(role = 1)
   @PostMapping("/s/resume/list")
-  public ResponseDto<?> orderList(@RequestParam("order") String order, @RequestBody Company company,
-      @Param("page") Integer page) {
-    ResumeFindAllRespDto resumeFindAllRespDto = resumeService.정렬하기(order, company.getCompanyId(), page);
+  public ResponseDto<?> orderList(@RequestBody ResumeViewOrderListReqDto resumeViewOrderListReqDto) {
+    ResumeFindAllRespDto resumeFindAllRespDto = resumeService.정렬하기(resumeViewOrderListReqDto);
     return new ResponseDto<>(1, "ok", resumeFindAllRespDto);
   }
 
