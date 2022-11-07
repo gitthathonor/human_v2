@@ -45,11 +45,11 @@ public class RecruitService {
 
         if (recruitOP.isPresent()) {
             List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-            List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
-                    .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+            // List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
+            // .findByCompanyId(recruitOP.get().getRecruitCompanyId());
             recruitOP.get().setResume(resumeDao.findByUserId(userId));
             recruitOP.get().setCategory(categoryList);
-            recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
+            // recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
 
         } else {
             throw new RuntimeException("공고가 존재하지 않습니다");
@@ -63,8 +63,8 @@ public class RecruitService {
     public RecruitRespDto 구인공고업데이트(Integer id, RecruitUpdateReqDto recruitUpdateReqDto) {
 
         recruitUpdateReqDto.setRecruitId(id); // URL 로 ID 받는 값을 주입 해줘야 함
-        Optional<Recruit> recruitPS = recruitDao.findByIdyet(id);
-        if (recruitPS.isPresent()) {
+        Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(id);
+        if (recruitOP.isPresent()) {
             Category category = new Category(id, null, null);
 
             // 기존의 카테고리 없애고
