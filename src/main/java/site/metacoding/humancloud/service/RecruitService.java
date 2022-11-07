@@ -72,6 +72,10 @@ public class RecruitService {
 
         recruitUpdateReqDto.setRecruitId(id); // URL 로 ID 받는 값을 주입 해줘야 함
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(id);
+
+        if (getSession() == null && recruitOP.get().getCompanyId() != getSession().getId()) {
+            throw new RuntimeException("공고를 ' 수정 '할 권한이 없습니다.");
+        }
         if (recruitOP.isPresent()) {
             Category category = new Category(id, null, null);
 
@@ -92,6 +96,9 @@ public class RecruitService {
     @Transactional
     public RecruitRespDto 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
 
+        if (getSession() == null) {
+            throw new RuntimeException("공고를 작성할 권한이 없습니다.");
+        }
         recruitSaveReqDto.setRecruitCompanyId(getSession().getId());
         recruitDao.save(recruitSaveReqDto);
         Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
@@ -189,6 +196,10 @@ public class RecruitService {
     @Transactional
     public Integer 공고삭제하기(Integer recruitId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
+
+        if (getSession() == null && recruitOP.get().getCompanyId() != getSession().getId()) {
+            throw new RuntimeException("공고를 ' 삭제 '할 권한이 없습니다.");
+        }
         if (recruitOP.isPresent()) {
             // 기존의 카테고리 없애고
             categoryDao.deleteByRecruitId(recruitId);
