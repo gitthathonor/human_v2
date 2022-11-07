@@ -3,6 +3,9 @@ package site.metacoding.humancloud.domain.recruit;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
@@ -22,9 +25,9 @@ public interface RecruitDao {
 
 	public void deleteById(Integer id);
 
-	public List<Recruit> orderByCreatedAt();
+	public List<RecruitDetailRespDto> orderByCreatedAt();
 
-	public List<Recruit> orderByCareer();
+	public List<RecruitDetailRespDto> orderByCareer();
 
 	public void findByCareer();
 
@@ -32,13 +35,13 @@ public interface RecruitDao {
 
 	public List<CompanyRecruitDtoRespDto> joinCompanyRecruit(int startNum);
 
-	public List<Recruit> orderByrecommend(Integer userId);
+	public List<RecruitDetailRespDto> orderByrecommend(Integer userId);
 
 	public List<RecruitDetailRespDto> findByTitle(String recruitTitle);
 
-	public PagingDto paging(Integer page);
+	public PagingDto paging(@Param("page") Integer page);
 
-	public List<Recruit> findByCategoryName(Integer startNum);
+	public List<RecruitDetailRespDto> findByCategoryName(Integer startNum);
 
 	public void deleteByCompanyId(Integer companyId);
 

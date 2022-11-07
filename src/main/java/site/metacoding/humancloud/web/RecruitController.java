@@ -56,7 +56,6 @@ public class RecruitController {
   }
 
   // 수정중
-  @Auth(role = 0)
   @GetMapping("/recruit/detail/{id}/{userId}")
   public ResponseDto<?> recruit_Detail(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId,
       Model model) {

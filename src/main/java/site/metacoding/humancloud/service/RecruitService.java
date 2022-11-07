@@ -53,11 +53,10 @@ public class RecruitService {
 
         if (recruitOP.isPresent()) {
             List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-            // List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
-            // .findByCompanyId(recruitOP.get().getRecruitCompanyId());
-            recruitOP.get().setResume(resumeDao.findByUserId(userId));
+            if (getSession() != null) {
+                recruitOP.get().setResume(resumeDao.findByUserId(getSession().getId()));
+            }
             recruitOP.get().setCategory(categoryList);
-            // recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
 
         } else {
             throw new RuntimeException("공고가 존재하지 않습니다");
@@ -139,7 +138,7 @@ public class RecruitService {
         return recruitList;
     }
 
-    public List<Recruit> 분류별채용공고목록보기(String categoryName, Integer page) {
+    public List<RecruitDetailRespDto> 분류별채용공고목록보기(String categoryName, Integer page) {
         // 페이징
         if (page == null) {
             page = 0;
@@ -149,11 +148,11 @@ public class RecruitService {
         paging.dopaging();
 
         // 비즈니스로직
-        List<Recruit> recruits = recruitDao.findByCategoryName(startNum);
+        List<RecruitDetailRespDto> recruits = recruitDao.findByCategoryName(startNum);
         return recruits;
     }
 
-    public List<Recruit> 정렬하기(@Param("orderList") String orderList, Integer userId) {
+    public List<RecruitDetailRespDto> 정렬하기(@Param("orderList") String orderList, Integer userId) {
         if (orderList.equals("recent")) {
             return 최신순보기();
         } else if (orderList.equals("career")) {
@@ -163,18 +162,18 @@ public class RecruitService {
         }
     }
 
-    public List<Recruit> 최신순보기() {
+    public List<RecruitDetailRespDto> 최신순보기() {
         return recruitDao.orderByCreatedAt();
     }
 
-    public List<Recruit> 경력순보기() {
+    public List<RecruitDetailRespDto> 경력순보기() {
         return recruitDao.orderByCareer();
     }
 
     public void 최신순기업리스트() {
         List<Company> companies = new ArrayList<>();
-        List<Recruit> recruitPS = recruitDao.orderByCreatedAt(); // 내림차순 작성일 정렬
-        for (Recruit r : recruitPS) {
+        List<RecruitDetailRespDto> recruitPS = recruitDao.orderByCreatedAt(); // 내림차순 작성일 정렬
+        for (RecruitDetailRespDto r : recruitPS) {
             Optional<CompanyFindById> companyPS = companyDao.findById(r.getRecruitCompanyId());
             if (companies.size() > 5) {
                 break;
@@ -182,7 +181,7 @@ public class RecruitService {
         }
     }
 
-    public List<Recruit> 추천순보기(Integer userId) {
+    public List<RecruitDetailRespDto> 추천순보기(Integer userId) {
         return recruitDao.orderByrecommend(userId);
     }
 
