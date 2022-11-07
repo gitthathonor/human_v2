@@ -1,5 +1,8 @@
 package site.metacoding.humancloud.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -78,6 +81,56 @@ public class CompanyControllerTest {
     // }
 
     @Test
+    public void 기업회원등록테스트() throws Exception {
+        // given
+        Integer id = 1;
+        MultipartFile file = new MockMultipartFile("file", "네이버.jpg", "/img/**", "<<jpg data>>".getBytes());
+
+        int pos = file.getOriginalFilename().lastIndexOf(".");
+        String extension = file.getOriginalFilename().substring(pos + 1);
+        String filePath = "C:\\temp\\img\\";
+        String logoSaveName = UUID.randomUUID().toString();
+        String logo = logoSaveName + "." + extension;
+
+        File makeFileFolder = new File(filePath);
+        if (!makeFileFolder.exists()) {
+            if (!makeFileFolder.mkdir()) {
+                throw new Exception("File.mkdir():Fail.");
+            }
+        }
+
+        File dest = new File(filePath, logo);
+        try {
+            Files.copy(file.getInputStream(), dest.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        CompanyUpdateReqDto companyUpdateReqDto = new CompanyUpdateReqDto();
+        companyUpdateReqDto.setCompanyLogo(logo);
+        companyUpdateReqDto.setCompanyPassword("4567");
+        companyUpdateReqDto.setCompanyEmail("ssar@gmail.com");
+        companyUpdateReqDto.setCompanyName("엘지");
+        companyUpdateReqDto.setCompanyAddress("남천동");
+        companyUpdateReqDto.setCompanyPhoneNumber("01033338888");
+
+        String body = om.writeValueAsString(companyUpdateReqDto);
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.put("/s/company/" + id).content(body)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .session(session));
+
+        // then
+        MvcResult mvcResult = resultActions.andReturn();
+        System.out.println("디버그 : " + mvcResult.getResponse().getContentAsString());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.companyName").value("엘지"));
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.companyEmail").value(" ssar@gmail.com"));
+    }
+
+    @Test
     public void 기업회원수정테스트() throws Exception {
         // given
         Integer id = 1;
@@ -88,6 +141,20 @@ public class CompanyControllerTest {
         String filePath = "C:\\temp\\img\\";
         String logoSaveName = UUID.randomUUID().toString();
         String logo = logoSaveName + "." + extension;
+
+        File makeFileFolder = new File(filePath);
+        if (!makeFileFolder.exists()) {
+            if (!makeFileFolder.mkdir()) {
+                throw new Exception("File.mkdir():Fail.");
+            }
+        }
+
+        File dest = new File(filePath, logo);
+        try {
+            Files.copy(file.getInputStream(), dest.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         CompanyUpdateReqDto companyUpdateReqDto = new CompanyUpdateReqDto();
         companyUpdateReqDto.setCompanyLogo(logo);

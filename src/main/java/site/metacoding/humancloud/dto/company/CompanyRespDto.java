@@ -8,8 +8,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
+import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 
 public class CompanyRespDto {
+
+    @Setter
+    @Getter
+    public static class CompanyFindAllDto {
+        private Integer companyId;
+        private String companyName;
+        private String companyAddress;
+        private String companyLogo;
+    }
 
     @Getter
     @Setter
@@ -142,6 +152,24 @@ public class CompanyRespDto {
             private String recruitTitle;
             private Integer recruitReadCount;
             private Timestamp recruitCreatedAt;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class CompanyFindAllRespDto {
+        private List<CompanyFindAllDto> companyList;
+
+        private Integer startPageNum;
+        private Integer lastPageNum;
+        private Integer blockPage;
+        private Integer blockPageCount;
+
+        public void dopaging(PagingDto paging) {
+            this.startPageNum = paging.getStartPageNum();
+            this.lastPageNum = paging.getLastPageNum();
+            this.blockPage = paging.getBlockPage();
+            this.blockPageCount = paging.getBlockPageCount();
         }
     }
 

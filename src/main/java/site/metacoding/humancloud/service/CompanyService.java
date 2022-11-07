@@ -3,9 +3,7 @@ package site.metacoding.humancloud.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
-import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
@@ -26,11 +23,12 @@ import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyDetailRespDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindAllRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto;
-import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 import site.metacoding.humancloud.util.SHA256;
@@ -113,18 +111,19 @@ public class CompanyService {
 	}
 
 	// 기업 리스트 보기
-	public Map<String, Object> getCompanyList(Integer page) {
+	public CompanyFindAllRespDto 기업리스트보기(Integer page) {
 		if (page == null) {
 			page = 0;
 		}
 		int startNum = page * 20;
 		PagingDto paging = companyDao.paging(page);
 		paging.dopaging();
+		CompanyFindAllRespDto companyFindAllRespDto = new CompanyFindAllRespDto();
+		companyFindAllRespDto.dopaging(paging);
 
-		Map<String, Object> result = new HashMap<>();
-		result.put("paging", paging);
-		result.put("list", companyDao.findAll(startNum));
-		return result;
+		companyFindAllRespDto.setCompanyList(companyDao.findAll(startNum));
+
+		return companyFindAllRespDto;
 	}
 
 	// 기업정보 수정
@@ -214,7 +213,4 @@ public class CompanyService {
 		return companyMypageRespDto;
 	}
 
-	public Object 기업리스트보기() {
-		return null;
-	}
 }

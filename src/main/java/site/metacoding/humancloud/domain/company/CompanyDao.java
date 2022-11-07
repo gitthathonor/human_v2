@@ -3,6 +3,7 @@ package site.metacoding.humancloud.domain.company;
 import java.util.List;
 import java.util.Optional;
 
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindAllDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 
@@ -11,7 +12,7 @@ public interface CompanyDao {
 
 	public Optional<CompanyFindById> findById(Integer id);
 
-	public List<Company> findAll(int startNum);
+	public List<CompanyFindAllDto> findAll(int startNum);
 
 	public void update(Company company);
 

@@ -55,7 +55,7 @@ public class CompanyController {
 	// 기업 리스트 보기
 	@GetMapping("/company")
 	public ResponseDto<?> getCompanyList(@Param("page") Integer page) {
-		return new ResponseDto<>(1, "기업 리스트 불러오기 성공", companyService.기업리스트보기());
+		return new ResponseDto<>(1, "기업 리스트 불러오기 성공", companyService.기업리스트보기(page));
 	}
 
 	// 기업 정보 수정
