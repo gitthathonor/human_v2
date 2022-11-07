@@ -108,7 +108,8 @@ public class RecruitService {
         return new RecruitRespDto(recruitSaveReqDto);
     }
 
-    public List<CompanyRecruitDtoRespDto> 메인공고목록보기(int startNum) {
+    public List<CompanyRecruitDtoRespDto> 메인공고목록보기() {
+        int startNum = 0;
         List<CompanyRecruitDtoRespDto> recruitPS = recruitDao.joinCompanyRecruit(startNum);
         List<CompanyRecruitDtoRespDto> result = new ArrayList<>();
 
