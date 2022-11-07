@@ -171,13 +171,14 @@ public class RecruitControllerTest {
     }
 
     @Test
-    public void deleteResume_test() throws Exception {
+    public void 공고삭제하기테스트() throws Exception {
         // given
-        Integer resumeId = 1;
+        Integer recruitId = 1;
+
         // when
         ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.delete("/s/resume/deleteById/" + resumeId)
-                        .session(userSession));
+                MockMvcRequestBuilders.delete("/s/recruit/delete/" + recruitId)
+                        .session(companySession));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
