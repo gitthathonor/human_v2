@@ -188,13 +188,6 @@ public class CompanyService {
 
 	}
 
-	// public List<RecruitListByCompanyIdRespDto> 채용공고리스트불러오기(Integer id) {
-	// for (int i = 0; i < recruitDao.findByCompanyId(id).get().size(); i++) {
-	// System.out.println(recruitDao.findByCompanyId(id).get().get(i).getRecruitTitle());
-	// }
-	// return recruitDao.findByCompanyId(id).get();
-	// }
-
 	@Transactional
 	public CompanyMypageRespDto 마이페이지보기(Integer companyId) {
 
