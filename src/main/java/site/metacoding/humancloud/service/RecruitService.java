@@ -64,7 +64,6 @@ public class RecruitService {
         }
 
         return recruitOP;
-
     }
 
     @Transactional
