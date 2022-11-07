@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,7 +29,7 @@ public class ResumeInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         String httpMethod = request.getMethod();
-
+        log.debug("디버그 :  이력서 인터셉터");
         if (!(httpMethod.equals("PUT") || httpMethod.equals("DELETE"))) {
             return true;
         }

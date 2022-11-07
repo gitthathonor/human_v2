@@ -35,9 +35,6 @@ public class MyWebConfig implements WebMvcConfigurer {
                                 .addPathPatterns("/s/resume/**");
                 registry.addInterceptor(new CompanyAuthInterceptor())
                                 .addPathPatterns("/s/company/**");
-
-                registry.addInterceptor(new ApplyAuthInterceptor(resumeDao))
-                                .addPathPatterns("/s/apply/**");
         }
 
 }
