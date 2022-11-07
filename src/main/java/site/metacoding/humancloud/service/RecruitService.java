@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
@@ -39,6 +42,11 @@ public class RecruitService {
     private final CategoryDao categoryDao;
     private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
     private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
+    private final HttpSession session;
+
+    private SessionUser getSession() {
+        return (SessionUser) session.getAttribute("sessionUser");
+    }
 
     public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
@@ -84,6 +92,7 @@ public class RecruitService {
     @Transactional
     public RecruitRespDto 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
 
+        recruitSaveReqDto.setRecruitCompanyId(getSession().getId());
         recruitDao.save(recruitSaveReqDto);
         Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
 
