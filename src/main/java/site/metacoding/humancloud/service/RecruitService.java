@@ -109,19 +109,13 @@ public class RecruitService {
         return new RecruitRespDto(recruitSaveReqDto);
     }
 
-    public List<CompanyRecruitDtoRespDto> 메인공고목록보기() {
-        Optional<List<CompanyRecruitDtoRespDto>> recruitPS = recruitDao.joinCompanyRecruit(0);
+    public List<CompanyRecruitDtoRespDto> 메인공고목록보기(int startNum) {
+        List<CompanyRecruitDtoRespDto> recruitPS = recruitDao.joinCompanyRecruit(startNum);
         List<CompanyRecruitDtoRespDto> result = new ArrayList<>();
-        int endFor;
-        if (recruitPS.isPresent()) {
-            if (recruitPS.get().size() < 5) {
-                endFor = recruitPS.get().size();
-            } else {
-                endFor = 6;
-            }
 
-            for (int i = 0; i < endFor; i++) {
-                result.add(recruitPS.get().get(i));
+        if (!recruitPS.isEmpty()) {
+            for (int i = 0; i < 10; i++) {
+                result.add(recruitPS.get(i));
             }
             return result;
         } else {

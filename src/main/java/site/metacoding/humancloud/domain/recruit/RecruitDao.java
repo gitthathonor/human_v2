@@ -30,7 +30,7 @@ public interface RecruitDao {
 
 	public Optional<List<RecruitListByCompanyIdRespDto>> findByCompanyId(Integer id);
 
-	public Optional<List<CompanyRecruitDtoRespDto>> joinCompanyRecruit(int startNum);
+	public List<CompanyRecruitDtoRespDto> joinCompanyRecruit(int startNum);
 
 	public List<Recruit> orderByrecommend(Integer userId);
 
