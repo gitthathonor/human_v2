@@ -148,18 +148,38 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void 기업회원삭제테스트() {
+    public void 기업회원삭제테스트() throws Exception {
         // given
         int companyId = 1;
 
         // when
-        // ResultActions resultActions = mvc.perform(
-        // MockMvcRequestBuilders.delete("/s/user/" + userId)
-        // .session(session));
+        ResultActions resultActions = mvc.perform(
+                MockMvcRequestBuilders.delete("/s/company/" + companyId)
+                        .session(session));
 
-        // // then
-        // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+    }
+
+    @Test
+    public void 기업리스트보기테스트() {
+
+    }
+
+    @Test
+    public void 기업마이페이지테스트() {
+
+    }
+
+    @Test
+    public void 기업정보상세보기테스트() {
+
+    }
+
+    @Test
+    public void 지원이력서목록보기테스트() {
+
     }
 
 }
