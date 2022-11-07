@@ -9,9 +9,9 @@ import site.metacoding.humancloud.domain.company.Company;
 
 public class CompanyReqDto {
     @Builder
+    @NoArgsConstructor
     @Setter
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class CompanyJoinReqDto {
         private Integer companyId;

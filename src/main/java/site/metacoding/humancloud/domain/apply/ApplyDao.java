@@ -2,10 +2,12 @@ package site.metacoding.humancloud.domain.apply;
 
 import java.util.List;
 
-import site.metacoding.humancloud.dto.dummy.request.apply.SaveDto;
+import org.apache.ibatis.annotations.Param;
+
+import site.metacoding.humancloud.dto.apply.ApplyReqDto.ApplySaveReqDto;
 
 public interface ApplyDao {
-	public void save(SaveDto saveDto);
+	public int save(ApplySaveReqDto applySaveReqDto);
 
 	public Apply findById(Integer id);
 
@@ -13,5 +15,5 @@ public interface ApplyDao {
 
 	public void update(Apply apply);
 
-	public void deleteById(Integer recruitId, Integer resumeId);
+	public void deleteById(@Param("recruitId") Integer recruitId, @Param("resumeId") Integer resumeId);
 }

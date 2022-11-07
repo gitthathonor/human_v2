@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
 import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
@@ -39,33 +42,40 @@ public class RecruitService {
     private final CategoryDao categoryDao;
     private final CompanyDao companyDao; // 공고 작성 회사 정보 to Object
     private final ResumeDao resumeDao; // 이력서 목록 findByUserId to LIST
+    private final HttpSession session;
 
-    
+    private SessionUser getSession() {
+        return (SessionUser) session.getAttribute("sessionUser");
+    }
+
     public Optional<RecruitDetailRespDto> 공고상세페이지(Integer recruitId, Integer userId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
 
-        if(recruitOP.isPresent()){
+        if (recruitOP.isPresent()) {
             List<Category> categoryList = categoryDao.findByRecruitId(recruitId);
-            //Optional<List<RecruitListByCompanyIdRespDto>> recruitListByCompanyId = recruitDao
-             //       .findByCompanyId(recruitOP.get().getRecruitCompanyId());
+            // List<RecruitListByCompanyIdRespDto> recruitListByCompanyId = recruitDao
+            // .findByCompanyId(recruitOP.get().getRecruitCompanyId());
             recruitOP.get().setResume(resumeDao.findByUserId(userId));
             recruitOP.get().setCategory(categoryList);
-            //recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId.get());
-    
-        }else{
+            // recruitOP.get().setRecruitListByCompanyId(recruitListByCompanyId);
+
+        } else {
             throw new RuntimeException("공고가 존재하지 않습니다");
         }
-        
+
         return recruitOP;
-        
     }
 
     @Transactional
     public RecruitRespDto 구인공고업데이트(Integer id, RecruitUpdateReqDto recruitUpdateReqDto) {
 
         recruitUpdateReqDto.setRecruitId(id); // URL 로 ID 받는 값을 주입 해줘야 함
-        Optional<Recruit> recruitPS = recruitDao.findByIdyet(id);
-        if (recruitPS.isPresent()) {
+        Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(id);
+
+        if (getSession() == null && recruitOP.get().getCompanyId() != getSession().getId()) {
+            throw new RuntimeException("공고를 ' 수정 '할 권한이 없습니다.");
+        }
+        if (recruitOP.isPresent()) {
             Category category = new Category(id, null, null);
 
             // 기존의 카테고리 없애고
@@ -85,6 +95,10 @@ public class RecruitService {
     @Transactional
     public RecruitRespDto 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
 
+        if (getSession() == null) {
+            throw new RuntimeException("공고를 작성할 권한이 없습니다.");
+        }
+        recruitSaveReqDto.setRecruitCompanyId(getSession().getId());
         recruitDao.save(recruitSaveReqDto);
         Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
 
@@ -95,28 +109,25 @@ public class RecruitService {
         return new RecruitRespDto(recruitSaveReqDto);
     }
 
-
     public List<CompanyRecruitDtoRespDto> 메인공고목록보기() {
         Optional<List<CompanyRecruitDtoRespDto>> recruitPS = recruitDao.joinCompanyRecruit(0);
         List<CompanyRecruitDtoRespDto> result = new ArrayList<>();
         int endFor;
-        if(recruitPS.isPresent()){
+        if (recruitPS.isPresent()) {
             if (recruitPS.get().size() < 5) {
                 endFor = recruitPS.get().size();
             } else {
                 endFor = 6;
             }
-    
+
             for (int i = 0; i < endFor; i++) {
                 result.add(recruitPS.get().get(i));
             }
             return result;
-        }else{
+        } else {
             throw new RuntimeException("목록이 없습네당");
         }
-        
 
-        
     }
 
     public Map<String, Object> 채용공고목록보기(Integer page) {
@@ -184,6 +195,10 @@ public class RecruitService {
     @Transactional
     public Integer 공고삭제하기(Integer recruitId) {
         Optional<RecruitDetailRespDto> recruitOP = recruitDao.findById(recruitId);
+
+        if (getSession() == null && recruitOP.get().getCompanyId() != getSession().getId()) {
+            throw new RuntimeException("공고를 ' 삭제 '할 권한이 없습니다.");
+        }
         if (recruitOP.isPresent()) {
             // 기존의 카테고리 없애고
             categoryDao.deleteByRecruitId(recruitId);

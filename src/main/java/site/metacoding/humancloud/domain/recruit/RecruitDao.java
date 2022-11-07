@@ -14,8 +14,6 @@ import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompan
 public interface RecruitDao {
 	public void save(RecruitSaveReqDto recruitSaveReqDto);
 
-	public Optional<Recruit> findByIdyet(Integer id);
-
 	public Optional<RecruitDetailRespDto> findById(Integer id);
 
 	public List<Recruit> findAll();
