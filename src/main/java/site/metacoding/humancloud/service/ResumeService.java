@@ -110,17 +110,27 @@ public class ResumeService {
 
     // 이력서 목록
     public ResumeFindAllRespDto 이력서목록보기(Integer page) {
+        log.debug("디버그 : 이력서 목록보기의 page값 : " + page);
+
         if (page == null) {
             page = 0;
         }
         int startNum = page * 20;
-        PagingDto paging = resumeDao.paging(page);
+        log.debug("디버그 : startNum" + startNum);
+
+        log.debug("디버그 : 1");
+        PagingDto paging = resumeDao.paging(0);
+        log.debug("디버그 : 2");
+
         paging.dopaging();
         ResumeFindAllRespDto resumeFindAllRespDto = new ResumeFindAllRespDto();
         resumeFindAllRespDto.dopaging(paging);
 
         resumeFindAllRespDto.setResumeList(resumeDao.findAll(startNum));
+
         resumeFindAllRespDto.setCategoryList(categoryDao.distinctName());
+        log.debug("디버그 : 3");
+        log.debug("디버그 : 이력서 목록보기 Service -> viewList Controller가기전 page값 : " + page);
 
         return resumeFindAllRespDto;
     }

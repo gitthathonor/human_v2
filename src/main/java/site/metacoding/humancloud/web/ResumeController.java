@@ -42,13 +42,13 @@ public class ResumeController {
   private final ResumeService resumeService;
   private final UserService userService;
 
-  // http://localhost:8000/resume?page=0
+  // http://localhost:8000/resume?pageNum=0
   @Auth(role = 1)
   @GetMapping("/s/resume")
   public ResponseDto<?> viewList(@Param("page") Integer page) {
-
+    log.debug("디버그 : viewList Controller의 page값 : " + page);
     ResumeFindAllRespDto resumeFindAllRespDto = resumeService.이력서목록보기(page);
-
+    log.debug("디버그 : 최종 page 값 : " + page);
     return new ResponseDto<>(1, "OK", resumeFindAllRespDto);
   }
 
