@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import site.metacoding.humancloud.dto.ResponseDto;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
+    // @ExceptionHandler(RuntimeException.class)
     public ResponseDto<?> apiError(Exception e) {
         return new ResponseDto<>(-1, e.getMessage(), null);
     }

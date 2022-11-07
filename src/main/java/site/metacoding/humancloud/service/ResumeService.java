@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
@@ -22,6 +24,8 @@ import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByRes
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewCategoryReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewOrderListReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeDetailRespDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
@@ -121,24 +125,26 @@ public class ResumeService {
         return resumeFindAllRespDto;
     }
 
-    public ResumeOrderByOrderListDto 분류별이력서목록보기(String category, Integer page) {
-        if (page == null) {
+    public ResumeOrderByOrderListDto 분류별이력서목록보기(ResumeViewCategoryReqDto resumeViewCategoryReqDto) {
+        Integer page = resumeViewCategoryReqDto.getPage();
+
+        if (resumeViewCategoryReqDto.getPage() == null) {
             page = 0;
         }
         int startNum = page * 20;
         PagingDto paging = resumeDao.paging(page);
         paging.dopaging();
+        resumeViewCategoryReqDto.setStartNum(startNum);
         ResumeOrderByOrderListDto resumeOrderByOrderListDto = new ResumeOrderByOrderListDto();
         resumeOrderByOrderListDto.dopaging(paging);
-        resumeOrderByOrderListDto.setResumeList(resumeDao.findAll(startNum));
-        resumeOrderByOrderListDto.setCategoryFindByName(categoryDao.findByName(category));
+        resumeOrderByOrderListDto.setResumeList(resumeDao.findByCategoryName(resumeViewCategoryReqDto));
+        log.debug("디버그 : resumeOrderByOrderListDto " + resumeOrderByOrderListDto.getResumeList().get(0));
 
         return resumeOrderByOrderListDto;
     }
 
-    public ResumeFindAllRespDto 정렬하기(@Param("orderList") String orderList, @Param("companyId") Integer companyId,
-            Integer page) {
-
+    public ResumeFindAllRespDto 정렬하기(ResumeViewOrderListReqDto resumeViewOrderListReqDto) {
+        Integer page = resumeViewOrderListReqDto.getPage();
         if (page == null) {
             page = 0;
         }
@@ -150,14 +156,14 @@ public class ResumeService {
         resumeFindAllRespDto.dopaging(paging);
         resumeFindAllRespDto.setCategoryList(categoryDao.distinctName());
 
-        if (orderList.equals("recent")) {
+        if (resumeViewOrderListReqDto.getOrder().equals("recent")) {
             resumeFindAllRespDto.setResumeList(최신순보기(startNum));
-        } else if (orderList.equals("career")) {
+        } else if (resumeViewOrderListReqDto.getOrder().equals("career")) {
             resumeFindAllRespDto.setResumeList(경력순보기(startNum));
-        } else if (orderList.equals("education")) {
+        } else if (resumeViewOrderListReqDto.getOrder().equals("education")) {
             resumeFindAllRespDto.setResumeList(학력순보기(startNum));
         } else {
-            resumeFindAllRespDto.setResumeList(추천순보기(companyId, startNum));
+            resumeFindAllRespDto.setResumeList(추천순보기(resumeViewOrderListReqDto.getCompanyId(), startNum));
         }
         return resumeFindAllRespDto;
     }

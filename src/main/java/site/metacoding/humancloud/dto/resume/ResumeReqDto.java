@@ -9,14 +9,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.dto.SessionUser.SessionUserBuilder;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
 
 public class ResumeReqDto {
 
-  // @Builder
+  @AllArgsConstructor
   @NoArgsConstructor
-  // @AllArgsConstructor
   @Getter
   @Setter
   public static class ResumeSaveReqDto {
@@ -28,7 +26,7 @@ public class ResumeReqDto {
     private String resumePhoto;
     private String resumeLink;
     private List<String> categoryList;
-    private MultipartFile[] file;
+    private MultipartFile file;
 
     @Builder
     public ResumeSaveReqDto(Integer resumeId, Integer resumeUserId, String resumeTitle, String resumeEducation,
@@ -43,8 +41,14 @@ public class ResumeReqDto {
       this.categoryList = categoryList;
     }
 
+    public void setFile(MultipartFile file) {
+      this.file = file;
+    }
+
   }
 
+  @NoArgsConstructor
+  @AllArgsConstructor
   @Getter
   @Setter
   public static class ResumeUpdateReqDto {
@@ -58,8 +62,9 @@ public class ResumeReqDto {
     private List<String> categoryList;
     private MultipartFile[] file;
 
-    public ResumeUpdateReqDto(Integer resumeUserId, String resumeTitle, String resumeEducation,
+    public ResumeUpdateReqDto(Integer resumeId, Integer resumeUserId, String resumeTitle, String resumeEducation,
         String resumeCareer, String resumePhoto, String resumeLink, List<String> categoryList) {
+      this.resumeId = resumeId;
       this.resumeUserId = resumeUserId;
       this.resumeTitle = resumeTitle;
       this.resumeEducation = resumeEducation;
@@ -68,5 +73,38 @@ public class ResumeReqDto {
       this.resumeLink = resumeLink;
       this.categoryList = categoryList;
     }
+  }
+
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Getter
+  @Setter
+  public static class ResumeViewCategoryReqDto {
+    private List<ResumeFindAllDto> resumeList;
+    private String categoryName;
+    private Integer page;
+    private Integer startNum;
+
+    public ResumeViewCategoryReqDto(String categoryName, Integer page) {
+      this.categoryName = categoryName;
+      this.page = page;
+    }
+
+  }
+
+  @NoArgsConstructor
+  @Getter
+  @Setter
+  public static class ResumeViewOrderListReqDto {
+    private String order;
+    private Integer companyId;
+    private Integer page;
+
+    public ResumeViewOrderListReqDto(String order, Integer companyId, Integer page) {
+      this.order = order;
+      this.companyId = companyId;
+      this.page = page;
+    }
+
   }
 }

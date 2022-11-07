@@ -16,15 +16,19 @@ import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class ResumeRespDto {
 
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Setter
   @Getter
   public static class ResumeFindAllDto {
     private Integer resumeId;
-    private Integer resumeUserId;
     private String resumeTitle;
+    private String resumePhoto;
     private String resumeEducation;
     private String resumeCareer;
-    private String resumePhoto;
     private String resumeLink;
+    private Integer resumeReadCount;
+    private Integer resumeUserId;
 
   }
 
@@ -197,20 +201,11 @@ public class ResumeRespDto {
   @Setter
   public static class ResumeOrderByOrderListDto {
     private List<ResumeFindAllDto> resumeList;
-    private List<ResumeCategoryDto> categoryList;
 
     private Integer startPageNum;
     private Integer lastPageNum;
     private Integer blockPage;
     private Integer blockPageCount;
-
-    public void setCategoryFindByName(List<CategoryFindByName> categoryList) {
-      List<ResumeCategoryDto> resumeCategoryLists = new ArrayList<>();
-      for (CategoryFindByName category : categoryList) {
-        resumeCategoryLists.add(new ResumeCategoryDto(category));
-      }
-      this.categoryList = resumeCategoryLists;
-    }
 
     public void dopaging(PagingDto paging) {
       this.startPageNum = paging.getStartPageNum();
@@ -219,18 +214,6 @@ public class ResumeRespDto {
       this.blockPageCount = paging.getBlockPageCount();
     }
 
-    @Getter
-    @Setter
-    public static class ResumeCategoryDto {
-      private Integer categoryId;
-      private Integer categoryResumeId;
-      private String categoryName;
-
-      public ResumeCategoryDto(CategoryFindByName category) {
-        this.categoryId = category.getCategoryId();
-        this.categoryResumeId = category.getCategoryResumeId();
-        this.categoryName = category.getCategoryName();
-      }
-    }
   }
+
 }

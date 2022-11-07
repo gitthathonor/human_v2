@@ -91,6 +91,7 @@ public class RecruitControllerTest {
 
         ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
                 1,
+                1,
                 "이력서 테스트중",
                 "1년이상 ~ 3년미만",
                 "신입",
@@ -143,7 +144,7 @@ public class RecruitControllerTest {
 
         String fileName = "testCustomerUpload.jpg";
 
-        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(
+        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(1,
                 1,
                 "이력서 테스트중",
                 "1년이상 ~ 3년미만",

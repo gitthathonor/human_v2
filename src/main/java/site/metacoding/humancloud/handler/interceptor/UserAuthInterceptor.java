@@ -16,6 +16,7 @@ public class UserAuthInterceptor implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    log.debug("디버그 :  유저 인터셉터");
 
     String uri = request.getRequestURI();
     String[] uriArray = uri.split("/");
