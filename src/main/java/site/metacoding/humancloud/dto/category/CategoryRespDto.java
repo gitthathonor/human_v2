@@ -1,6 +1,7 @@
 package site.metacoding.humancloud.dto.category;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class CategoryRespDto {
@@ -19,6 +20,7 @@ public class CategoryRespDto {
     private String CategoryName;
   }
 
+  @NoArgsConstructor
   @Getter
   @Setter
   public static class CategoryFindByName {

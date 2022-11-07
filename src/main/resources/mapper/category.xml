@@ -30,8 +30,8 @@
 			select * from category where category_resume_id=#{resuemId}
 	</select>
 
-	<select id="findByName" resultType="site.metacoding.humancloud.domain.category.Category">
-		select * from category where category_name=#{name}
+	<select id="findByName" resultType="site.metacoding.humancloud.dto.category.CategoryRespDto$CategoryFindByName">
+		select category_id, category_resume_id, category_name from category where category_name=#{name}
 	</select>
 
 	<insert id="save">     

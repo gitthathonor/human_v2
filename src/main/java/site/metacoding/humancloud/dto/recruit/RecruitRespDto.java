@@ -137,4 +137,37 @@ public class RecruitRespDto {
 
     }
 
+    @Getter
+    @Setter
+    public static class CompanyRecruitDtoRespDto {
+        private Integer companyId;
+        private String companyUsername;
+        private String companyPassword;
+        private String companyName;
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private String companyAddress;
+        private String companyLogo;
+        private Timestamp companyCreatedAt;
+    
+        private Integer recruitId;
+        private String recruitTitle;
+        private String recruitCareer;
+        private Integer recruitSalary;
+        private String recruitLocation;
+        private String recruitContent;
+        private Integer recruitReadCount;
+        private Integer recruitCompanyId;
+        private String recruitDeadline;
+        private Timestamp recruitCreatedAt;
+        private String recruitStartDay;
+
+        public void setRecruitCreatedAt(Timestamp recruitCreatedAt) {
+            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
+            String t = form.format(recruitCreatedAt);
+            this.recruitStartDay = t;
+        }
+
+    }
+
 }

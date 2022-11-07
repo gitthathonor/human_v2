@@ -1,12 +1,14 @@
 package site.metacoding.humancloud.dto.company;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.company.Company;
+import site.metacoding.humancloud.domain.recruit.Recruit;
 
 public class CompanyRespDto {
 
@@ -53,6 +55,29 @@ public class CompanyRespDto {
 
     }
 
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    public static class CompanyJoinRespDto {
+        private String companyName;
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private String companyAddress;
+        private String companyLogo;
+
+        public CompanyJoinRespDto(CompanyFindById companyFindById) {
+            this.companyName = companyFindById.getCompanyName();
+            this.companyEmail = companyFindById.getCompanyEmail();
+            this.companyPhoneNumber = companyFindById.getCompanyPhoneNumber();
+            this.companyAddress = companyFindById.getCompanyAddress();
+            this.companyLogo = companyFindById.getCompanyLogo();
+        }
+
+        public void toPhoneNumber(String num) {
+            this.companyPhoneNumber = num;
+        }
+    }
+
     @Setter
     @Getter
     public static class CompanyUpdateRespDto {
@@ -97,6 +122,17 @@ public class CompanyRespDto {
         public void toPhoneNumber(String num) {
             this.companyPhoneNumber = num;
         }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class CompanyMypageRespDto {
+        private String companyEmail; // 이메일
+        private String companyPhoneNumber; // 전화번호
+        private int applyCount; // 지원횟수
+        private List<Recruit> recruitList; // 기업회원이 작성한 공고 리스트
+
     }
 
 }

@@ -7,6 +7,7 @@ import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto.CompanyRecruitDtoRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 
@@ -31,7 +32,7 @@ public interface RecruitDao {
 
 	public Optional<List<RecruitListByCompanyIdRespDto>> findByCompanyId(Integer id);
 
-	public List<CompanyRecruitDto> joinCompanyRecruit(int startNum);
+	public Optional<List<CompanyRecruitDtoRespDto>> joinCompanyRecruit(int startNum);
 
 	public List<Recruit> orderByrecommend(Integer userId);
 
