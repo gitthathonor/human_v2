@@ -150,7 +150,7 @@ public class CompanyControllerTest {
     @Test
     public void 기업회원삭제테스트() {
         // given
-        int userId = 1;
+        int companyId = 1;
 
         // when
         // ResultActions resultActions = mvc.perform(
