@@ -5,14 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-
 import site.metacoding.humancloud.domain.apply.ApplyDao;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.dto.apply.ApplyReqDto.ApplySaveReqDto;
 import site.metacoding.humancloud.dto.apply.ApplyRespDto.ApplyListRespDto;
 import site.metacoding.humancloud.dto.apply.ApplyRespDto.ApplySaveRespDto;
-import site.metacoding.humancloud.dto.dummy.request.apply.SaveDto;
 
 @RequiredArgsConstructor
 @Service
