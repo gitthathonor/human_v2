@@ -39,7 +39,7 @@ public interface ResumeDao {
 	public List<ResumeFindAllDto> orderByRecommend(@Param("companyId") Integer companyId,
 			@Param("startNum") Integer startNum);
 
-	public PagingDto paging(@Param("pagaData") Integer pagaData);
+	public PagingDto paging(@Param("pagaData") Integer page);
 
 	public void updateReadCount(Integer resumeId);
 

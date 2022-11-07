@@ -66,8 +66,8 @@ public class JwtAuthenticationFilter implements Filter {
         usernamePS.get().setRole(loginDto.getRole());
         // 패스워드 체크
 
-        String encPassword = sha256.encrypt(loginDto.getPassword());
-        // String encPassword = usernamePS.get().getPassword();
+        // String encPassword = sha256.encrypt(loginDto.getPassword());
+        String encPassword = usernamePS.get().getPassword();
         if (!usernamePS.get().getPassword().equals(encPassword)) {
             customResponse("패스워드가 틀렸습니다.", resp);
             return;
