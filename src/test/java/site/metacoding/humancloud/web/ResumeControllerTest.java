@@ -1,7 +1,10 @@
 package site.metacoding.humancloud.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 
@@ -46,7 +50,8 @@ public class ResumeControllerTest {
 
     // header json
     private static final String APPLICATION_JSON = "application/json; charset=utf-8";
-
+    private static final SessionUser sessionUser = SessionUser.builder().id(1).username("ssar").role(0).build();
+    private static final SessionUser sessionCom = SessionUser.builder().id(1).username("adt").role(1).build();
     @Autowired
     private ObjectMapper om;
     @Autowired
@@ -59,32 +64,12 @@ public class ResumeControllerTest {
     private CompanyDao companyDao;
 
     @Autowired
-    private MockHttpSession userSession;
-
-    @Autowired
-    private MockHttpSession companySession;
+    private MockHttpSession session;
 
     @Autowired
     private ResumeDao resumeDao;
     @Autowired
     private ResumeController resumeController;
-
-    @BeforeEach
-    public void userSessionInit() {
-        userSession.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("ssar").role(0).build());
-    }
-
-    @BeforeEach
-    public void companySessionInit() {
-        companySession.setAttribute("sessionUser",
-                SessionUser.builder().id(1).username("adt").role(1).build());
-    }
-
-    @Test
-    public void 인터셉터테스트() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/test"));
-    }
 
     @Test
     public void create_test() throws Exception {
@@ -93,21 +78,13 @@ public class ResumeControllerTest {
         categoryList.add("Java");
         categoryList.add("JavaScript");
 
-        MultipartFile file = new MockMultipartFile("file", "testCustomerUpload.jpg", "/img/**",
-                "<<jpg data>>".getBytes());
+        String uploadFile = "testImage.jpg";
 
-        int pos = file.getOriginalFilename().lastIndexOf(".");
-        String extension = file.getOriginalFilename().substring(pos + 1);
+        int pos = uploadFile.lastIndexOf(".");
+        String extension = uploadFile.substring(pos + 1);
         String filePath = "C:\\temp\\img\\";
         String imgSaveName = UUID.randomUUID().toString();
         String imgName = imgSaveName + "." + extension;
-
-        File dest = new File(filePath, imgName);
-        try {
-            Files.copy(file.getInputStream(), dest.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
                 1,
@@ -117,17 +94,22 @@ public class ResumeControllerTest {
                 imgName,
                 "http:localhost:8000",
                 categoryList);
-        log.debug("디버그 : 파일" + file.getInputStream());
-        resumeSaveReqDto.setFile(file);
 
         String body = om.writeValueAsString(resumeSaveReqDto);
-        // when
+        MockMultipartFile resumeSaveReqDtoFile = new MockMultipartFile("ResumeSaveReqDto", "ResumeSaveReqDto",
+                "application/json", body.getBytes(StandardCharsets.UTF_8));
 
+        MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
+                filePath.getBytes(StandardCharsets.UTF_8));
+
+        session.setAttribute("sessionUser", sessionUser);
+
+        // when
         ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/s/resume/save")
-                        .content(body).contentType("multipart/form-data")
-                        .accept(APPLICATION_JSON).session(userSession));
+                multipart("/s/resume/save")
+                        .file(file)
+                        .file(resumeSaveReqDtoFile)
+                        .session(session));
 
         // then
         MvcResult mvcResult = resultActions.andReturn();
@@ -143,12 +125,12 @@ public class ResumeControllerTest {
         // given
         Integer resumeId = 1;
         Integer userId = 1;
-
+        session.setAttribute("sessionUser", sessionUser);
         // when
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.get("/s/resume/detail/" + resumeId + "/" + userId)
                         .accept(APPLICATION_JSON)
-                        .session(userSession));
+                        .session(session));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
@@ -162,26 +144,45 @@ public class ResumeControllerTest {
         List<String> categoryList = new ArrayList<>();
         categoryList.add("Java");
         categoryList.add("JavaScript");
+        Integer resumeId = 1;
+        String uploadFile = "testImage.jpg";
 
-        String fileName = "testCustomerUpload.jpg";
+        int pos = uploadFile.lastIndexOf(".");
+        String extension = uploadFile.substring(pos + 1);
+        String filePath = "C:\\temp\\img\\";
+        String imgSaveName = UUID.randomUUID().toString();
+        String imgName = imgSaveName + "." + extension;
 
-        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(
+        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(1,
                 1,
                 "이력서 테스트중",
                 "1년이상 ~ 3년미만",
                 "신입",
-                fileName,
+                imgName,
                 "http:localhost:8000",
                 categoryList);
 
         String body = om.writeValueAsString(resumeUpdateReqDto);
+
+        MockMultipartFile resumeUpdateReqDtoFile = new MockMultipartFile("resumeUpdateReqDto", "resumeUpdateReqDto",
+                "application/json", body.getBytes(StandardCharsets.UTF_8));
+
+        MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
+                filePath.getBytes(StandardCharsets.UTF_8));
+
+        session.setAttribute("sessionUser", sessionUser);
+
         // when
 
         ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.put(
-                        "/s/resume/update/" + resumeUpdateReqDto.getResumeId())
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(userSession));
+                multipart("/s/resume/update/" + resumeId)
+                        .file(file)
+                        .file(resumeUpdateReqDtoFile)
+                        .with(req -> {
+                            req.setMethod("PUT");
+                            return req;
+                        })
+                        .session(session));
 
         // then
         MvcResult mvcResult = resultActions.andReturn();
@@ -196,10 +197,12 @@ public class ResumeControllerTest {
     public void deleteResume_test() throws Exception {
         // given
         Integer resumeId = 1;
+        session.setAttribute("sessionUser", sessionUser);
         // when
+
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.delete("/s/resume/deleteById/" + resumeId)
-                        .session(userSession));
+                        .session(session));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
@@ -210,12 +213,13 @@ public class ResumeControllerTest {
     @Test
     public void viewList_test() throws Exception {
         // given
-
+        session.setAttribute("sessionCom", sessionCom);
         // when
+
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.get("/s/resume")
                         .accept(APPLICATION_JSON)
-                        .session(companySession));
+                        .session(session));
 
         // then
 
@@ -231,12 +235,13 @@ public class ResumeControllerTest {
 
         String body = om.writeValueAsString(category);
 
+        session.setAttribute("sessionCom", sessionCom);
         // when
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.post(
                         "/s/resume?category=" + category.getCategoryName())
                         .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(companySession));
+                        .accept(APPLICATION_JSON).session(session));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
@@ -252,13 +257,13 @@ public class ResumeControllerTest {
 
         Integer companyId = 1;
         String body = om.writeValueAsString(companyId);
-
+        session.setAttribute("sessionCom", sessionCom);
         // when
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.post(
                         "/s/resume/list?page=" + page + "&order=" + order)
                         .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(companySession));
+                        .accept(APPLICATION_JSON).session(session));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());

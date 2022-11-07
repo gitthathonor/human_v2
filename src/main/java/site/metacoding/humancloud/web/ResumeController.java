@@ -122,7 +122,7 @@ public class ResumeController {
   @PostMapping(value = "/s/resume/save", consumes = { MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseDto<?> create(@RequestPart("file") MultipartFile file,
-      @RequestPart("resumeReqSaveDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
+      @RequestPart("ResumeSaveReqDto") ResumeSaveReqDto resumeSaveReqDto) throws Exception {
 
     resumeService.이력서저장(file, resumeSaveReqDto);
 

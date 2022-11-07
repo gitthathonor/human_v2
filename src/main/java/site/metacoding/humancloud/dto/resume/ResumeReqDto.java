@@ -47,6 +47,8 @@ public class ResumeReqDto {
 
   }
 
+  @NoArgsConstructor
+  @AllArgsConstructor
   @Getter
   @Setter
   public static class ResumeUpdateReqDto {
@@ -60,8 +62,9 @@ public class ResumeReqDto {
     private List<String> categoryList;
     private MultipartFile[] file;
 
-    public ResumeUpdateReqDto(Integer resumeUserId, String resumeTitle, String resumeEducation,
+    public ResumeUpdateReqDto(Integer resumeId, Integer resumeUserId, String resumeTitle, String resumeEducation,
         String resumeCareer, String resumePhoto, String resumeLink, List<String> categoryList) {
+      this.resumeId = resumeId;
       this.resumeUserId = resumeUserId;
       this.resumeTitle = resumeTitle;
       this.resumeEducation = resumeEducation;

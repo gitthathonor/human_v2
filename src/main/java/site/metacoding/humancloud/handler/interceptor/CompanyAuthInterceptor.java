@@ -17,6 +17,7 @@ public class CompanyAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+
         log.debug("디버그 : 기업 아서 11");
         // url요청의 {id}
         String uri = request.getRequestURI();

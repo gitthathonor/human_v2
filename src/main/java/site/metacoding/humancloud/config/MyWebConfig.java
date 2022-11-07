@@ -16,24 +16,24 @@ import site.metacoding.humancloud.handler.interceptor.UserAuthInterceptor;
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
 
-    private final ResumeDao resumeDao;
+        private final ResumeDao resumeDao;
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**")
-                .addResourceLocations("file:///C:/temp/img/");
-    }
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/img/**")
+                                .addResourceLocations("file:///C:/temp/img/");
+        }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RoleInterceptor())
-                .order(0);
-        registry.addInterceptor(new UserAuthInterceptor())
-                .addPathPatterns("/s/user/**");
-        registry.addInterceptor(new ResumeInterceptor(resumeDao))
-                .addPathPatterns("/s/resume/**");
-        registry.addInterceptor(new CompanyAuthInterceptor())
-                .addPathPatterns("/s/company/**");
-    }
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(new RoleInterceptor())
+                                .order(0);
+                registry.addInterceptor(new UserAuthInterceptor())
+                                .addPathPatterns("/s/user/**");
+                registry.addInterceptor(new ResumeInterceptor(resumeDao))
+                                .addPathPatterns("/s/resume/**");
+                registry.addInterceptor(new CompanyAuthInterceptor())
+                                .addPathPatterns("/s/company/**");
+        }
 
 }
