@@ -31,7 +31,6 @@ public class ResumeReqDto {
     @Builder
     public ResumeSaveReqDto(Integer resumeUserId, String resumeTitle, String resumeEducation,
         String resumeCareer, String resumePhoto, String resumeLink, List<String> categoryList) {
-      this.resumeId = resumeId;
       this.resumeUserId = resumeUserId;
       this.resumeTitle = resumeTitle;
       this.resumeEducation = resumeEducation;
