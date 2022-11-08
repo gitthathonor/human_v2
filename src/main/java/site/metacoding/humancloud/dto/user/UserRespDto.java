@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.user.User;
-import site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto;
+import site.metacoding.humancloud.dto.CompanyRankingDto;
 
 public class UserRespDto {
     @Builder

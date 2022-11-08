@@ -40,7 +40,7 @@
 	</delete>
 
 
-	<select id="findByRank" resultType="site.metacoding.humancloud.dto.dummy.response.user.CompanyRankingDto">
+	<select id="findByRank" resultType="site.metacoding.humancloud.dto.CompanyRankingDto">
 		SELECT RANK() over (ORDER BY COUNT(subscribe_company_id) desc) as ranking, COUNT(subscribe_company_id) likes,  c.company_name name, c.company_logo logo
 		FROM subscribe  s RIGHT OUTER JOIN company c
 		ON s.subscribe_company_id = c.company_id
