@@ -64,9 +64,9 @@ public class ResumeService {
         resumeUpdateReqDto.setResumePhoto(imgName);
 
         resumeDao.update(resumeUpdateReqDto);
-        categoryDao.deleteByResumeId(resumeUpdateReqDto.getResumeId());
+        categoryDao.deleteByResumeId(resumeId);
         for (String category : resumeUpdateReqDto.getCategoryList()) {
-            Category categoryElement = new Category(resumeUpdateReqDto.getResumeId(), category);
+            Category categoryElement = new Category(resumeId, category);
             categoryDao.save(categoryElement);
         }
     }
