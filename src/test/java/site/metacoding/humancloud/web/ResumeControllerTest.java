@@ -222,9 +222,7 @@ public class ResumeControllerTest {
                 // when
                 ResultActions resultActions = mvc.perform(
                                 MockMvcRequestBuilders.post(
-                                                "/s/resume").param("category",
-                                                                resumeViewCategoryReqDto.getCategoryName())
-                                                .param("page", "0")
+                                                "/s/resume")
                                                 .content(body).contentType(APPLICATION_JSON)
                                                 .accept(APPLICATION_JSON).session(session));
 
@@ -237,16 +235,13 @@ public class ResumeControllerTest {
         @Test
         public void orderList_test() throws Exception {
                 // given
-                ResumeViewOrderListReqDto resumeViewOrderListReqDto = new ResumeViewOrderListReqDto("education", 1, 0);
-                resumeViewOrderListReqDto.setStartNum(1);
+                ResumeViewOrderListReqDto resumeViewOrderListReqDto = new ResumeViewOrderListReqDto("recent", 1, 0);
                 String body = om.writeValueAsString(resumeViewOrderListReqDto);
                 session.setAttribute("sessionUser", sessionCom);
                 // when
                 ResultActions resultActions = mvc.perform(
                                 MockMvcRequestBuilders.post(
-                                                "/s/resume/list").param("order",
-                                                                resumeViewOrderListReqDto.getOrder())
-                                                .param("page", "0")
+                                                "/s/resume/list")
                                                 .content(body).contentType(APPLICATION_JSON)
                                                 .accept(APPLICATION_JSON).session(session));
 

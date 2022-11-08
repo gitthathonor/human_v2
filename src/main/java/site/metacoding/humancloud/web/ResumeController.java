@@ -56,8 +56,6 @@ public class ResumeController {
   @Auth(role = 1)
   @PostMapping("/s/resume")
   public ResponseDto<?> viewCategory(@RequestBody ResumeViewCategoryReqDto resumeViewCategoryReqDto) {
-    log.debug("디버그 : 카테고리 " + resumeViewCategoryReqDto.getCategoryName());
-    log.debug("디버그 : page " + resumeViewCategoryReqDto.getPage());
     ResumeOrderByOrderListDto resumeOrderByOrderListDto = resumeService.분류별이력서목록보기(resumeViewCategoryReqDto);
     return new ResponseDto<>(1, "OK", resumeOrderByOrderListDto);
   }
