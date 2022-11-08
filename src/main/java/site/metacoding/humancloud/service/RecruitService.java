@@ -18,20 +18,16 @@ import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.category.CategoryDao;
 import site.metacoding.humancloud.domain.company.Company;
 import site.metacoding.humancloud.domain.company.CompanyDao;
-import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.recruit.RecruitDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.dto.PagingDto;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
-import site.metacoding.humancloud.dto.dummy.request.recruit.SaveDto;
-import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
-import site.metacoding.humancloud.dto.dummy.response.recruit.CompanyRecruitDto;
-import site.metacoding.humancloud.dto.recruit.RecruitRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitUpdateReqDto;
+import site.metacoding.humancloud.dto.recruit.RecruitRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.CompanyRecruitDtoRespDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitDetailRespDto;
-import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 
 @Slf4j
 @RequiredArgsConstructor

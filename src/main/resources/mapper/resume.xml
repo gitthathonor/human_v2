@@ -29,7 +29,7 @@
       update resume set resume_read_count=resume_read_count+1 where resume_id=#{resumeId}
    </update>
 
-   <select id="paging" resultType="site.metacoding.humancloud.dto.dummy.response.page.PagingDto">
+   <select id="paging" resultType="site.metacoding.humancloud.dto.PagingDto">
 		SELECT totalCount,
 		totalPage,
 		currentPage,

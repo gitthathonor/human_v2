@@ -9,9 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.domain.resume.Resume;
+import site.metacoding.humancloud.dto.PagingDto;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByName;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
-import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.user.UserRespDto.UserFindById;
 
 public class ResumeRespDto {

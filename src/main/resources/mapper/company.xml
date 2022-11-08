@@ -3,7 +3,7 @@
 <mapper namespace="site.metacoding.humancloud.domain.company.CompanyDao">
 
 	<select id="paging"
-		resultType="site.metacoding.humancloud.dto.dummy.response.page.PagingDto">
+		resultType="site.metacoding.humancloud.dto.PagingDto">
 		SELECT totalCount,
 		totalPage,
 		currentPage,

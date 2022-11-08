@@ -20,6 +20,7 @@ import site.metacoding.humancloud.domain.resume.Resume;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
 import site.metacoding.humancloud.domain.subscribe.SubscribeDao;
 import site.metacoding.humancloud.domain.user.UserDao;
+import site.metacoding.humancloud.dto.PagingDto;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyJoinReqDto;
 import site.metacoding.humancloud.dto.company.CompanyReqDto.CompanyUpdateReqDto;
@@ -30,7 +31,6 @@ import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyJoinRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyUpdateRespDto;
-import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.recruit.RecruitRespDto.RecruitListByCompanyIdRespDto;
 import site.metacoding.humancloud.util.SHA256;
 
