@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.recruit.Recruit;
 import site.metacoding.humancloud.domain.user.User;
@@ -28,6 +29,7 @@ import site.metacoding.humancloud.util.annotation.Auth;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class RecruitController {
 
   private final RecruitService recruitService;
@@ -71,6 +73,7 @@ public class RecruitController {
   @Auth(role = 1)
   @PostMapping("/s/recruit/save")
   public ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {
+
     return new ResponseDto<>(1, "성공", recruitService.구인공고작성(recruitSaveReqDto));
   }
 

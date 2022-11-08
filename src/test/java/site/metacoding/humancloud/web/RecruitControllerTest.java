@@ -103,8 +103,10 @@ public class RecruitControllerTest {
                                 .recruitCareer("1년")
                                 .recruitCompanyId(1)
                                 .recruitLocation("서울")
+                                .recruitReadCount(1)
+                                .recruitDeadline("ddd")
                                 .recruitSalary(5000)
-                                .recruitCategoryList(null).build();
+                                .build();
                 String body = om.writeValueAsString(recruitSaveReqDto);
 
                 // then
@@ -127,7 +129,6 @@ public class RecruitControllerTest {
                                 .recruitTitle("제제제제제제목")
                                 .recruitContent("내내내낸내용")
                                 .recruitCareer("1년")
-                                .recruitId(recruitId)
                                 .recruitCompanyId(1)
                                 .recruitLocation("서울")
                                 .recruitSalary(5000)

@@ -75,15 +75,15 @@ public class RecruitService {
             throw new RuntimeException("공고를 ' 수정 '할 권한이 없습니다.");
         }
         if (recruitOP.isPresent()) {
-            Category category = new Category(id, null, null);
+            // Category category = new Category(id, null, null);
 
-            // 기존의 카테고리 없애고
-            categoryDao.deleteByRecruitId(id);
-            // 새로 수정된 사항대로 체크리스트 INSERT
-            for (String i : recruitUpdateReqDto.getRecruitCategoryList()) {
-                category.setCategoryName(i);
-                categoryDao.save(category);
-            }
+            // // 기존의 카테고리 없애고
+            // categoryDao.deleteByRecruitId(id);
+            // // 새로 수정된 사항대로 체크리스트 INSERT
+            // for (String i : recruitUpdateReqDto.getRecruitCategoryList()) {
+            // category.setCategoryName(i);
+            // categoryDao.save(category);
+            // }
             recruitDao.update(recruitUpdateReqDto);
             return new RecruitRespDto(recruitUpdateReqDto);
         } else {
@@ -94,17 +94,19 @@ public class RecruitService {
     @Transactional
     public RecruitRespDto 구인공고작성(RecruitSaveReqDto recruitSaveReqDto) {
 
+        log.info("디버그 : 나실행됨? = " + recruitSaveReqDto.getRecruitTitle());
         if (getSession() == null) {
             throw new RuntimeException("공고를 작성할 권한이 없습니다.");
         }
         recruitSaveReqDto.setRecruitCompanyId(getSession().getId());
         recruitDao.save(recruitSaveReqDto);
-        Category category = new Category(recruitSaveReqDto.getRecruitId(), null, null);
+        // Category category = new Category(recruitSaveReqDto.getRecruitId(), null,
+        // null);
 
-        for (String i : recruitSaveReqDto.getRecruitCategoryList()) {
-            category.setCategoryName(i);
-            categoryDao.save(category);
-        }
+        // for (String i : recruitSaveReqDto.getRecruitCategoryList()) {
+        // category.setCategoryName(i);
+        // categoryDao.save(category);
+        // }
         return new RecruitRespDto(recruitSaveReqDto);
     }
 
