@@ -79,7 +79,7 @@
         select * from resume
         order by FIELD(resume_education,  '대학원졸업', '4년제대학졸업', '3년제대학졸업', '2년제대학졸업', '고졸'),  
         resume_education 		
-        limit 20 offset {startNum}
+        limit 20 offset #{startNum}
     </select>
 
    <select id="orderByCareer" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
@@ -118,7 +118,7 @@
     UPDATE resume SET 
     resume_title = #{resumeTitle}, resume_education =#{resumeEducation}, 
     resume_career = #{resumeCareer}, resume_photo = #{resumePhoto}, resume_link = #{resumeLink}
-    WHERE resume_id = ${resumeId}
+    WHERE resume_id = #{resumeId}
   </update>
 
    <delete id="deleteById">
