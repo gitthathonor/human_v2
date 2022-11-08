@@ -9,7 +9,7 @@ VALUES ('sun', '1234', '김씨', 'rlaTl@naver.com', '01033332222', NOW());
 -- company 더미 데이터
 INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
-VALUES('adt', '1234', 'ADT', 'adt@never.com', '01020203060', '부산진구청', 'ADT.png', NOW());
+VALUES('adt', '1234', 'ADT', 'adt@naver.com', '01020203060', '부산진구청', 'ADT.png', NOW());
 INSERT INTO company(company_username, company_password, company_name, company_email,
             company_phone_number, company_address, company_logo,   company_created_at)
 VALUES('gsbuilt', '1234', 'GS건설', 'gs@never.com', '01025259999', '광주광역시청', 'GS건설.png', NOW());
@@ -55,3 +55,9 @@ insert into subscribe(subscribe_user_id, subscribe_company_id, subscribe_created
 values (1, 1, now());
 insert into subscribe(subscribe_user_id, subscribe_company_id, subscribe_created_at) 
 values (1, 2, now());
+
+--apply 더미 데이터
+insert into apply(apply_recruit_id, apply_resume_id, apply_created_at)
+values(1, 1, now());
+insert into apply(apply_recruit_id, apply_resume_id, apply_created_at)
+values(1, 2, now());

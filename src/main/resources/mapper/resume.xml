@@ -37,7 +37,7 @@
 		case when currentPage=totalPage-1 then 1 else 0 end as isLast
 		FROM
 		(
-		select count(*) totalCount, ceil(count(*)/20) totalPage, #{page} currentPage, 0
+		select count(*) totalCount, ceil(count(*)/20) totalPage, ${page} currentPage, 0
 		isFirst, 0 isLast
 		FROM resume
 		) b
@@ -51,7 +51,7 @@
       from
       (select recruit.* from recruit inner join company
       on company.company_id=recruit.recruit_company_id
-      where company_id=1) r
+      where company_id=#{companyId}) r
       inner join category
       on r.recruit_id=category.category_recruit_id
       group by category_name) c1
@@ -77,16 +77,16 @@
 
    <select id="orderByEducation" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
         select * from resume
-        order by FIELD(resume_education,  '대학원졸업', '4년제대학졸업', '3년제대학졸업', '2년제대학졸업', '고졸'),
-         resume_education 		
-         limit 20 offset #{startNum}
+        order by FIELD(resume_education,  '대학원졸업', '4년제대학졸업', '3년제대학졸업', '2년제대학졸업', '고졸'),  
+        resume_education 		
+        limit 20 offset {startNum}
     </select>
 
    <select id="orderByCareer" resultType="site.metacoding.humancloud.dto.resume.ResumeRespDto$ResumeFindAllDto">
       select * from resume
       order by FIELD(resume_career,  '6년이상', '3년이상 ~ 5년미만', '1년이상 ~ 3년미만', '1년미만', '신입'),
-       resume_education 
-       limit 20 offset #{startNum}
+      resume_education 
+      limit 20 offset #{startNum}
    </select>
 
    <select id="sumReadCount" resultType="site.metacoding.humancloud.domain.resume.Resume">

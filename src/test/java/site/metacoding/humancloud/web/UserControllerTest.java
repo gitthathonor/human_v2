@@ -60,10 +60,10 @@ public class UserControllerTest {
     // .build();
     // }
 
-    @Test
-    public void 인터셉터테스트() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/test"));
-    }
+    // @Test
+    // public void 인터셉터테스트() throws Exception {
+    // mvc.perform(MockMvcRequestBuilders.get("/test"));
+    // }
 
     @Test
     public void 회원가입dao테스트() throws Exception {

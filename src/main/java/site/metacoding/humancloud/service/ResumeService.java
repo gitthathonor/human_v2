@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
@@ -127,6 +125,8 @@ public class ResumeService {
 
     public ResumeOrderByOrderListDto 분류별이력서목록보기(ResumeViewCategoryReqDto resumeViewCategoryReqDto) {
         Integer page = resumeViewCategoryReqDto.getPage();
+        log.debug("디버그 : 카테고리 " + resumeViewCategoryReqDto.getCategoryName());
+        log.debug("디버그 : page " + resumeViewCategoryReqDto.getPage());
 
         if (resumeViewCategoryReqDto.getPage() == null) {
             page = 0;
@@ -138,7 +138,6 @@ public class ResumeService {
         ResumeOrderByOrderListDto resumeOrderByOrderListDto = new ResumeOrderByOrderListDto();
         resumeOrderByOrderListDto.dopaging(paging);
         resumeOrderByOrderListDto.setResumeList(resumeDao.findByCategoryName(resumeViewCategoryReqDto));
-        log.debug("디버그 : resumeOrderByOrderListDto " + resumeOrderByOrderListDto.getResumeList().get(0));
 
         return resumeOrderByOrderListDto;
     }

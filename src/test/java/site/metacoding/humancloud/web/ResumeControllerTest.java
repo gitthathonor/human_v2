@@ -2,15 +2,11 @@ package site.metacoding.humancloud.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,13 +28,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
-import site.metacoding.humancloud.domain.company.CompanyDao;
-import site.metacoding.humancloud.domain.resume.ResumeDao;
-import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.dummy.response.page.PagingDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeSaveReqDto;
 import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewCategoryReqDto;
+import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeViewOrderListReqDto;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
 @Slf4j
@@ -48,225 +43,210 @@ import site.metacoding.humancloud.dto.resume.ResumeReqDto.ResumeUpdateReqDto;
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class ResumeControllerTest {
 
-    // header json
-    private static final String APPLICATION_JSON = "application/json; charset=utf-8";
-    private static final SessionUser sessionUser = SessionUser.builder().id(1).username("ssar").role(0).build();
-    private static final SessionUser sessionCom = SessionUser.builder().id(1).username("adt").role(1).build();
-    @Autowired
-    private ObjectMapper om;
-    @Autowired
-    private MockMvc mvc;
+        // header json
+        private static final String APPLICATION_JSON = "application/json; charset=utf-8";
+        private static final SessionUser sessionUser = SessionUser.builder().id(1).username("ssar").role(0).build();
+        private static final SessionUser sessionCom = SessionUser.builder().id(1).username("adt").role(1).build();
+        @Autowired
+        private ObjectMapper om;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private UserDao userDao;
+        @Autowired
+        private MockHttpSession session;
 
-    @Autowired
-    private CompanyDao companyDao;
+        @Test
+        public void create_test() throws Exception {
+                // given
+                List<String> categoryList = new ArrayList<>();
+                categoryList.add("Java");
+                categoryList.add("JavaScript");
 
-    @Autowired
-    private MockHttpSession session;
+                String uploadFile = "testImage.jpg";
 
-    @Autowired
-    private ResumeDao resumeDao;
-    @Autowired
-    private ResumeController resumeController;
+                int pos = uploadFile.lastIndexOf(".");
+                String extension = uploadFile.substring(pos + 1);
+                String filePath = "C:\\temp\\img\\";
+                String imgSaveName = UUID.randomUUID().toString();
+                String imgName = imgSaveName + "." + extension;
 
-    @Test
-    public void create_test() throws Exception {
-        // given
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add("Java");
-        categoryList.add("JavaScript");
+                ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
+                                1,
+                                "이력서 테스트중",
+                                "1년이상 ~ 3년미만",
+                                "신입",
+                                imgName,
+                                "http:localhost:8000",
+                                categoryList);
 
-        String uploadFile = "testImage.jpg";
+                String body = om.writeValueAsString(resumeSaveReqDto);
+                MockMultipartFile resumeSaveReqDtoFile = new MockMultipartFile("ResumeSaveReqDto", "ResumeSaveReqDto",
+                                "application/json", body.getBytes(StandardCharsets.UTF_8));
 
-        int pos = uploadFile.lastIndexOf(".");
-        String extension = uploadFile.substring(pos + 1);
-        String filePath = "C:\\temp\\img\\";
-        String imgSaveName = UUID.randomUUID().toString();
-        String imgName = imgSaveName + "." + extension;
+                MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
+                                filePath.getBytes(StandardCharsets.UTF_8));
 
-        ResumeSaveReqDto resumeSaveReqDto = new ResumeSaveReqDto(
-                1,
-                "이력서 테스트중",
-                "1년이상 ~ 3년미만",
-                "신입",
-                imgName,
-                "http:localhost:8000",
-                categoryList);
+                session.setAttribute("sessionUser", sessionUser);
 
-        String body = om.writeValueAsString(resumeSaveReqDto);
-        MockMultipartFile resumeSaveReqDtoFile = new MockMultipartFile("ResumeSaveReqDto", "ResumeSaveReqDto",
-                "application/json", body.getBytes(StandardCharsets.UTF_8));
+                // when
+                ResultActions resultActions = mvc.perform(
+                                multipart("/s/resume/save")
+                                                .file(file)
+                                                .file(resumeSaveReqDtoFile)
+                                                .session(session));
 
-        MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
-                filePath.getBytes(StandardCharsets.UTF_8));
+                // then
+                MvcResult mvcResult = resultActions.andReturn();
 
-        session.setAttribute("sessionUser", sessionUser);
+                log.debug("디버그 : " + mvcResult);
 
-        // when
-        ResultActions resultActions = mvc.perform(
-                multipart("/s/resume/save")
-                        .file(file)
-                        .file(resumeSaveReqDtoFile)
-                        .session(session));
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
+        @Test
+        public void detailResume_test() throws Exception {
+                // given
+                Integer resumeId = 1;
+                Integer userId = 1;
+                session.setAttribute("sessionUser", sessionUser);
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.get("/s/resume/detail/" + resumeId + "/" + userId)
+                                                .accept(APPLICATION_JSON)
+                                                .session(session));
 
-        log.debug("디버그 : " + mvcResult);
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+        }
 
-    @Test
-    public void detailResume_test() throws Exception {
-        // given
-        Integer resumeId = 1;
-        Integer userId = 1;
-        session.setAttribute("sessionUser", sessionUser);
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/s/resume/detail/" + resumeId + "/" + userId)
-                        .accept(APPLICATION_JSON)
-                        .session(session));
+        @Test
+        public void updateResume_test() throws Exception {
+                // given
+                List<String> categoryList = new ArrayList<>();
+                categoryList.add("Java");
+                categoryList.add("JavaScript");
+                Integer resumeId = 1;
+                String uploadFile = "testImage.jpg";
 
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                int pos = uploadFile.lastIndexOf(".");
+                String extension = uploadFile.substring(pos + 1);
+                String filePath = "C:\\temp\\img\\";
+                String imgSaveName = UUID.randomUUID().toString();
+                String imgName = imgSaveName + "." + extension;
 
-    }
+                ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(1,
+                                1,
+                                "이력서 테스트중",
+                                "1년이상 ~ 3년미만",
+                                "신입",
+                                imgName,
+                                "http:localhost:8000",
+                                categoryList);
 
-    @Test
-    public void updateResume_test() throws Exception {
-        // given
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add("Java");
-        categoryList.add("JavaScript");
-        Integer resumeId = 1;
-        String uploadFile = "testImage.jpg";
+                String body = om.writeValueAsString(resumeUpdateReqDto);
 
-        int pos = uploadFile.lastIndexOf(".");
-        String extension = uploadFile.substring(pos + 1);
-        String filePath = "C:\\temp\\img\\";
-        String imgSaveName = UUID.randomUUID().toString();
-        String imgName = imgSaveName + "." + extension;
+                MockMultipartFile resumeUpdateReqDtoFile = new MockMultipartFile("resumeUpdateReqDto",
+                                "resumeUpdateReqDto",
+                                "application/json", body.getBytes(StandardCharsets.UTF_8));
 
-        ResumeUpdateReqDto resumeUpdateReqDto = new ResumeUpdateReqDto(1,
-                1,
-                "이력서 테스트중",
-                "1년이상 ~ 3년미만",
-                "신입",
-                imgName,
-                "http:localhost:8000",
-                categoryList);
+                MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
+                                filePath.getBytes(StandardCharsets.UTF_8));
 
-        String body = om.writeValueAsString(resumeUpdateReqDto);
+                session.setAttribute("sessionUser", sessionUser);
 
-        MockMultipartFile resumeUpdateReqDtoFile = new MockMultipartFile("resumeUpdateReqDto", "resumeUpdateReqDto",
-                "application/json", body.getBytes(StandardCharsets.UTF_8));
+                // when
 
-        MockMultipartFile file = new MockMultipartFile("file", uploadFile, "form-data",
-                filePath.getBytes(StandardCharsets.UTF_8));
+                ResultActions resultActions = mvc.perform(
+                                multipart("/s/resume/update/" + resumeId)
+                                                .file(file)
+                                                .file(resumeUpdateReqDtoFile)
+                                                .with(req -> {
+                                                        req.setMethod("PUT");
+                                                        return req;
+                                                })
+                                                .session(session));
 
-        session.setAttribute("sessionUser", sessionUser);
+                // then
+                MvcResult mvcResult = resultActions.andReturn();
 
-        // when
+                log.debug("디버그 : " + mvcResult);
 
-        ResultActions resultActions = mvc.perform(
-                multipart("/s/resume/update/" + resumeId)
-                        .file(file)
-                        .file(resumeUpdateReqDtoFile)
-                        .with(req -> {
-                            req.setMethod("PUT");
-                            return req;
-                        })
-                        .session(session));
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
+        @Test
+        public void deleteResume_test() throws Exception {
+                // given
+                Integer resumeId = 1;
+                session.setAttribute("sessionUser", sessionUser);
+                // when
 
-        log.debug("디버그 : " + mvcResult);
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.delete("/s/resume/deleteById/" + resumeId)
+                                                .session(session));
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                // then
+        }
 
-    @Test
-    public void deleteResume_test() throws Exception {
-        // given
-        Integer resumeId = 1;
-        session.setAttribute("sessionUser", sessionUser);
-        // when
+        @Test
+        public void viewList_test() throws Exception {
+                // given
+                session.setAttribute("sessionUser", sessionCom);
+                // when
 
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.delete("/s/resume/deleteById/" + resumeId)
-                        .session(session));
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.get("/s/resume").param("page", "1")
+                                                .accept(APPLICATION_JSON)
+                                                .session(session));
 
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-        // then
-    }
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
 
-    @Test
-    public void viewList_test() throws Exception {
-        // given
-        session.setAttribute("sessionCom", sessionCom);
-        // when
+        }
 
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/s/resume")
-                        .accept(APPLICATION_JSON)
-                        .session(session));
+        @Test
+        public void viewCategory_test() throws Exception {
+                // given
+                ResumeViewCategoryReqDto resumeViewCategoryReqDto = new ResumeViewCategoryReqDto("Java", 0);
 
-        // then
+                String body = om.writeValueAsString(resumeViewCategoryReqDto);
 
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                session.setAttribute("sessionUser", sessionCom);
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.post(
+                                                "/s/resume")
+                                                .content(body).contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(session));
 
-    }
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
 
-    @Test
-    public void viewCategory_test() throws Exception {
-        // given
-        Category category = new Category(1, "Java");
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 
-        String body = om.writeValueAsString(category);
+        @Test
+        public void orderList_test() throws Exception {
+                // given
+                ResumeViewOrderListReqDto resumeViewOrderListReqDto = new ResumeViewOrderListReqDto("recent", 1, 0);
+                String body = om.writeValueAsString(resumeViewOrderListReqDto);
+                session.setAttribute("sessionUser", sessionCom);
+                // when
+                ResultActions resultActions = mvc.perform(
+                                MockMvcRequestBuilders.post(
+                                                "/s/resume/list")
+                                                .content(body).contentType(APPLICATION_JSON)
+                                                .accept(APPLICATION_JSON).session(session));
 
-        session.setAttribute("sessionCom", sessionCom);
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/s/resume?category=" + category.getCategoryName())
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(session));
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
-
-    @Test
-    public void orderList_test() throws Exception {
-        // given
-        String order = "education";
-        Integer page = 0;
-
-        Integer companyId = 1;
-        String body = om.writeValueAsString(companyId);
-        session.setAttribute("sessionCom", sessionCom);
-        // when
-        ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.post(
-                        "/s/resume/list?page=" + page + "&order=" + order)
-                        .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(session));
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-    }
+                // then
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+        }
 }
