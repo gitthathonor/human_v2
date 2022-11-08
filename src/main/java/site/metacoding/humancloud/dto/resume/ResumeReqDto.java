@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllDto;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindAllRespDto;
 
 public class ResumeReqDto {
 

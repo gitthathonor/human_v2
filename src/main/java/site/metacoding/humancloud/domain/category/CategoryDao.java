@@ -3,7 +3,6 @@ package site.metacoding.humancloud.domain.category;
 import java.util.List;
 
 import site.metacoding.humancloud.domain.resume.Resume;
-import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryDistinctNameDto;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByName;
 import site.metacoding.humancloud.dto.category.CategoryRespDto.CategoryFindByResumeId;
 

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import site.metacoding.humancloud.dto.PagingDto;
 import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyMypageRespDto.CompanyRecruitDto;

@@ -1,23 +1,18 @@
 package site.metacoding.humancloud.handler.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import site.metacoding.humancloud.domain.company.CompanyDao;
-import site.metacoding.humancloud.domain.resume.ResumeDao;
-import site.metacoding.humancloud.dto.SessionUser;
-import site.metacoding.humancloud.dto.company.CompanyRespDto.CompanyFindById;
-import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
-
-import org.springframework.web.servlet.HandlerInterceptor;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.util.Optional;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.dto.SessionUser;
+import site.metacoding.humancloud.dto.resume.ResumeRespDto.ResumeFindById;
 
 @Slf4j
 @RequiredArgsConstructor
