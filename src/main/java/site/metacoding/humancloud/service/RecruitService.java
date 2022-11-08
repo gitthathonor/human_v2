@@ -116,8 +116,9 @@ public class RecruitService {
         List<CompanyRecruitDtoRespDto> result = new ArrayList<>();
 
         if (!recruitPS.isEmpty()) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < recruitPS.size(); i++) {
                 result.add(recruitPS.get(i));
+                System.out.println("디버그" + result.get(i));
             }
             return result;
         } else {

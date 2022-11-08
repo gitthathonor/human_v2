@@ -1,6 +1,5 @@
 package site.metacoding.humancloud.web;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,11 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.apply.ApplyReqDto.ApplySaveReqDto;
-import site.metacoding.humancloud.dto.user.UserReqDto.JoinReqDto;
-import site.metacoding.humancloud.dto.user.UserReqDto.UserUpdateReqDto;
 
 @Sql({ "classpath:ddl.sql", "classpath:dml.sql" })
 @Slf4j

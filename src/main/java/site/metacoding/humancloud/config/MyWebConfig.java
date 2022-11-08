@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
-import site.metacoding.humancloud.handler.interceptor.ApplyAuthInterceptor;
 import site.metacoding.humancloud.handler.interceptor.CompanyAuthInterceptor;
 import site.metacoding.humancloud.handler.interceptor.ResumeInterceptor;
 import site.metacoding.humancloud.handler.interceptor.RoleInterceptor;

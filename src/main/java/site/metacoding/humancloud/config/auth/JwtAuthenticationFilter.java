@@ -37,11 +37,6 @@ public class JwtAuthenticationFilter implements Filter {
     private final UserDao userDao; // DI (FilterConfig 주입받음)
     private final SHA256 sha256;
 
-    // /login 요청시
-    // post 요청시
-    // username, password (json)
-    // db확인
-    // 토큰 생성
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
