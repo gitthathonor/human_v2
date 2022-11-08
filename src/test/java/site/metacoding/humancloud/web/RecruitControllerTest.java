@@ -187,13 +187,12 @@ public class RecruitControllerTest {
     }
 
     @Test
-    public void viewList_test() throws Exception {
+    public void 채용공고목록보기테스트() throws Exception {
         // given
-        Integer page = 1;
 
         // when
         ResultActions resultActions = mvc.perform(
-                MockMvcRequestBuilders.get("/s/resume?page=" + page)
+                MockMvcRequestBuilders.get("/recruit/list")
                         .accept(APPLICATION_JSON)
                         .session(companySession));
 
@@ -205,26 +204,64 @@ public class RecruitControllerTest {
     }
 
     @Test
-    public void viewCategory_test() throws Exception {
+    public void 분류별채용공고목록보기테스트() throws Exception {
         // given
         Category category = new Category(1, "Java");
-
-        Integer page = 0;
 
         String body = om.writeValueAsString(category);
 
         // when
         ResultActions resultActions = mvc.perform(
                 MockMvcRequestBuilders.post(
-                        "/s/resume?page=" + page + "&category=" + category.getCategoryName())
+                        "/recruit/category")
                         .content(body).contentType(APPLICATION_JSON)
-                        .accept(APPLICATION_JSON).session(companySession));
+                        .accept(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
 
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
     }
+
+    // @Test
+    // public void viewList_test() throws Exception {
+    // // given
+    // Integer page = 1;
+
+    // // when
+    // ResultActions resultActions = mvc.perform(
+    // MockMvcRequestBuilders.get("/s/resume?page=" + page)
+    // .accept(APPLICATION_JSON)
+    // .session(companySession));
+
+    // // then
+
+    // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+    // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+
+    // }
+
+    // @Test
+    // public void viewCategory_test() throws Exception {
+    // // given
+    // Category category = new Category(1, "Java");
+
+    // Integer page = 0;
+
+    // String body = om.writeValueAsString(category);
+
+    // // when
+    // ResultActions resultActions = mvc.perform(
+    // MockMvcRequestBuilders.post(
+    // "/s/resume?page=" + page + "&category=" + category.getCategoryName())
+    // .content(body).contentType(APPLICATION_JSON)
+    // .accept(APPLICATION_JSON).session(companySession));
+
+    // // then
+    // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+
+    // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+    // }
 
     @Test
     public void orderList_test() throws Exception {

@@ -18,7 +18,7 @@
 		case when currentPage=totalPage-1 then 1 else 0 end as isLast
 		FROM
 		(
-		select count(*) totalCount, ceil(count(*)/20) totalPage, #{page} currentPage, 0
+		select count(*) totalCount, ceil(count(*)/20) totalPage, ${page} currentPage, 0
 		isFirst, 0 isLast
 		FROM recruit
 		) b
