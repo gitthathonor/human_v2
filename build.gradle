@@ -30,7 +30,11 @@ dependencies {
 	testImplementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter-test', version: '2.2.2'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	
+
+	// 롬복 라이브러리
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor'org.projectlombok:lombok'
+
 	// 써드파티
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.3'
 
@@ -38,4 +42,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
 }

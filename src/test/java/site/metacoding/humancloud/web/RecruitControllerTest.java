@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.domain.category.Category;
 import site.metacoding.humancloud.domain.company.CompanyDao;
 import site.metacoding.humancloud.domain.resume.ResumeDao;
+import site.metacoding.humancloud.domain.user.User;
 import site.metacoding.humancloud.domain.user.UserDao;
 import site.metacoding.humancloud.dto.SessionUser;
 import site.metacoding.humancloud.dto.recruit.RecruitReqDto.RecruitSaveReqDto;
@@ -205,11 +206,10 @@ public class RecruitControllerTest {
         @Test
         public void orderList_test() throws Exception {
                 // given
-                String order = "education";
-                Integer page = 0;
+                String order = "recent";
+                User user = User.builder().userId(1).build();
 
-                Integer companyId = 1;
-                String body = om.writeValueAsString(companyId);
+                String body = om.writeValueAsString(user);
 
                 // when
                 ResultActions resultActions = mvc.perform(
@@ -219,7 +219,7 @@ public class RecruitControllerTest {
                                                 .accept(APPLICATION_JSON));
 
                 // then
-                // resultActions.andExpect(MockMvcResultMatchers.status().isOk());
-                // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
+                resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+                resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
         }
 }
