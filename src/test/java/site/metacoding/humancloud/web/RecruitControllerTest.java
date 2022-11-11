@@ -142,7 +142,7 @@ public class RecruitControllerTest {
 
                 // when
                 ResultActions resultActions = mvc.perform(
-                                MockMvcRequestBuilders.get("/")
+                                MockMvcRequestBuilders.get("/main")
                                                 .accept(APPLICATION_JSON));
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());

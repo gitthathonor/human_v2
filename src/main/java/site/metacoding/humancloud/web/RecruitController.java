@@ -34,9 +34,15 @@ public class RecruitController {
   private final ApplyService applyService;
 
   // main
-  @GetMapping("/")
-  public ResponseDto<?> main() {
+  @GetMapping("/main")
+  public ResponseDto<?> mainWithRecruit() {
     return new ResponseDto<>(1, "성공", recruitService.메인공고목록보기());
+  }
+
+  // main
+  @GetMapping("/")
+  public String main() {
+    return "<h1>home</h1>";
   }
 
   // @GetMapping("recruit/update/{id}")
