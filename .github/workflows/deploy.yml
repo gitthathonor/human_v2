@@ -1,4 +1,4 @@
-name: humancloud_aws_test
+name: human_v2
 on:
   pull_request:
     branches: 
