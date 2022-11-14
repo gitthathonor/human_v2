@@ -76,8 +76,7 @@ public class RecruitRespDto {
         private String companyAddress;
         private String companyLogo;
 
-        private List<Resume> resume; // Detail 용, 난중에 DTO 로 바꿔야하나...? 그게 좋으려나 ... 힝구 ㅜㅜ
-
+        private List<Resume> resume;
         private List<Category> category;
         private List<RecruitListByCompanyIdRespDto> recruitListByCompanyId;
 
@@ -86,32 +85,7 @@ public class RecruitRespDto {
             String t = form.format(recruitCreatedAt);
             this.recruitStartDay = t;
         }
-        /*
-         * public RecruitDetailRespDto(RecruitDetailRespDto recruit,List<Resume> resume)
-         * 
-         * {
-         * this.recruitId = recruit.getRecruitId();
-         * this.recruitTitle = recruit.getRecruitTitle();
-         * this.recruitCareer = recruit.getRecruitCareer();
-         * this.recruitSalary = recruit.getRecruitSalary();
-         * this.recruitLocation = recruit.getRecruitContent();
-         * this.recruitContent = recruit.getRecruitContent();
-         * this.recruitReadCount = recruit.getRecruitReadCount();
-         * this.recruitCompanyId = recruit.getRecruitCompanyId();
-         * this.recruitDeadline = recruit.getRecruitDeadline();
-         * this.recruitCreatedAt = recruit.getRecruitCreatedAt();
-         * this.getRecruitStartDay(recruit.getRecruitCreatedAt());
-         * this.category = recruit.getCategory();
-         * this.recruitListByCompanyId = recruit.getRecruitListByCompanyId();
-         * this.resume = resume;
-         * this.companyId = recruit.getCompanyId();
-         * this.companyName =recruit.getCompanyName();
-         * this.companyEmail = recruit.getCompanyEmail();
-         * this.companyPhoneNumber = recruit.getCompanyPhoneNumber();
-         * this.companyAddress = company.get().getCompanyAddress();
-         * this.companyLogo = company.get().getCompanyLogo();
-         * }
-         */
+
     }
 
     @Getter

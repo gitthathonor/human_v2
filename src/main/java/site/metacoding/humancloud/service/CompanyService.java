@@ -46,16 +46,6 @@ public class CompanyService {
 	private final SHA256 sha256;
 	private final UserDao userDao;
 
-	// 회원 username 중복체크
-	// public boolean 유저네임중복체크(String companyUsername) {
-	// Optional<UserFindByAllUsernameDto> username =
-	// userDao.findAllUsername(companyUsername);
-	// if (username == null) {
-	// return true;
-	// }
-	// return false;
-	// }
-
 	// 기업 회원 등록
 	@Transactional
 	public CompanyJoinRespDto 기업회원등록(MultipartFile file, CompanyJoinReqDto companyJoinReqDto) throws Exception {

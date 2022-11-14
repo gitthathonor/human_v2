@@ -137,9 +137,9 @@ public class CompanyRespDto {
     @Getter
     @Setter
     public static class CompanyMypageRespDto {
-        private String companyEmail; // 이메일
-        private String companyPhoneNumber; // 전화번호
-        private List<CompanyRecruitDto> companyRecruitList; // 기업이 작성한 공고리스트
+        private String companyEmail;
+        private String companyPhoneNumber;
+        private List<CompanyRecruitDto> companyRecruitList;
 
         public CompanyMypageRespDto(CompanyFindById companyFindById) {
             this.companyEmail = companyFindById.getCompanyEmail();

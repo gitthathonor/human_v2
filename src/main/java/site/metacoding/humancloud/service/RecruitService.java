@@ -118,7 +118,7 @@ public class RecruitService {
             }
             return result;
         } else {
-            throw new RuntimeException("목록이 없습네당");
+            throw new RuntimeException("목록이 없습니다");
         }
 
     }

@@ -95,7 +95,7 @@ public class UserRespDto {
     public static class UserMypageRespDto {
         private String email;
         private String phoneNumber;
-        private int resumeReadCount; // 이력서 열람 횟수
+        private int resumeReadCount;
         private List<SubscribeCompanyDto> companyList;
         private List<UserResumeDto> resumeList;
         private List<CompanyRankingDto> companyRankingDtoList;

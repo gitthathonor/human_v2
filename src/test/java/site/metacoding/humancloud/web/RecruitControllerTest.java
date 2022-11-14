@@ -127,7 +127,7 @@ public class RecruitControllerTest {
 
                 // when
                 ResultActions resultActions = mvc.perform(
-                                MockMvcRequestBuilders.put("/s/recruit/update/" + recruitId).content(body)
+                                MockMvcRequestBuilders.put("/s/recruit/" + recruitId).content(body)
                                                 .contentType(APPLICATION_JSON)
                                                 .accept(APPLICATION_JSON).session(companySession));
 

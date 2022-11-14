@@ -65,7 +65,7 @@ public class ResumeController {
   }
 
   @Auth(role = 0)
-  @DeleteMapping("/s/resume/deleteById/{resumeId}")
+  @DeleteMapping("/s/resume/{resumeId}")
   public ResponseDto<?> deleteResume(@PathVariable Integer resumeId) {
     resumeService.이력서삭제(resumeId);
     return new ResponseDto<>(1, "이력서 삭제 성공", null);
@@ -84,19 +84,6 @@ public class ResumeController {
 
     return new ResponseDto<>(1, "이력서 수정 성공", resumeDetailRespDto);
   }
-
-  // @GetMapping("resume/updateForm/{resumeId}/{userId}")
-  // public String updatePage(@PathVariable("resumeId") Integer resumeId,
-  // @PathVariable("userId") Integer userId,
-  // Model model) {
-  // // model.addAttribute("resume", resumeService.이력서상세보기(resumeId,
-  // // userId).get("resume"));
-  // // model.addAttribute("category", resumeService.이력서상세보기(resumeId,
-  // // userId).get("category"));
-  // // model.addAttribute("user", resumeService.이력서상세보기(resumeId,
-  // // userId).get("user"));
-  // return "page/resume/updateForm";
-  // }
 
   @GetMapping("/s/resume/detail/{resumeId}/{userId}")
   public ResponseDto<?> detailResume(@PathVariable("resumeId") Integer resumeId,

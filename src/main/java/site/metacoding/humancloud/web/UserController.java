@@ -52,43 +52,4 @@ public class UserController {
         return new ResponseDto<>(1, "ok", userService.마이페이지보기(id));
     }
 
-    // @PostMapping("/user/login")
-    // public ResponseDto<?> login(@RequestBody LoginReqDto loginDto) {
-    // User result = userService.로그인(loginDto);
-    // if (result != null) {
-    // }
-    // return new ResponseDto<>(1, "1", result);
-    // }
-
-    // @GetMapping("/user/{id}")
-    // public ResponseDto<?> updateMypage(@PathVariable Integer id) {
-    // return new ResponseDto<>(1, "ok", userService.유저정보보기(id));
-    // }
-
-    // @GetMapping("/logout")
-    // public String logout() {
-    // session.invalidate();
-    // return "redirect:/";
-    // }
-
-    // @GetMapping("/login")
-    // public String loginForm() {
-    // return "page/user/login";
-    // }
-
-    // @GetMapping("/user/usernameSameCheck")
-    // public @ResponseBody ResponseDto<?>
-    // usernameSameCheck(@RequestParam("username") String username) {
-    // Boolean result = userService.유저네임중복체크(username);
-    // if (result == true) {
-    // return new ResponseDto<>(1, "ok", true);
-    // }
-    // return new ResponseDto<>(1, "same id", false);
-    // }
-
-    // @GetMapping("/join")
-    // public String userSaveForm() {
-    // return "page/user/userSaveForm";
-    // }
-
 }

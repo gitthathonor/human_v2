@@ -45,16 +45,8 @@ public class RecruitController {
     return "<h1>home</h1>";
   }
 
-  // @GetMapping("recruit/update/{id}")
-  // public ResponseDto<?> updateFrom(@PathVariable(required = false) Integer id,
-  // Model model) {
-  // Recruit recruitPS = recruitService.공고상세페이지(id);
-  // model.addAttribute("Recruit", recruitPS);
-  // return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id));
-  // }
-
   @Auth(role = 1)
-  @PutMapping("/s/recruit/update/{id}")
+  @PutMapping("/s/recruit/{id}")
   public @ResponseBody ResponseDto<?> update(@PathVariable Integer id,
       @RequestBody RecruitUpdateReqDto recruitUpdateReqDto) {
     return new ResponseDto<>(1, "성공", recruitService.구인공고업데이트(id, recruitUpdateReqDto));
@@ -68,11 +60,6 @@ public class RecruitController {
     return new ResponseDto<>(1, "성공", recruitService.공고상세페이지(id, userId));
   }
 
-  // @GetMapping("/recruit/saveForm/{companyId}")
-  // public String writeFrom(@PathVariable Integer companyId, Model model) {
-  // model.addAttribute("company", companyService.getCompanyDetail(companyId));
-  // return "page/recruit/saveForm";
-  // }
   @Auth(role = 1)
   @PostMapping("/s/recruit/save")
   public ResponseDto<?> write(@RequestBody RecruitSaveReqDto recruitSaveReqDto) {

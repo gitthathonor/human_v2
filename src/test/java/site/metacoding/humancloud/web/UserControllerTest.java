@@ -53,13 +53,6 @@ public class UserControllerTest {
                                 SessionUser.builder().id(1).username("ssar").role(0).build());
         }
 
-        // @BeforeEach
-        // public void setMock() {
-        // mvc = MockMvcBuilders.standaloneSetup(userController)
-        // .addInterceptors(new RoleInterceptor())
-        // .build();
-        // }
-
         @Test
         public void 회원가입dao테스트() throws Exception {
                 // given

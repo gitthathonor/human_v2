@@ -34,7 +34,6 @@ public class UserService {
         if (userPS.isPresent()) {
             throw new RuntimeException("중복된 아이디 입니다");
         }
-        // userPS.orElseThrow(() -> new RuntimeException("중복된 아이디 입니다."));
 
         String encPassword = sha256.encrypt(joinReqDto.getPassword());
         joinReqDto.setPassword(encPassword);
@@ -92,16 +91,5 @@ public class UserService {
         userPS.orElseThrow(() -> new RuntimeException("잘못된 아이디값입니다."));
         return userPS.get();
     }
-
-    // public User 로그인(LoginDto loginDto) {
-    // User userPS = userDao.findByUsername(loginDto.getUsername());
-    // if (userPS == null) {
-    // return null;
-    // }
-    // if (loginDto.getPassword().equals(userPS.getPassword())) {
-    // return userPS;
-    // }
-    // return null;
-    // }
 
 }

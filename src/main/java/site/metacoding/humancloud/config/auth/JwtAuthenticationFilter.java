@@ -34,7 +34,7 @@ import site.metacoding.humancloud.util.SHA256;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
 
-    private final UserDao userDao; // DI (FilterConfig 주입받음)
+    private final UserDao userDao;
     private final SHA256 sha256;
 
     @Override

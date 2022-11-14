@@ -227,7 +227,6 @@ public class CompanyControllerTest {
                 // then
                 resultActions.andExpect(MockMvcResultMatchers.status().isOk());
                 resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1));
-                // resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.data.[0].resumeTitle").value("이력서1"));
 
         }
 

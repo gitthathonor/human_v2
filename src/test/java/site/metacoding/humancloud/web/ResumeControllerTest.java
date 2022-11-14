@@ -184,7 +184,7 @@ public class ResumeControllerTest {
                 // when
 
                 ResultActions resultActions = mvc.perform(
-                                MockMvcRequestBuilders.delete("/s/resume/deleteById/" + resumeId)
+                                MockMvcRequestBuilders.delete("/s/resume/" + resumeId)
                                                 .session(session));
 
                 // then
