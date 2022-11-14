@@ -54,7 +54,7 @@ public class ResumeControllerTest {
         private MockHttpSession session;
 
         @Test
-        public void create_test() throws Exception {
+        public void 이력서작성테스트() throws Exception {
                 // given
                 List<String> categoryList = new ArrayList<>();
                 categoryList.add("Java");
@@ -103,7 +103,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void detailResume_test() throws Exception {
+        public void 이력서상세보기테스트() throws Exception {
                 // given
                 Integer resumeId = 1;
                 Integer userId = 1;
@@ -121,7 +121,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void updateResume_test() throws Exception {
+        public void 이력서수정테스트() throws Exception {
                 // given
                 List<String> categoryList = new ArrayList<>();
                 categoryList.add("Java");
@@ -177,7 +177,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void deleteResume_test() throws Exception {
+        public void 이력서삭제테스트() throws Exception {
                 // given
                 Integer resumeId = 1;
                 session.setAttribute("sessionUser", sessionUser);
@@ -194,7 +194,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void viewList_test() throws Exception {
+        public void 이력서목록보기테스트() throws Exception {
                 // given
                 session.setAttribute("sessionUser", sessionCom);
                 // when
@@ -210,7 +210,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void viewCategory_test() throws Exception {
+        public void 분류별이력서정렬테스트() throws Exception {
                 // given
                 ResumeViewCategoryReqDto resumeViewCategoryReqDto = new ResumeViewCategoryReqDto("Java", 0);
 
@@ -231,7 +231,7 @@ public class ResumeControllerTest {
         }
 
         @Test
-        public void orderList_test() throws Exception {
+        public void 항목별이력서정렬테스트() throws Exception {
                 // given
                 ResumeViewOrderListReqDto resumeViewOrderListReqDto = new ResumeViewOrderListReqDto("recent", 1, 0);
                 String body = om.writeValueAsString(resumeViewOrderListReqDto);

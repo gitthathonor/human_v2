@@ -73,7 +73,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void recruitsave_test() throws Exception {
+        public void 채용공고작성테스트() throws Exception {
                 // given
                 RecruitSaveReqDto recruitSaveReqDto = RecruitSaveReqDto.builder()
                                 .recruitTitle("제제제제제제목")
@@ -105,7 +105,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void recruitupdate_test() throws Exception {
+        public void 채용공고수정테스트() throws Exception {
                 // given
                 Integer recruitId = 1;
 
@@ -137,7 +137,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void recruitmain_test() throws Exception {
+        public void 메인페이지테스트() throws Exception {
                 // given , 한 페이지에서 볼 목록 개수 10 = 0 개 / 0 = 10 개
 
                 // when
@@ -151,7 +151,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void recruitdetail_test() throws Exception {
+        public void 채용공고상세보기테스트() throws Exception {
                 // given
                 Integer recruitId = 1;
                 Integer userId = 1;
@@ -183,7 +183,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void viewCategory_test() throws Exception {
+        public void 분류별채용공고정렬테스트() throws Exception {
                 // given
                 Category category = new Category(1, "Java");
 
@@ -204,7 +204,7 @@ public class RecruitControllerTest {
         }
 
         @Test
-        public void orderList_test() throws Exception {
+        public void 항목별채용공고정렬테스트() throws Exception {
                 // given
                 String order = "recent";
                 User user = User.builder().userId(1).build();
