@@ -30,7 +30,7 @@ public class FilterConfig {
         return bean;
     }
 
-    @Profile("dev")
+    @Profile("prod")
     @Bean
     public FilterRegistrationBean<JwtAuthorizationFilter> jwtAuthorizationFilterRegister() {
         log.debug("디버그 : 인가 필터 등록");

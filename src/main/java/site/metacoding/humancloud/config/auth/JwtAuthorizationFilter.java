@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import site.metacoding.humancloud.dto.ResponseDto;
 import site.metacoding.humancloud.dto.SessionUser;
 
-@Profile("dev")
+@Profile("prod")
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter implements Filter {

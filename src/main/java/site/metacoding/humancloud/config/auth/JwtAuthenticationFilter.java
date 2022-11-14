@@ -29,7 +29,7 @@ import site.metacoding.humancloud.dto.auth.LoginDto;
 import site.metacoding.humancloud.dto.auth.UserFindByAllUsernameDto;
 import site.metacoding.humancloud.util.SHA256;
 
-@Profile("dev")
+@Profile("prod")
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
