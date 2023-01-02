@@ -1,4 +1,4 @@
-# 미니프로젝트 humancloud2 - Rest하게 서버 만들기
+# 미니프로젝트 humancloud2 - Restful 서버 만들기
 
 ### 개요
 
